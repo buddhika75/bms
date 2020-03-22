@@ -1,0 +1,46 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:cc="http://java.sun.com/jsf/composite"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core">
+
+    <!-- INTERFACE -->
+    <cc:interface>
+        <cc:attribute name="patient" />
+    </cc:interface>
+
+    <!-- IMPLEMENTATION -->
+    <cc:implementation>
+        <p:panelGrid columns="2"  rendered="#{cc.attrs.patient!=null}"  >
+
+            <f:facet name="header" >
+                <p:outputLabel value="Selected Patient Details" ></p:outputLabel>
+            </f:facet>
+
+            <h:outputLabel value="Name" />
+            <h:outputLabel value="#{cc.attrs.patient.person.nameWithTitle}" />
+
+            <h:outputLabel value="Sex &amp; Age" />
+            <h:outputLabel value="#{cc.attrs.patient.person.sex} / #{cc.attrs.patient.age}" />
+
+            <h:outputLabel value="Membership"  rendered="#{cc.attrs.patient.person.membershipScheme ne null}" />
+            <h:outputLabel value="#{cc.attrs.patient.person.membershipScheme.name}" rendered="#{cc.attrs.patient.person.membershipScheme ne null}" /> 
+
+            <h:outputLabel value="PHN" />
+            <h:outputLabel value="#{cc.attrs.patient.phn}" />
+
+            <h:outputLabel value="Phone" />
+            <h:panelGroup>
+                <h:outputLabel value="#{cc.attrs.patient.person.phone}" />
+                <h:outputLabel value="#{cc.attrs.patient.person.mobile}" />
+            </h:panelGroup>
+
+
+            <h:outputLabel value="Address" />
+            <h:outputLabel value="#{cc.attrs.patient.person.address}" />
+
+        </p:panelGrid>
+    </cc:implementation>
+</html>

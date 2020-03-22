@@ -1,0 +1,203 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:cc="http://java.sun.com/jsf/composite"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+
+    <!-- INTERFACE -->
+    <cc:interface>
+        <cc:attribute name="con" />
+    </cc:interface>
+
+    <!-- IMPLEMENTATION -->
+    <cc:implementation>
+
+        <h:outputStylesheet library="css" name="paySheet.css" ></h:outputStylesheet>
+        <h:form>
+            <p:spacer height="100" />
+            <div class="a4HalfPaysheet">
+                <div style="position: relative!important;
+                     /*padding-left: 0.5%!important;*/
+                     height:95%!important;
+                     width:95%!important; 
+                     /*             overflow:hidden!important; */
+                     font-family: Times New Roman!important; 
+                     font-size: 10px!important; 
+                     margin:2px!important; 
+                     padding: 5px!important;
+                     /*             background-size: 100% auto!important;*/
+                     letter-spacing: 0px;
+                     /*             border: 1px solid!important;*/">
+
+                    <div class="institutionName" style="text-align: center!important;
+                         text-decoration-line: underline;
+                         font-weight: bold!important;
+                         font-size: 30px!important;">
+                        Diagnosis Card
+                    </div>  
+                    <div style="font-family: Times New Roman!important; font-size: 15px!important;
+                         letter-spacing: 0px; padding-left: 5%;">
+                        <table style="font-size: 20px!important">
+                            <tr>
+                                <td><p:spacer height="5" /></td>
+                                <td><h:outputLabel value=" "/></td>
+                                <td><h:outputLabel value=" "/></td>
+                            </tr>
+                            <tr>
+                                <td>Date</td>
+                                <td> : </td>
+                                <td>
+                                    <h:outputLabel value="#{cc.attrs.con.date}">
+                                        <f:convertDateTime pattern="dd MMM yyyy" />
+                                    </h:outputLabel>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><p:spacer height="3" /></td>
+                                <td><h:outputLabel value=" "/></td>
+                                <td><h:outputLabel value=" "/></td>
+                            </tr>
+
+                            <tr>
+                                <td>Name</td>
+                                <td> : </td>
+                                <td>
+                                    <h:outputLabel value="#{cc.attrs.con.patient.person.nameWithTitle}"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><p:spacer height="3" /></td>
+                                <td><h:outputLabel value=" "/></td>
+                                <td><h:outputLabel value=" "/></td>
+                            </tr>
+                            <tr>
+                                <td>Age</td>
+                                <td> : </td>
+                                <td>
+                                    <h:outputLabel value="#{cc.attrs.con.patient.person.age}"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><p:spacer height="3" /></td>
+                                <td><h:outputLabel value=" "/></td>
+                                <td><h:outputLabel value=" "/></td>
+                            </tr>
+                            <tr>
+                                <td>Address</td>
+                                <td> : </td>
+                                <td>
+                                    <h:outputLabel value="#{cc.attrs.con.patient.person.address}"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><p:spacer height="3" /></td>
+                                <td><h:outputLabel value=" "/></td>
+                                <td><h:outputLabel value=" "/></td>
+                            </tr>
+                            <tr>
+                                <td>Past History</td>
+                                <td> : </td>
+                                <td>
+                                    <h:outputLabel value="#{cc.attrs.con.patient.comments}"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><p:spacer height="3" /></td>
+                                <td><h:outputLabel value=" "/></td>
+                                <td><h:outputLabel value=" "/></td>
+                            </tr>
+                            <tr>
+                                <td>PC</td>
+                                <td> : </td>
+                                <td>
+                                    <p>
+                                        #{cc.attrs.con.hpc}
+                                    </p>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><p:spacer height="3" /></td>
+                                <td><h:outputLabel value=" "/></td>
+                                <td><h:outputLabel value=" "/></td>
+                            </tr>
+                            <tr>
+                                <td width="25%" valign="top">Examination Findings</td>
+                                <td valign="top"> : </td>
+                                <td valign="top">
+                                    <p>
+                                        #{cc.attrs.con.examinationFindings}
+                                    </p>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><p:spacer height="3" /></td>
+                                <td><h:outputLabel value=" "/></td>
+                                <td><h:outputLabel value=" "/></td>
+                            </tr>
+                            <tr>
+                                <td>Diagnosis</td>
+                                <td>:</td>
+                                <td>
+                                    <p>
+                                        #{cc.attrs.con.diagnosis}
+                                    </p>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><p:spacer height="3" /></td>
+                                <td><h:outputLabel value=" "/></td>
+                                <td><h:outputLabel value=" "/></td>
+                            </tr>
+                            <tr align="left">
+                                <td valign="top">Treatments Given</td>
+                                <td valign="top">:</td>
+                                <td valign="top">
+                                    <p>
+                                        #{cc.attrs.con.treatmentsGiven}
+                                    </p>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td><p:spacer height="80" /></td>
+                                <td><h:outputLabel value=" "/></td>
+                                <td><h:outputLabel value=" "/></td>
+                            </tr>
+
+                            <tr>
+                                <td colspan="3">
+                                    <h:outputLabel value="Signature &amp;  Seal of the Doctor / Consultant" style="text-decoration: overline;"/>
+                                </td>
+                            </tr>
+
+                        </table>
+                    </div>
+                    <div class="institutionName" style="text-align: center!important;
+                         font-weight: bold!important;
+                         font-size: 17px!important;">
+                        #{sessionController.institution.chequePrintingName}<br></br>
+                    </div>
+                    <hr></hr>
+                    <div class="institutionName" style="text-align: center!important;
+                         font-weight: bold!important;
+                         font-size: 17px!important;
+                         font-family: monospace;">
+                        Fully Computerized Patient and Laboratory Information System.
+                    </div>
+                    <hr></hr>
+
+                    <div class="institutionName" style="text-align: center!important;
+                         font-weight: bold!important;
+                         font-size: 17px!important;">
+                        <div style="width: 8cm; height: 1cm; text-align: center; overflow: hidden;" >
+                            <p:barcode   style="width: 7.5cm; height: 5cm;"   type="code128" cache="false" value="#{letterController.patient.phn}" ></p:barcode>
+                        </div>                 
+                    </div>
+                </div>
+            </div>
+        </h:form>
+
+    </cc:implementation>
+</html>

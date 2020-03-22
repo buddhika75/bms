@@ -1,0 +1,143 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ezcomp="http://xmlns.jcp.org/jsf/composite/ezcomp">
+
+    <h:body>
+
+        <ui:composition template="/resources/template/template.xhtml">
+
+            <ui:define name="content">
+
+
+
+
+
+
+
+                <p:panel  id="panelQueue" header="Add Patient to the Queue" style="width: 100%;" >
+
+                    <h:form>
+
+
+
+                        <h:panelGrid columns="3" styleClass="alignTop" >
+
+                            <p:panel header="Patient Details" style="min-width: 400px;">
+                                <ezcomp:patient patient="#{patientController.current}"  >
+                                </ezcomp:patient>
+                            </p:panel>
+
+
+                            <p:panel header="Doctor Details" >
+                                <h:panelGrid columns="2" >
+                                    <h:outputLabel value="Date" ></h:outputLabel>
+                                    <p:calendar value="#{practiceBookingController.sessionDate}" 
+                                                pattern="dd MMMM yyyy" >
+                                        <f:ajax  event="dateSelect" execute="@this" render="bSession"  
+                                                 listener="#{practiceBookingController.listBillSessions}" />                                                
+                                    </p:calendar>
+
+                                    <h:outputLabel value="Speciality" ></h:outputLabel>
+                                    <p:autoComplete value="#{practiceBookingController.speciality}"
+                                                    id="acSpeciality" inputStyle="width:240px;"
+                                                    completeMethod="#{specialityController.completeSpeciality}"
+                                                    var="dsp" itemLabel="#{dsp.name}" itemValue="#{dsp}"
+                                                    >
+                                        <f:ajax event="itemSelect" execute="acSpeciality" render="acStaff" ></f:ajax>
+                                    </p:autoComplete>
+
+                                    <h:outputLabel value="Doctor" ></h:outputLabel>
+                                    <p:autoComplete value="#{practiceBookingController.doctor}"
+                                                    id="acStaff" converter="conDoc"
+                                                    inputStyle="width:240px;"
+                                                    completeMethod="#{practiceBookingController.completeDoctorsOfSelectedSpeciality}"
+                                                    var="doc"
+                                                    itemLabel="#{doc.person.nameWithTitle}" itemValue="#{doc}"
+                                                    >
+                                        <f:ajax  event="itemSelect" execute="@this" render="bSession"  listener="#{practiceBookingController.listBillSessions}" />                                                
+                                    </p:autoComplete>
+
+                                    <p:commandButton id="btnAddToQueue"   value="Add" ajax="false" style="float: right;" 
+                                                     
+                                                     action="#{practiceBookingController.addToQueue()}" >                        
+                                    </p:commandButton>
+
+                                    <p:commandButton id="btnAddToQueueAndClear"  value="Back" ajax="false" style="float: right;" 
+
+                                                     action="/clinical/patient_search" >                        
+                                    </p:commandButton>
+
+                                </h:panelGrid>
+                            </p:panel>
+
+
+                            <p:panel header="Current Bookings" >
+
+                                <p:dataTable id="bSession" value="#{practiceBookingController.billSessions}" var='bs'
+                                             selectionMode="single" rowKey="#{bs.id}" 
+                                             selection="#{practiceBookingController.selectedBillSession}">
+
+
+                                    <p:column headerText="No" width="30">#{bs.serialNo}</p:column>
+                                    <p:column headerText="Patient Name" >#{bs.bill.patient.person.nameWithTitle}</p:column>
+                                    <p:column headerText="Actions" >
+                                        <p:panelGrid columns="2" >
+                                            <p:commandButton value="To Patient" process="bSession" action="/clinical/patient">
+                                                <f:setPropertyActionListener value="#{bs.bill.patient}" target="#{patientController.current}" >
+                                                </f:setPropertyActionListener>
+                                            </p:commandButton>
+
+                                            <p:commandButton disabled="#{bs.absent}" value="To Visit" 
+                                                             action="#{practiceBookingController.opdVisitFromQueue()}" 
+                                                             ajax="false"  >
+                                                <f:setPropertyActionListener value="#{bs}" 
+                                                                             target="#{practiceBookingController.billSession}" ></f:setPropertyActionListener>
+                                            </p:commandButton>
+                                        </p:panelGrid>
+                                    </p:column>
+                                </p:dataTable>  
+
+                            </p:panel>
+
+
+
+
+
+                        </h:panelGrid>
+
+
+
+
+
+
+
+
+                    </h:form> 
+
+                </p:panel>
+
+
+
+
+
+
+
+
+
+
+
+
+
+            </ui:define>
+
+
+
+        </ui:composition>
+
+    </h:body>
+</html>

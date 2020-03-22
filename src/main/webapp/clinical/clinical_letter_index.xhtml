@@ -1,0 +1,64 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core">
+
+    <h:body>
+
+        <ui:composition template="/resources/template/template.xhtml">
+
+            <ui:define name="content">
+
+                <p:panel  id="panelQueue" header="Letters" >
+
+                    <h:form>
+                        <h:panelGrid columns="1"  >
+                            <p:panelGrid columns="2" >
+                                <f:facet name="header">
+                                    <p:outputLabel value="Leters"/>
+                                </f:facet>
+                                <p:commandButton styleClass="linkButton" ajax="false" value="Medical Certificate" 
+                                                 action="clinical_letter_mcedical_certificate" 
+                                                 actionListener="#{letterController.fetchMedicalCertificate}" />
+                                <p:commandButton styleClass="linkButton" ajax="false" value="New Medical Certificate" 
+                                                 action="clinical_letter_mcedical_certificate" 
+                                                 actionListener="#{letterController.newMedicalCertificate}" />
+                                <p:commandButton styleClass="linkButton" ajax="false" value="Diagnosis Card" 
+                                                 action="clinical_letter_diagnosis_card" 
+                                                 actionListener="#{letterController.fetchDiagnosisCard}" />
+                                <p:spacer ></p:spacer>
+
+                                <p:commandButton styleClass="linkButton" ajax="false" value="Receipt" 
+                                                 action="clinical_letter_invoice" 
+                                                 actionListener="#{letterController.fetchInvoice}" />
+                                <p:spacer ></p:spacer>
+                                <p:commandButton styleClass="linkButton" ajax="false" value="Referral Letter" 
+                                                 action="clinical_letter_request_letter" 
+                                                 actionListener="#{letterController.fetchRequestLetter}" />    
+                                <p:commandButton styleClass="linkButton" ajax="false" value="New Referral Letter" 
+                                                 action="clinical_letter_request_letter" 
+                                                 actionListener="#{letterController.newRequestLetter}" /> 
+                                <p:commandButton styleClass="linkButton" ajax="false" value="View All Patient Letter" 
+                                                 action="#{letterController.viewPatientLetter()}" /> 
+
+                                <p:spacer ></p:spacer>
+                                <p:commandButton styleClass="linkButton" ajax="false" value="Back to Visit" 
+                                                 action="clinical_new_opd_visit" /> 
+
+                                
+                            </p:panelGrid> 
+                        </h:panelGrid>
+                    </h:form>
+
+                </p:panel>
+
+            </ui:define>
+
+        </ui:composition>
+
+    </h:body>
+
+</html>

@@ -1,0 +1,28 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <f:metadata >
+        <f:viewParam name="nameReq" value="#{patientController.nameReq}" ></f:viewParam>
+        <f:viewParam name="addressReq" value="#{patientController.addressReq}" ></f:viewParam>
+        <f:viewParam name="titleReq" value="#{patientController.titleReq}" ></f:viewParam>
+        <f:viewParam name="yearsReq" value="#{patientController.yearsReq}" ></f:viewParam>
+        <f:viewParam name="monthsReq" value="#{patientController.monthsReq}" ></f:viewParam>
+        <f:viewParam name="daysReq" value="#{patientController.daysReq}" ></f:viewParam>
+        <f:viewParam name="phoneReq" value="#{patientController.phoneReq}" ></f:viewParam>
+        <f:viewParam name="sexReq" value="#{patientController.sexReq}" ></f:viewParam>
+        <f:viewParam name="membershipReq" value="#{patientController.membershipReq}" ></f:viewParam>
+        
+
+        <f:viewParam name="passwordReq" value="#{patientController.passwordReq}" ></f:viewParam>
+        <f:viewParam name="usernameReq" value="#{patientController.usernameReq}" ></f:viewParam>
+        <f:viewAction action="#{patientController.preparePatientAddingByRequest()}" ></f:viewAction>
+    </f:metadata>
+    <head>
+        <title>Login</title>
+    </head>
+    <body>
+        #{patientController.requestResponse}
+    </body>
+</html>
+

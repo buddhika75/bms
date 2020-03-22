@@ -1,0 +1,34 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:h="http://java.sun.com/jsf/html">
+
+    <h:body>
+        <ui:composition template="/resources/template/template.xhtml">
+            <ui:define name="content">
+                <h:form enctype="multipart/form-data">
+
+                    <h:outputScript library="photocam" name="webcam.js" ></h:outputScript>
+                    
+                    <p:commandButton type="button" value="Capture" onclick="PF('pc').capture()"/>
+                    <p:commandButton ajax="false" value="Back" action="clinical_patient_for_receptionist"/>
+
+                    <p:photoCam 
+                        listener="#{photoCamBean.oncapturePatientPhoto}" 
+                        widgetVar="pc" 
+                        width="800"
+                        height="600"
+                        photoWidth="800"
+                        photoHeight="600"
+                        />
+
+                    
+
+
+                </h:form>
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>

@@ -1,0 +1,133 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://java.sun.com/jsf/facelets"
+                template="/resources/template/template.xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:p="http://primefaces.org/ui">
+
+
+    <ui:define name="content">
+
+        <h:panelGroup >
+            <h:form  >
+                <p:panel header="Manage Clinical Fingings" >
+                    <p:commandButton ajax="false" value="Back" action="clinical_letter_index" ></p:commandButton>
+                    <p:panel>
+                        <h:panelGrid columns="2" >
+                            <p:outputLabel value="Patient" />
+                            <p:autoComplete widgetVar="aPt" id="acPt" forceSelection="true" 
+                                            value="#{letterController.patient}" 
+                                            completeMethod="#{patientController.completePatientByNameOrCodeOrTitle}" 
+                                            var="apt" itemLabel="#{apt.person.name}" 
+                                            itemValue="#{apt}" size="30"  style="width: 400px;">
+                                <p:column headerText="Name">
+                                    <h:outputLabel value="#{apt.person.nameWithTitle}" />
+                                </p:column>
+
+                                <p:column headerText="Age">
+                                    <h:outputLabel value="#{apt.age}" />
+                                </p:column>
+                                <p:column headerText="Code">
+                                    <h:outputLabel value="#{apt.code}" />
+                                </p:column>
+                                <p:column headerText="Sex">
+                                    <h:outputLabel value="#{apt.person.sex}" />
+                                </p:column>
+                                <p:column headerText="Address">
+                                    <h:outputLabel value="#{apt.person.address}" />
+                                </p:column>
+                                <p:column headerText="Date of Birth">
+                                    <h:outputLabel value="#{apt.person.dob}" >
+                                        <f:convertDateTime pattern="dd MMMM yyyy"/>
+                                    </h:outputLabel>
+                                </p:column>
+                            </p:autoComplete>
+                            <p:outputLabel value="Consider Date" />
+                            <p:selectBooleanCheckbox value="#{letterController.bool1}" >
+                                <f:ajax event="change" execute="@this" render="fd td" />
+                            </p:selectBooleanCheckbox>
+                            <p:outputLabel value="From Date" />
+                            <p:calendar id="fd" styleClass="dateTimePicker" value="#{letterController.fromDate}"
+                                        pattern="yyyy MM dd hh:mm:ss a" disabled="#{!letterController.bool1}" />
+                            <p:outputLabel value="To Date" />
+                            <p:calendar id="td" styleClass="dateTimePicker" value="#{letterController.toDate}"
+                                        pattern="yyyy MM dd hh:mm:ss a" disabled="#{!letterController.bool1}" />
+                            <p:outputLabel value="Letter Type" />
+                            <p:selectOneMenu value="#{letterController.documentType}"  >
+                                <f:selectItem itemLabel="Select Document Type" />
+                                <f:selectItems value="#{enumController.documentTypes}" var="t" itemLabel="#{t.label}" itemValue="#{t}"/>
+                                <f:ajax event="change" execute="@this" render="acPt" />
+                            </p:selectOneMenu>
+                            <p:commandButton value="Search" action="#{letterController.fetchAllLetters}" ajax="false" />
+                        </h:panelGrid>
+                    </p:panel>
+                    <p:panel>
+                        <p:dataTable value="#{letterController.documents}" var="d" rowIndexVar="i" >
+                            <p:column>
+                                <f:facet name="header" >
+                                    <p:outputLabel value="No" />
+                                </f:facet>
+                                <p:outputLabel value="#{i+1}" />
+                            </p:column>
+                            <p:column rendered="#{letterController.documentType eq null}" >
+                                <f:facet name="header" >
+                                    <p:outputLabel value="Letter Type" />
+                                </f:facet>
+                                <p:outputLabel value="#{d.documentType.label}" />
+                            </p:column>
+                            <p:column>
+                                <f:facet name="header" >
+                                    <p:outputLabel value="Visit Date" />
+                                </f:facet>
+                                <p:outputLabel value="#{d.visit.createdAt}" >
+                                    <f:convertDateTime pattern="yyyy MM dd" />
+                                </p:outputLabel>
+                            </p:column>
+                            <p:column>
+                                <f:facet name="header" >
+                                    <p:outputLabel value="Creater" />
+                                </f:facet>
+                                <p:outputLabel value="#{d.creater.webUserPerson.name}" />
+                            </p:column>
+                            <p:column>
+                                <f:facet name="header" >
+                                    <p:outputLabel value="Create Date" />
+                                </f:facet>
+                                <p:outputLabel value="#{d.createdAt}" >
+                                    <f:convertDateTime pattern="yyyy MM dd hh:mm:ss a" />
+                                </p:outputLabel>
+                            </p:column>
+                            <p:column>
+                                <f:facet name="header" >
+                                    <p:outputLabel value="Editer" />
+                                </f:facet>
+                                <p:outputLabel value="#{d.editer.webUserPerson.name}" />
+                            </p:column>
+                            <p:column>
+                                <f:facet name="header" >
+                                    <p:outputLabel value="Edit Date" />
+                                </f:facet>
+                                <p:outputLabel value="#{d.editedAt}" >
+                                    <f:convertDateTime pattern="yyyy MM dd hh:mm:ss a   " />
+                                </p:outputLabel>
+                            </p:column>
+                            <p:column>
+                                <f:facet name="header" >
+                                    <p:outputLabel value="Actions" />
+                                </f:facet>
+                                <p:commandButton value="View" action="#{letterController.viewDocument(d)}" ajax="false"/>
+                                <p:commandButton value="Edit" action="#{letterController.editDocument(d)}" ajax="false"/>
+
+                            </p:column>
+                        </p:dataTable>
+                    </p:panel>
+                </p:panel>
+            </h:form>
+
+        </h:panelGroup>
+
+    </ui:define>
+
+</ui:composition>

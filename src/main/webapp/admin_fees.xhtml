@@ -1,0 +1,89 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:h="http://java.sun.com/jsf/html">
+
+    <h:body>
+
+        <ui:composition template="/resources/template/template.xhtml">
+
+            <ui:define name="content">
+
+                <h:form>
+
+
+                    <p:panel header="Manage Financial Activities" >
+
+                        <p:tabView orientation="left">
+                            <p:tab title="Fees for Services &amp; Invastigations" >
+                                <h:panelGrid columns="1" columnClasses="grid1 grid1">
+                                    <p:commandButton  styleClass="longButton" ajax="false" value="Item Fees" action="/common/manage_item_fees" />
+                                </h:panelGrid>
+                            </p:tab>
+                            <p:tab title="Discounts by Payment Method" >
+                                <h:panelGrid columns="1" columnClasses="grid1 grid1" >
+                                    <p:commandButton   styleClass="longButton"  action="/memberShip/payment_method_discount_opd_by_department" value="By Department" actionListener="#{opdMemberShipDiscountController.recreateModel()}" ajax="false" rendered="#{webUserController.hasPrivilege('MemberShipOpdMemberShipDisByDepartment')}"/>                                            
+                                    <p:commandButton   styleClass="longButton"  action="/memberShip/payment_method_discount_opd_by_category" value="By Opd Category" actionListener="#{opdMemberShipDiscountController.recreateModel()}"  ajax="false" rendered="#{webUserController.hasPrivilege('MemberShipOpdMemberShipDisByCategory')}"/>
+                                    <p:commandButton   styleClass="longButton"  action="/memberShip/payment_method_discount_pharmacy_by_category" value="By Pharmacy Category " actionListener="#{opdMemberShipDiscountController.recreateModel()}"  ajax="false" rendered="#{webUserController.hasPrivilege('MemberShipOpdMemberShipDisByCategory')}"/>
+                                </h:panelGrid>
+                            </p:tab>
+                            <p:tab title="Discounts by Discount Schemes" >
+                                <h:panelGrid columns="1" columnClasses="grid1 grid1" >
+                                    <p:commandButton  styleClass="longButton"  action="/memberShip/payment_scheme" actionListener="#{paymentSchemeController.createPaymentSchemes()}" value="Discount Schemes" ajax="false" rendered="#{webUserController.hasPrivilege('MembershipSchemes')}"/>                                       
+                                    <p:commandButton  styleClass="longButton"  action="/memberShip/payment_scheme_payment_method_allowed"   value="Valid Discount Schemes for Payment Methods" ajax="false" rendered="#{webUserController.hasPrivilege('MembershipSchemes')}"/>                                       
+                                    <p:commandButton  styleClass="longButton"   action="/memberShip/payment_scheme_discount_opd_by_department" value="Discounts By Department" actionListener="#{opdMemberShipDiscountController.recreateModel()}" ajax="false"/>
+                                    <p:commandButton  styleClass="longButton"   action="/memberShip/payment_scheme_discount_opd_by_category" value="Discounts By Service &amp; Investigation Category" actionListener="#{opdMemberShipDiscountController.recreateModel()}"  ajax="false"/>
+                                    <p:commandButton   styleClass="longButton"  action="/memberShip/payment_scheme_discount_pharmacy_by_category" value="By Pharmacy Category " actionListener="#{opdMemberShipDiscountController.recreateModel()}"  ajax="false" />
+                                    <!--<p:commandButton  styleClass="longButton"   action="/memberShip/payment_scheme_discount_opd_by_item" value="By Item " actionListener="#{opdMemberShipDiscountController.recreateModel()}"  ajax="false" />-->
+                                    <p:commandButton   styleClass="longButton" action="/memberShip/payment_scheme_discount_channel"   value="Channel Discount Schemes" ajax="false" rendered="#{webUserController.hasPrivilege('MembershipSchemes')}"/>   
+                                </h:panelGrid>
+                            </p:tab>
+                            <p:tab title="Discounts for Members" >
+                                <h:panelGrid columns="1" columnClasses="grid1 grid1" >
+                                    <p:commandButton  styleClass="longButton" ajax="false" value="Membership Schemes" action="/memberShip/membership_scheme"/>
+                                    <!--<p:commandButton  styleClass="longButton" ajax="false" value="Membership Schemes Dicounts" action="/memberShip/membership_scheme_discount_inward" />-->
+                                    <p:commandButton  styleClass="longButton"  action="/memberShip/membership_scheme_payment_method_allowed"   value="Allowed Memberships for Payment Method" ajax="false" rendered="#{webUserController.hasPrivilege('MembershipSchemes')}"/>                                       
+                                    <!--<p:commandButton   styleClass="longButton"  action="/memberShip/membership_scheme_discount_inward" value="Schemes Dicounts Inward"  ajax="false" rendered="#{webUserController.hasPrivilege('MemberShipInwardMemberShipSchemesDicounts')}"/>-->
+                                    <!--<p:commandButton  styleClass="longButton"   action="/memberShip/report_inward" value="Inward MemberShip Report"  ajax="false" rendered="#{webUserController.hasPrivilege('MemberShipInwardMemberShipInwardMemberShipReport')}"/>-->
+                                    <p:commandButton   styleClass="longButton"  action="/memberShip/membership_scheme_discount_opd_by_department" value="By Department" actionListener="#{opdMemberShipDiscountController.recreateModel()}" ajax="false" rendered="#{webUserController.hasPrivilege('MemberShipOpdMemberShipDisByDepartment')}"/>
+                                    <!--<p:commandButton   styleClass="longButton"  action="/memberShip/membership_scheme_discount_opd_by_category" value="By Opd Category" actionListener="#{opdMemberShipDiscountController.recreateModel()}"  ajax="false" rendered="#{webUserController.hasPrivilege('MemberShipOpdMemberShipDisByCategory')}"/>-->
+                                    <p:commandButton   styleClass="longButton"  action="/memberShip/membership_scheme_discount_pharmacy_by_category" value="By Pharmacy Category " actionListener="#{opdMemberShipDiscountController.recreateModel()}"  ajax="false" rendered="#{webUserController.hasPrivilege('MemberShipOpdMemberShipDisByCategory')}"/>
+                                    <!--<p:commandButton   styleClass="longButton" action="/memberShip/membership_scheme_discount_channel"   value="Channel Discount Schemes" ajax="false" rendered="#{webUserController.hasPrivilege('MembershipSchemes')}"/>-->   
+                                    <p:commandButton   styleClass="longButton"  action="/memberShip/report_opd" value="Opd MemberShip Report"  ajax="false" rendered="#{webUserController.hasPrivilege('MemberShipOpdMemberShipDisOpdMemberShipReport')}"/>
+                                    <p:commandButton   styleClass="longButton"  action="/memberShip/report_opd" value="Discount List"  ajax="false" />
+
+                                </h:panelGrid>
+                            </p:tab>
+                            <p:tab title="Packages" >
+                                <h:panelGrid columns="1" columnClasses="grid1 grid1" >
+                                    <p:commandButton  styleClass="longButton" ajax="false" value="Package Names" action="lab/package_name" />
+                                    <p:commandButton  styleClass="longButton" ajax="false" value="Add Item to Package" action="lab/package_item" />
+                                    <p:commandButton  styleClass="longButton" ajax="false" value="Manage Package Prices" action="lab/package_item_prices" />
+                                </h:panelGrid>
+                            </p:tab>
+                            <p:tab title="Medical Packages"  >
+                                <h:panelGrid columns="1" columnClasses="grid1 grid1" >
+                                    <p:commandButton  styleClass="longButton" ajax="false" value="Medical Package Names" action="opd_medical_package_name" />
+                                    <p:commandButton  styleClass="longButton" ajax="false" value="Add Item to Package" action="opd_medical_package_item" />
+                                    <p:commandButton  styleClass="longButton" ajax="false" value="Manage Package Prices" action="opd_medical_package_item_prices" />
+                                </h:panelGrid>
+                            </p:tab>
+
+
+                        </p:tabView>
+
+
+                    </p:panel>
+
+
+
+                </h:form>
+            </ui:define>
+
+
+        </ui:composition>
+
+    </h:body>
+</html>

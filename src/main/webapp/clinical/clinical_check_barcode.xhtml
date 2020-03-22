@@ -1,0 +1,48 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://java.sun.com/jsf/facelets"
+                template="/resources/template/template.xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:p="http://primefaces.org/ui">
+
+
+    <ui:define name="content">
+
+        <h:panelGroup >
+            <h:form  >
+                <p:panel>
+
+                    <f:facet name="header" >
+                        <h:outputText value="Manage Treatments" ></h:outputText>
+                        <p:spacer width="40" height="1" ></p:spacer>
+                        <p:commandButton value="Fill" ajax="false" action="#{letterController.fillAllPatientBarcodes}" ></p:commandButton>
+                        <p:commandButton value="Refresh" ajax="false" action="#" ></p:commandButton>
+                    </f:facet>
+
+                    <p:dataTable value="#{letterController.patients}" var="p" >
+                        <p:column>
+                            <p:outputLabel value="#{p.person.nameWithTitle}" />
+                        </p:column>
+                        <p:column>
+                            <p:outputLabel value="#{p.code}" />
+                        </p:column>
+                        <p:column>
+                            <div style="width: 8cm; height: 1cm; text-align: center; overflow: hidden;" >
+                                <p:barcode   style="width: 7.5cm; height: 5cm;"   type="code128" cache="false" value="#{p.code}" ></p:barcode>
+                            </div>
+                        </p:column>
+                        <p:column>
+                            <p:barcode value="#{p.code}" cache="false" type="ean8" />
+                        </p:column>
+
+                    </p:dataTable>
+                </p:panel>
+            </h:form>
+
+        </h:panelGroup>
+
+    </ui:define>
+
+</ui:composition>

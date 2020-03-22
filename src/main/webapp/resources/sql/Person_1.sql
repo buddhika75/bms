@@ -1,0 +1,1 @@
+select * from patient where `PERSON_ID`=44596

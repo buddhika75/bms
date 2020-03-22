@@ -1,0 +1,449 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ph="http://java.sun.com/jsf/composite/pharmacy">
+
+    <h:body>
+
+        <ui:composition template="/resources/template/template.xhtml">
+
+            <ui:define name="content">
+                <h:form>
+                    <p:panel header="Reprint" >
+                        <f:facet name="header" >
+                            <h:outputLabel value="Reprint Sale Bill" ></h:outputLabel>
+                            <hr/>
+                            <p:commandButton value="Reprint" ajax="false" >
+                                <p:printer target="gpBillPreview" ></p:printer>
+                            </p:commandButton>
+
+                            <p:commandButton ajax="false" value="Cancel" action="pharmacy_cancel_bill_retail" disabled="#{pharmacyBillSearch.bill.cancelled}"
+                                             rendered="#{webUserController.hasPrivilege('PharmacySaleCancel')}">                           
+                            </p:commandButton>
+
+                            <p:commandButton accesskey="n" value="New Pharmacy Bill"  
+                                             ajax="false" action="pharmacy_bill_retail_sale" 
+                                             onclick="onSubmitButton();"
+                                             actionListener="#{pharmacySaleController.resetAll()}" 
+                                             style="font-size: 18px!important; font-weight: bold!important; float: right"></p:commandButton>
+
+                        </f:facet>
+
+
+                    </p:panel>
+
+
+
+                    <h:panelGroup   id="gpBillPreview"  > 
+
+                        <h:panelGroup   id="gpBillPreviewSingle" >
+
+                            <div >
+                                <h:panelGroup rendered="#{sessionController.institutionPreference.pharmacyBillPrabodha eq false}" > 
+                                    <!--<ph:saleBill bill="#{pharmacyBillSearch.bill}" duplicate="true" ></ph:saleBill>-->
+                                    <h:outputStylesheet library="css" name="pharmacypos.css" ></h:outputStylesheet>
+                                    <div class="posbill">
+
+                                        <div class="institutionName" style="text-align: center!important;
+                                             font-weight: bold!important;
+                                             font-size: 15px!important;
+                                             font-weight: bold;">
+                                            <h:outputLabel value="#{pharmacyBillSearch.bill.department.printingName}" />
+                                        </div>
+                                        <div class="institutionContact" >
+                                            <div>
+                                                <h:outputLabel value="#{pharmacyBillSearch.bill.department.address}"/>
+                                            </div>
+                                            <div >
+                                                <h:outputLabel value="#{pharmacyBillSearch.bill.department.telephone1} "/>
+                                                <h:outputLabel value="#{pharmacyBillSearch.bill.department.telephone2}"/>
+                                            </div>
+                                            <div >
+                                                <h:outputLabel value="#{pharmacyBillSearch.bill.department.fax}"/>                                                 
+                                            </div>
+                                        </div>
+
+                                        <div class="headingBill">
+                                            <h:outputLabel value="Sale Bill"   />    
+                                            <h:outputLabel value="**Duplicate**"  /> 
+                                            <h:outputLabel value="**Cancelled**"  rendered="#{pharmacyBillSearch.bill.cancelled eq true}" /> 
+                                        </div>
+
+                                        <div class="billline">
+                                            <h:outputLabel value="-----------------------------------------------"   />                           
+                                        </div>
+
+                                        <div class="billDetails" >
+                                            <table style="width: 100%;" >
+                                                <tr>
+                                                    <td style="width: 15%; text-align: left;" >
+                                                        <h:outputLabel value="Date" class="billDetails" ></h:outputLabel>
+                                                    </td>
+                                                    <td>:</td>
+                                                    <td style="width: 30%" >
+                                                        <!--<h:outputLabel value=": &npsp;" ></h:outputLabel>-->
+                                                        <h:outputLabel value="#{pharmacyBillSearch.bill.createdAt}" class="billDetails" >
+                                                            <f:convertDateTime pattern="dd/MM/yy" ></f:convertDateTime>
+                                                        </h:outputLabel>
+                                                    </td>
+                                                    <td style="width: 10%" >
+
+                                                    </td>
+                                                    <td style="width: 15%" >
+                                                        <!--<h:outputLabel value="Time" ></h:outputLabel>-->
+                                                    </td>
+
+                                                    <td style="width: 30%" >
+                                                        <!--<h:outputLabel value=": &npsp;" ></h:outputLabel>-->
+                                                        <h:outputLabel value="#{pharmacyBillSearch.bill.createdAt}" class="billDetails">
+                                                            <f:convertDateTime pattern="hh:mm a" ></f:convertDateTime>
+                                                        </h:outputLabel>
+                                                    </td>
+
+                                                </tr>
+
+
+                                                <tr>
+                                                    <td style="width: 15% ;text-align: left;" >
+                                                        <h:outputLabel value="Inv.No" class="billDetails"></h:outputLabel>
+                                                    </td>
+                                                    <td>:</td>
+                                                    <td style="width: 30%;" >
+                                                        <!--<h:outputLabel value=": &npsp;" ></h:outputLabel>-->
+                                                        <h:outputLabel value="#{pharmacyBillSearch.bill.deptId}"  class="billDetails">
+                                                        </h:outputLabel>
+                                                    </td>
+                                                    <td style="width: 10%" >
+
+                                                    </td>
+                                                    <td style="width: 15%" >
+                                                        <!--<h:outputLabel value="User" ></h:outputLabel>-->
+                                                    </td>
+
+                                                    <td style="width: 30%" >
+                                                        <!--<h:outputLabel value=": &npsp;" ></h:outputLabel>-->
+                                                        <h:outputLabel value="#{pharmacyBillSearch.bill.creater.staff.code}" class="billDetails">
+                                                        </h:outputLabel>
+                                                    </td>
+
+                                                </tr>
+
+                                                <tr>
+                                                    <td style="width: 15% ;text-align: left;" >
+                                                        <h:outputLabel value="Method" class="billDetails"></h:outputLabel>
+                                                    </td>
+                                                    <td>:</td>
+                                                    <td style="width: 30%;" >
+                                                        <!--<h:outputLabel value=": &npsp;" ></h:outputLabel>-->
+                                                        <h:outputLabel value="#{pharmacyBillSearch.bill.paymentMethod}"  class="billDetails">
+                                                        </h:outputLabel>
+                                                    </td>
+                                                    <td style="width: 10%" >
+
+                                                    </td>
+                                                    <td style="width: 15%" >
+                                                        <!--<h:outputLabel value="User" ></h:outputLabel>-->
+                                                    </td>
+
+                                                    <td style="width: 30%" >
+                                                        <!--<h:outputLabel value=": &npsp;" ></h:outputLabel>-->
+                            <!--                            <h:outputLabel value="#{pharmacyBillSearch.bill.creater.staff.code}" >
+                                                        </h:outputLabel>-->
+                                                    </td>
+
+                                                </tr>
+
+                                                <h:panelGroup rendered="#{pharmacyBillSearch.bill.patient ne null}" >
+                                                    <tr>
+                                                        <td style="width: 15% ;text-align: left;" >
+                                                            <h:outputLabel value="Name" class="billDetails"></h:outputLabel>
+                                                        </td>
+                                                        <td>:</td>
+                                                        <td style="width: 30%;" >
+                                                            <h:outputLabel value="#{pharmacyBillSearch.bill.patient.person.nameWithTitle}"  class="billDetails">
+                                                            </h:outputLabel>
+                                                        </td>
+                                                        <td style="width: 10%" >
+                                                        </td>
+                                                        <td style="width: 15%" >
+                                                        </td>
+                                                        <td style="width: 30%" >
+                                                        </td>
+                                                    </tr>
+                                                </h:panelGroup>
+
+
+
+
+                                                <h:panelGroup rendered="#{pharmacyBillSearch.bill.toStaff ne null}" >
+                                                    <tr>
+                                                        <td style="width: 15% ;text-align: left;" >
+                                                            <h:outputLabel value="Staff Name" class="billDetails"></h:outputLabel>
+                                                        </td>
+                                                        <td>:</td>
+                                                        <td style="width: 30%;" >
+                                                            <h:outputLabel value="#{pharmacyBillSearch.bill.toStaff.person.nameWithTitle}"  class="billDetails">
+                                                            </h:outputLabel>
+                                                        </td>
+                                                        <td style="width: 10%" >
+                                                        </td>
+                                                        <td style="width: 15%" >
+                                                        </td>
+                                                        <td style="width: 30%" >
+                                                        </td>
+                                                    </tr>
+                                                </h:panelGroup>
+
+
+                                                <h:panelGroup rendered="#{pharmacyBillSearch.bill.toDepartment ne null}" >
+                                                    <tr>
+                                                        <td style="width: 15% ;text-align: left;" >
+                                                            <h:outputLabel value="To Unit" class="billDetails"></h:outputLabel>
+                                                        </td>
+                                                        <td>:</td>
+                                                        <td style="width: 30%;" >
+                                                            <h:outputLabel value="#{pharmacyBillSearch.bill.toDepartment.name}"  class="billDetails">
+                                                            </h:outputLabel>
+                                                        </td>
+                                                        <td style="width: 10%" >
+                                                        </td>
+                                                        <td style="width: 15%" >
+                                                        </td>
+                                                        <td style="width: 30%" >
+                                                        </td>
+                                                    </tr>
+                                                </h:panelGroup>
+
+                                                <h:panelGroup rendered="#{pharmacyBillSearch.bill.toInstitution ne null}" >
+                                                    <tr>
+                                                        <td style="width: 15% ;text-align: left;" >
+                                                            <h:outputLabel value="Company" class="billDetails"></h:outputLabel>
+                                                        </td>
+                                                        <td>:</td>
+                                                        <td style="width: 30%;" >
+                                                            <h:outputLabel value="#{pharmacyBillSearch.bill.toInstitution.name}"  class="billDetails">
+                                                            </h:outputLabel>
+                                                        </td>
+                                                        <td style="width: 10%" >
+                                                        </td>
+                                                        <td style="width: 15%" >
+                                                        </td>
+                                                        <td style="width: 30%" >
+                                                        </td>
+                                                    </tr>
+                                                </h:panelGroup>
+                                            </table>
+
+
+                                        </div>
+
+
+                                        <div class="billline">
+                                            <h:outputLabel value="-----------------------------------------------"   />                           
+                                        </div>
+
+
+                                        <div >
+
+                                            <table width="100%" style="width: 100%;" >
+                                                <tr>
+                                                    <td style="width: 25%; ">
+                                                        <h:outputLabel value="ITEM" styleClass="itemHeadings" ></h:outputLabel>
+                                                    </td>
+                                                    <td  style="width:15%;text-align: right; padding-right: 30px;">
+                                                        <h:outputLabel value="QTY"  styleClass="itemHeadings" ></h:outputLabel>
+                                                    </td>
+
+                                                    <td  style="width:25%;text-align: right; padding-right: 30px;">
+                                                        <h:outputLabel value="RATE"  styleClass="itemHeadings" ></h:outputLabel>
+                                                    </td>
+
+                                                    <td  style="width:30%;text-align: right; padding-right: 30px;">
+                                                        <h:outputLabel value="VALUE"  styleClass="itemHeadings" ></h:outputLabel>
+                                                    </td>
+                                                </tr>
+
+                                                <tr>
+                                                    <td colspan="4" >
+                                                        <h:outputLabel value="-----------------------------------------------"   />                           
+                                                    </td>
+                                                </tr>
+
+                                                <ui:repeat value="#{pharmacyBillSearch.bill.billItems}" var="bip"   >
+
+                                                    <tr>
+                                                        <td colspan="4" style="overflow: visible;">
+                                                            <h:outputLabel value="#{bip.item.code}"  styleClass="itemsBlock" style="text-transform: capitalize;" >
+                                                            </h:outputLabel>
+                                                            -
+                                                            &nbsp;
+                                                            <h:outputLabel value="#{bip.searialNo+1} - #{bip.item.name}"  styleClass="itemsBlock" style="text-transform: capitalize!important;"  >
+                                                            </h:outputLabel>
+
+
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>
+
+                                                        </td>
+                                                        <td>
+                                                            <h:outputLabel    value="#{bip.qty}"    styleClass="itemsBlock"   style="text-align: right; padding-right: 30px;" >
+                                                                <f:convertNumber integerOnly="true" />
+                                                            </h:outputLabel>
+                                                        </td>
+                                                        <td  styleClass="itemsBlockRight"  style="text-align: right; padding-right: 30px;" >
+                                                            <h:outputLabel    value="#{bip.rate}"     >
+                                                                <f:convertNumber pattern="#,##0.00" />
+                                                            </h:outputLabel>
+                                                        </td>
+                                                        <td  styleClass="itemsBlockRight" style="text-align: right; padding-right: 30px;" >
+                                                            <h:outputLabel    value="#{bip.grossValue}"    >
+                                                                <f:convertNumber pattern="#,##0.00" />
+                                                            </h:outputLabel>
+                                                        </td>
+
+                                                    </tr>
+
+
+
+
+                                                </ui:repeat>
+
+
+
+
+                                            </table>
+
+
+                                        </div>
+
+
+                                        <div class="billline">
+                                            <h:outputLabel value="-----------------------------------------------"   />                           
+                                        </div>
+
+
+
+                                        <div  >
+
+                                            <table style="width: 100%;">
+
+                                                <tr>
+                                                    <td class="totalsBlock" style="text-align: left; width: 60%;">
+                                                        <h:outputLabel value="Total" />
+                                                    </td>
+                                                    <td  class="totalsBlock" style="text-align: right!important; width: 40%; padding-right: 30px;">
+                                                        <h:outputLabel value="#{pharmacyBillSearch.bill.total}" >
+                                                            <f:convertNumber pattern="#,##0.00" />
+                                                        </h:outputLabel>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td  class="totalsBlock" style="text-align: left;">
+                                                        <h:outputLabel  rendered="#{pharmacyBillSearch.bill.discount ne 0.0}" value="Discount " style="font-weight: bolder!important;"/>
+                                                    </td>
+                                                    <td  class="totalsBlock" style="text-align: right!important; ; padding-right: 30px;">
+                                                        <h:outputLabel rendered="#{pharmacyBillSearch.bill.discount ne 0.0}"   value="#{-pharmacyBillSearch.bill.discount}" style="font-weight: bolder!important;" >
+                                                            <f:convertNumber pattern="#,##0.00" />
+                                                        </h:outputLabel>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td  class="totalsBlock" style="text-align: left;">
+                                                        <h:outputLabel  rendered="#{pharmacyBillSearch.bill.discount ne 0.0}"    value="Net Total" />
+                                                    </td>
+                                                    <td  class="totalsBlock" style="text-align: right!important;font-weight: bold; ; padding-right: 30px; ">
+                                                        <h:outputLabel  rendered="#{pharmacyBillSearch.bill.discount ne 0.0}"    value="#{pharmacyBillSearch.bill.netTotal}">
+                                                            <f:convertNumber pattern="#,##0.00" />
+                                                        </h:outputLabel>                          
+                                                    </td>                        
+                                                </tr>
+
+                                                <tr>
+
+                                                    <td  class="totalsBlock" style="text-align: left;">
+                                                        <h:outputLabel  rendered="#{pharmacyBillSearch.bill.discountPercentPharmacy ne 0.0}" value="Discount Percent" style="font-weight: bolder!important;"/>
+                                                    </td>
+
+                                                    <td  class="totalsBlock" style="text-align: right!important;font-weight: bold; ; padding-right: 30px; ">
+                                                        <h:outputLabel  rendered="#{pharmacyBillSearch.bill.discountPercentPharmacy ne 0.0}"    value="#{pharmacyBillSearch.bill.discountPercentPharmacy} %">
+                                                            <f:convertNumber pattern="#,##0.0" />
+                                                        </h:outputLabel>
+
+
+                                                    </td>
+                                                </tr>
+
+                                                <tr>
+                                                    <td  class="totalsItemBlock" style="text-align: left;">
+                                                        <h:outputLabel   value="Number of Items Count" />
+                                                    </td>
+                                                    <td  class="totalsItemBlock">
+                                                        <h:outputLabel   value="#{pharmacyBillSearch.bill.billItems.size()}">
+                                                            <f:convertNumber pattern="#,##0.00" />
+                                                        </h:outputLabel>
+                                                    </td>
+                                                </tr>
+
+
+                                            </table>
+
+                                        </div>
+
+
+                                        <div class="footer">
+                                            <p:graphicImage cache="false" value="#{billController.getCreateBarcodeCode128(pharmacyBillSearch.bill.patient.phn)}" 
+                                                            style="max-width: 7.5cm; padding: 10px; margin: 10px;" ></p:graphicImage>
+                                            <br/>
+                                            THANK YOU !
+                                            <h:panelGroup  rendered="#{sessionController.institutionPreference.pharmacyBillFooter ne null}">
+                                                <br/>
+                                            </h:panelGroup>
+                                            <h:outputLabel value="#{sessionController.institutionPreference.pharmacyBillFooter}" ></h:outputLabel>
+                                        </div>
+
+
+
+                                    </div>
+                                </h:panelGroup>
+                            </div>
+
+                        </h:panelGroup>
+
+                        <h:panelGroup id="gpBillPreviewDouble" rendered="#{sessionController.institutionPreference.pharmacyBillPaperType eq 'PosPaper'}"> 
+
+                            <div >
+                                <h:panelGroup rendered="#{sessionController.institutionPreference.pharmacyBillPrabodha eq true}"> 
+                                    <ph:saleBill_prabodha bill="#{pharmacyBillSearch.bill}"></ph:saleBill_prabodha>
+                                </h:panelGroup>
+                            </div>
+
+                        </h:panelGroup>
+
+                        <h:panelGroup id="gpBillPreviewFiveFive" rendered="#{sessionController.institutionPreference.pharmacyBillPaperType eq 'FiveFivePaper'}"> 
+
+                            <div >
+                                <h:panelGroup rendered="#{sessionController.institutionPreference.pharmacyBillPrabodha eq false}" > 
+                                    <ph:saleBill_five_five bill="#{pharmacyBillSearch.bill}"></ph:saleBill_five_five>
+                                </h:panelGroup>
+                            </div>
+
+                        </h:panelGroup>
+
+                    </h:panelGroup>
+
+
+                </h:form>
+            </ui:define>
+
+
+
+        </ui:composition>
+
+    </h:body>
+</html>

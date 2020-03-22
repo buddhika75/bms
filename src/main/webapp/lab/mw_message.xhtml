@@ -1,0 +1,55 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <body>
+
+        <ui:composition template="./../resources/template/template.xhtml">
+
+            <ui:define name="content">
+
+
+
+                <f:view>
+
+
+                    <h:form>
+                        <h1><h:outputText value="View"/></h1>
+                        <p:panelGrid columns="2">
+                            <h:outputText value="Id:"/>
+                            <h:outputText value="#{middlewareController.selected.id}" title="Id"/>
+                            <h:outputText value="Machine:"/>
+                            <h:outputText value="#{middlewareController.selected.machine}" title="Machine"/>
+                            <h:outputText value="Shift:"/>
+                            <h:outputText value="#{middlewareController.selected.shift}" title="Shift"/>
+                            <h:outputText value="Shift1:"/>
+                            <h:outputText value="#{middlewareController.selected.shift1}" title="Shift1"/>
+                            <h:outputText value="Shift2:"/>
+                            <h:outputText value="#{middlewareController.selected.shift2}" title="Shift2"/>
+                            <h:outputText value="Msg:"/>
+                            <h:outputText value="#{middlewareController.selected.msg}" title="Msg"/>
+                            <h:outputText value="ApiResponse:"/>
+                            <h:outputText value="#{middlewareController.selected.apiResponse}" title="ApiResponse"/>
+                            <h:outputText value="ReceivedAt:"/>
+                            <h:outputText value="#{middlewareController.selected.receivedAt}" title="ReceivedAt">
+                                <f:convertDateTime pattern="MM/dd/yyyy HH:mm:ss.SSS" />
+                            </h:outputText>
+                            <h:outputText value="SentAt:"/>
+                            <h:outputText value="#{middlewareController.selected.sentAt}" title="SentAt">
+                                <f:convertDateTime pattern="MM/dd/yyyy HH:mm:ss.SSS" />
+                            </h:outputText>
+                        </p:panelGrid>
+                    </h:form>
+                </f:view>
+
+
+            </ui:define>
+
+        </ui:composition>
+
+    </body>
+</html>

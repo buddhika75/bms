@@ -1,0 +1,81 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:l="http://java.sun.com/jsf/composite/letters"
+      xmlns:f="http://java.sun.com/jsf/core">
+
+    <h:body>
+
+        <ui:composition template="/resources/template/template.xhtml">
+
+            <ui:define name="content">
+
+                <h:outputStylesheet library="css" name="paySheet.css" ></h:outputStylesheet>
+                <p:panel  id="panelQueue" header="Request Letter" >
+
+                    <h:form>
+                        <h:panelGrid columns="1"  >
+                            <p:panel header="" >
+                                <h:panelGrid columns="2"  >
+                                    <h:outputLabel value="Speciality" ></h:outputLabel>
+                                    <p:autoComplete value="#{practiceBookingController.speciality}"
+                                                    id="acSpeciality" 
+                                                    completeMethod="#{specialityController.completeSpeciality}"
+                                                    var="dsp" itemLabel="#{dsp.name}" itemValue="#{dsp}"
+                                                    >
+                                        <f:ajax event="itemSelect" execute="acSpeciality" render="acStaff" ></f:ajax>
+                                    </p:autoComplete>
+                                    <h:outputLabel value="Doctor" />
+                                    <p:autoComplete value="#{letterController.document.doctor}"
+                                                    id="acStaff" converter="conDoc"
+                                                    completeMethod="#{practiceBookingController.completeDoctorsOfSelectedSpeciality}"
+                                                    var="doc"
+                                                    itemLabel="#{doc.person.nameWithTitle}" itemValue="#{doc}"
+                                                    >
+                                        <f:ajax event="itemSelect" execute="@this" render="txh" listener="#{letterController.listnerHeader}" />
+                                    </p:autoComplete>
+                                    <p:outputLabel value="Date" />
+                                    <p:calendar value="#{letterController.document.fromDate}" >
+                                        <f:convertDateTime parent="dd MMMM yyyy" ></f:convertDateTime>
+                                    </p:calendar>
+                                    
+                                    <p:outputLabel value="Diagnosis" />
+                                    <p:inputTextarea value="#{letterController.document.diagnosis}" rows="5" cols="60" />     
+                                    <p:outputLabel value="Comments" />
+                                    <p:inputTextarea value="#{letterController.document.specialComments}" rows="5" />     
+                                    <p:outputLabel value="Header" />
+                                    <p:inputTextarea id="txh" value="#{letterController.document.header}" rows="5" />     
+                                </h:panelGrid>
+                                <h:panelGrid columns="3"  >
+                                    <p:commandButton value="Save" ajax="false"
+                                                     rendered="#{letterController.document.id eq null}"
+                                                     action="#{letterController.saveDocument}" />
+                                    <p:commandButton value="Update" ajax="false"
+                                                     rendered="#{letterController.document.id ne null and webUserController.hasPrivilege('ClinicalAdministrationEditLetter')}"
+                                                     action="#{letterController.saveDocument}" />
+                                    <p:commandButton value="Print" ajax="false" action="#"  >
+                                        <p:printer target="gpPosBill" ></p:printer>
+                                    </p:commandButton>
+                                    <p:commandButton value="Back to letters" ajax="false" action="clinical_letter_index"/>
+                                </h:panelGrid>
+                            </p:panel>
+                            <p:panel>
+                                <h:panelGrid  id="gpPosBill" style="width: 1000px;height: 1000px;" >
+                                    <l:letter_request_letter con="#{letterController.document}" controller="#{letterController}" /> 
+                                </h:panelGrid>
+                            </p:panel>
+                        </h:panelGrid>
+                    </h:form>
+
+                </p:panel>
+
+            </ui:define>
+
+        </ui:composition>
+
+    </h:body>
+
+</html>
