@@ -66,6 +66,11 @@ public class PatientController implements Serializable {
     @Inject
     ApplicationController applicationController;
 
+    
+    
+    private String billNoForPaymentForMembership;
+    private boolean billNumberForPaymentMatchesPatient;
+    
     private Patient current;
     private List<Patient> items = null;
 
@@ -876,6 +881,7 @@ public class PatientController implements Serializable {
 
     public void setCurrent(Patient current) {
         this.current = current;
+        billNoForPaymentForMembership = "";
         getYearMonthDay();
         if (current == null) {
             yearMonthDay.setDay("0");
@@ -1157,6 +1163,58 @@ public class PatientController implements Serializable {
     public void setSearchPhn(String searchPhn) {
         this.searchPhn = searchPhn;
     }
+
+    public String getBillNoForPaymentForMembership() {
+        return billNoForPaymentForMembership;
+    }
+
+    public void setBillNoForPaymentForMembership(String billNoForPaymentForMembership) {
+        this.billNoForPaymentForMembership = billNoForPaymentForMembership;
+    }
+
+    public boolean isBillNumberForPaymentMatchesPatient() {
+        if(billNoForPaymentForMembership==null || billNoForPaymentForMembership.trim().equals("")){
+            billNumberForPaymentMatchesPatient = false;
+            return billNumberForPaymentMatchesPatient;
+        }
+        String cardIssue = "Card issue";
+        cardIssue = cardIssue.trim().toLowerCase();
+        
+        String j = "select count(bi) from BillItem bi "
+                + " where bi.bill.retired<>:ret "
+                + " and bi.bill.cancelled<>:ret "
+                + " and bi.retired<>:ret "
+                + " and bi.bill.patient=:pt "
+                + " and (bi.bill.insId=:bn or bi.bill.deptId=:bn or bi.bill.id=:bid) "
+                + " and lower(bi.item.name)=:name";
+        Map m = new HashMap();
+        m.put("pt", current);
+        m.put("ret", false);
+        m.put("name", cardIssue);
+        m.put("bn", billNoForPaymentForMembership);
+
+        try{
+            Long bid = Long.parseLong(billNoForPaymentForMembership);
+            m.put("bid", bid);
+        }catch(Exception e){
+            m.put("bid", 0);
+        }
+        
+        Long count = getFacade().countBySql(j,m);
+        if(count==null||count==0l){
+            billNumberForPaymentMatchesPatient = false;
+            return billNumberForPaymentMatchesPatient;
+        }
+        billNumberForPaymentMatchesPatient = true;
+        return billNumberForPaymentMatchesPatient;
+    }
+
+    public void setBillNumberForPaymentMatchesPatient(boolean billNumberForPaymentMatchesPatient) {
+        this.billNumberForPaymentMatchesPatient = billNumberForPaymentMatchesPatient;
+    }
+    
+    
+    
 
     /**
      *

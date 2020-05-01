@@ -107,19 +107,19 @@
                                                                  process="@this" update="txtCode" >
                                                 </p:commandButton>
                                             </h:panelGroup>
-                                            
-                                            
+
+
                                             <h:outputLabel value="PHN" rendered="true"/>
                                             <h:panelGroup rendered="true" >
                                                 <p:inputText id="txtPhn" 
                                                              required="true" requiredMessage="Please Generate a new PHN or Enter the existing PHN of the patient"
                                                              value="#{patientController.current.phn}" ></p:inputText>
-                                                 <p:commandButton value="Generate" id="cmdGenPhn" 
-                                                                  action="#{patientController.generateNewPhn}" 
-                                                                  process="@this" update="txtPhn" >
+                                                <p:commandButton value="Generate" id="cmdGenPhn" 
+                                                                 action="#{patientController.generateNewPhn}" 
+                                                                 process="@this" update="txtPhn" >
                                                 </p:commandButton>
                                             </h:panelGroup>
-                                            
+
 
                                             <h:outputLabel value="Sex"/>
                                             <h:outputLabel rendered="#{patientController.current.person eq null}" value=""/>
@@ -164,10 +164,25 @@
 
 
                                             <h:outputLabel value="Membership"/>
-                                            <p:selectOneMenu value="#{patientController.current.person.membershipScheme}" >
-                                                <f:selectItem itemLabel="Select" ></f:selectItem>
-                                                <f:selectItems value="#{membershipSchemeController.items}" var="m" itemLabel="#{m.name}" itemValue="#{m}" ></f:selectItems>
-                                            </p:selectOneMenu>
+
+
+
+
+                                            <h:panelGrid columns="2" id="cmbMembership">
+                                                <h:panelGroup  >
+                                                    <p:selectOneMenu disabled="#{!patientController.billNumberForPaymentMatchesPatient}" value="#{patientController.current.person.membershipScheme}" >
+                                                        <f:selectItem itemLabel="Select" ></f:selectItem>
+                                                        <f:selectItems value="#{membershipSchemeController.items}" var="m" itemLabel="#{m.name}" itemValue="#{m}" ></f:selectItems>
+                                                    </p:selectOneMenu>
+                                                </h:panelGroup>
+                                                <p:inputText id="txtBillNo" value="#{patientController.billNoForPaymentForMembership}" placeholder="Enter Bill No to activate mambership" >
+                                                    <p:ajax process="@this" update="cmbMembership" ></p:ajax>
+                                                    <p:ajax event="blur" process="@this" update="cmbMembership" ></p:ajax>
+                                                </p:inputText>
+                                                
+                                            </h:panelGrid>
+
+
 
                                             <h:outputLabel value="Card Issue"/>
                                             <h:panelGroup>
