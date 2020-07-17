@@ -696,10 +696,10 @@
 
                                                     <tr>
                                                         <td class="totalsBlock" style="text-align: left; width: 60%;">
-                                                            <h:outputLabel value="Net Total" />
+                                                            <h:outputLabel value="Gross Total" />
                                                         </td>
                                                         <td  class="totalsBlock" style="text-align: right!important; width: 40%; padding-right: 30px;">
-                                                            <h:outputLabel value="#{billSearch.bill.netTotal}" >
+                                                            <h:outputLabel value="#{billSearch.bill.total}" >
                                                                 <f:convertNumber pattern="#,##0.00" />
                                                             </h:outputLabel>
                                                         </td>
@@ -707,7 +707,7 @@
 
                                                     <tr>
                                                         <td  class="totalsBlock" style="text-align: left;">
-                                                            <h:outputLabel  rendered="#{billSearch.bill.discount ne 0.0}" value="Discount " style="font-weight: bolder!important;"/>
+                                                            <h:outputLabel  rendered="#{billSearch.bill.discount ne 0.0}" value="Discount" style="font-weight: bolder!important;"/>
                                                         </td>
                                                         <td  class="totalsBlock" style="text-align: right!important; ; padding-right: 30px;">
                                                             <h:outputLabel rendered="#{billSearch.bill.discount ne 0.0}"   value="#{-billSearch.bill.discount}" style="font-weight: bolder!important;" >

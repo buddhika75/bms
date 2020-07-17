@@ -174,7 +174,7 @@
                                     <p:menuitem ajax="false" action="/lab/administration" value="Administration" rendered="#{webUserController.hasPrivilege('LabAdiministrator')}"  ></p:menuitem>
                                 </p:submenu>
 
-                               
+
 
                                 <p:submenu styleClass="rightBordrOnly" label="Pharmacy"  rendered="#{webUserController.hasPrivilege('Pharmacy')}">
                                     <p:submenu label="Sale Bills" rendered="#{webUserController.hasPrivilege('PharmacySale')}"> 
@@ -659,6 +659,7 @@
                                     <p:menuitem  ajax="false"  action="/credit/index_opd_due_access" value="Opd Dues and Access"  ></p:menuitem>
                                     <p:menuitem  ajax="false"  action="/dataAdmin/report_entered_data" value="Check Entered Data"  ></p:menuitem>
                                     <p:menuitem  ajax="false"  action="/dataAdmin/update_entered_data" value="Update Entered Data"  ></p:menuitem>
+                                    <p:menuitem  ajax="false"  action="/analysis/index" value="Analysis"  ></p:menuitem>
 
                                 </p:submenu>
 
@@ -836,7 +837,7 @@
             <div style="height: 30px" class="nonPrintBlock" >
             </div>
             <div style="position: fixed; bottom: 10px; right: 10px; " class="nonPrintBlock" >
-                
+
                 <p:clock pattern="hh:mm:ss a - EEEE - dd MMMM yyyy" mode="server"  />  
                 <p:outputLabel value="#{sessionController.institutionPreference.channelBillPaperType}" rendered="false" ></p:outputLabel>
             </div>
