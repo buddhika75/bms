@@ -270,10 +270,16 @@
 
 
                                                 <h:outputLabel value="Membership"/>
-                                                <p:selectOneMenu value="#{patientController.current.person.membershipScheme}" >
-                                                    <f:selectItem itemLabel="Select" ></f:selectItem>
-                                                    <f:selectItems value="#{membershipSchemeController.items}" var="m" itemLabel="#{m.name}" itemValue="#{m}" ></f:selectItems>
-                                                </p:selectOneMenu>
+                                                <h:panelGroup >
+                                                    <h:panelGroup rendered="#{webUserController.hasPrivilege('ClinicalMembershipEdit')}">
+                                                        <p:selectOneMenu value="#{patientController.current.person.membershipScheme}" >
+                                                            <f:selectItem itemLabel="Select" ></f:selectItem>
+                                                            <f:selectItems value="#{membershipSchemeController.items}" var="m" itemLabel="#{m.name}" itemValue="#{m}" ></f:selectItems>
+                                                        </p:selectOneMenu>
+                                                    </h:panelGroup>
+                                                </h:panelGroup>
+
+
 
                                                 <h:outputLabel value="Card Issue"/>
                                                 <h:panelGroup>
@@ -362,12 +368,12 @@
                 </p:panel>
 
 
-                
+
                 <h:form >
                     <p:commandButton value="PHS for all" ajax="false" action="#{patientController.createPhnsForAllPatients()}" >
                     </p:commandButton>
                 </h:form>
-                
+
 
             </ui:define>
 

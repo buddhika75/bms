@@ -203,6 +203,8 @@ public enum Privileges {
     ClinicalPatientCommentsView,
     ClinicalPatientCommentsEdit,
     ClinicalPatientNameChange,
+    ClinicalMembershipAdd,
+    ClinicalMembershipEdit,
     
     ChannelAdd,
     ChannelCancel,

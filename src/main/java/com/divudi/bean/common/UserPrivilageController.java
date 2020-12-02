@@ -252,6 +252,11 @@ public class UserPrivilageController implements Serializable {
         TreeNode node710 = new PrivilageNode("View Patient Comments", node7, Privileges.ClinicalPatientCommentsView);
         TreeNode node711 = new PrivilageNode("Edit Patient Comments", node7, Privileges.ClinicalPatientCommentsEdit);
         TreeNode node712 = new PrivilageNode("Change Patient Name", node7, Privileges.ClinicalPatientNameChange);
+        TreeNode node713 = new PrivilageNode("Add Patient Membership", node7, Privileges.ClinicalMembershipAdd);
+        TreeNode node714 = new PrivilageNode("Edit Patient Membership", node7, Privileges.ClinicalMembershipEdit);
+        
+        
+        
         
         TreeNode node6 = new PrivilageNode("Administration", tmproot);
         TreeNode node60 = new PrivilageNode("Admin Menu", node6, Privileges.Admin);
