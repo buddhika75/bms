@@ -15,6 +15,7 @@ import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -26,6 +27,7 @@ import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.ejb.Schedule;
 import javax.ejb.Stateless;
+import javax.persistence.TemporalType;
 import javax.swing.JOptionPane;
 
 /**
@@ -47,25 +49,30 @@ public class SmsManagerEjb {
     }
 
     private void sendSmsAwaitingToSendInDatabase() {
-//        String j = "Select e from Sms e where e.sentSuccessfully=false and e.retired=false";
-//        List<Sms> smses = getSmsFacade().findBySQL(j);
-////        if (false) {
-////            Sms e = new Sms();
-////            e.getSentSuccessfully();
-////            e.getInstitution();
-////        }
-//        for (Sms e : smses) {
-//            e.setSentSuccessfully(Boolean.TRUE);
-//            getSmsFacade().edit(e);
-//
-//            sendSms(e.getReceipientNumber(), e.getSendingMessage(),
-//                    e.getInstitution().getSmsSendingUsername(),
-//                    e.getInstitution().getSmsSendingPassword(),
-//                    e.getInstitution().getSmsSendingAlias());
-//            e.setSentSuccessfully(true);
-//            e.setSentAt(new Date());
-//            getSmsFacade().edit(e);
+        String j = "Select e from Sms e where e.sentSuccessfully=false and e.retired=false and e.createdAt>:d";
+        Map m = new HashMap();
+        Calendar c = Calendar.getInstance();
+        c.set(Calendar.HOUR_OF_DAY, 0);
+        m.put("d", c.getTime());
+        //System.out.println("m = " + m);
+        List<Sms> smses = getSmsFacade().findBySQL(j,m,TemporalType.DATE);
+//        if (false) {
+//            Sms e = new Sms();
+//            e.getSentSuccessfully();
+//            e.getInstitution();
 //        }
+        for (Sms e : smses) {
+            e.setSentSuccessfully(Boolean.TRUE);
+            getSmsFacade().edit(e);
+
+            sendSms(e.getReceipientNumber(), e.getSendingMessage(),
+                    e.getInstitution().getSmsSendingUsername(),
+                    e.getInstitution().getSmsSendingPassword(),
+                    e.getInstitution().getSmsSendingAlias());
+            e.setSentSuccessfully(true);
+            e.setSentAt(new Date());
+            getSmsFacade().edit(e);
+        }
 
     }
 
@@ -94,7 +101,7 @@ public class SmsManagerEjb {
         }
 
         try {
-            System.out.println("targetURL = " + targetURL);
+            //System.out.println("targetURL = " + targetURL);
             //Create connection
             //Create connection
             //Create connection
@@ -103,142 +110,26 @@ public class SmsManagerEjb {
             //Create connection
             //Create connection
             //Create connection
-            //Create connection
-            //Create connection
-            //Create connection
-            //Create connection
-            //Create connection
-            //Create connection
-            //Create connection
-            //Create connection
-            //Create connection
-            //Create connection
-            //Create connection
-            //Create connection
-            //Create connection
-            //Create connection
-            //Create connection
-            //Create connection
-            //Create connection
-            //Create connection
-            //Create connection
-            //Create connection
-            //Create connection
-            //Create connection
-            //Create connection
-            //Create connection
-            //Create connection
-            //Create connection
-            //Create connection
-            //Create connection
-            //Create connection
-            //Create connection
-            //Create connection
-            //Create connection
-            //Create connection
-            //Create connection
-            //Create connection
-            //Create connection
-            //Create connection
-            //Create connection
-            //Create connection
-            //Create connection
-            //Create connection
-            //Create connection
-            //Create connection
-            //Create connection
-            //Create connection
-            //Create connection
-            //Create connection
-            //Create connection
-            //Create connection
-            //Create connection
-            //Create connection
-            //Create connection
-            //Create connection
-            //Create connection
-            //Create connection
-            //Create connection
-            //Create connection
-            //Create connection
-            //Create connection
-            //Create connection
-            //Create connection
-            //Create connection
-            //Create connection
-            //Create connection
-            //Create connection
-            //Create connection
-            //Create connection
-            //Create connection
-            //Create connection
-            //Create connection
-            //Create connection
-            //Create connection
-            //Create connection
-            //Create connection
-            //Create connection
-            //Create connection
-            //Create connection
-            //Create connection
-            //Create connection
-            //Create connection
-            //Create connection
-            //Create connection
-            //Create connection
-            //Create connection
-            //Create connection
-            //Create connection
-            //Create connection
-            //Create connection
-            //Create connection
-            //Create connection
-            //Create connection
-            //Create connection
-            //Create connection
-            //Create connection
-            //Create connection
-            //Create connection
-            //Create connection
-            //Create connection
-            //Create connection
-            //Create connection
-            //Create connection
-            //Create connection
-            //Create connection
-            //Create connection
-            //Create connection
-            //Create connection
-            //Create connection
-            //Create connection
-            //Create connection
-            //Create connection
-            //Create connection
-            //Create connection
-            //Create connection
-            //Create connection
-            //Create connection
-            //Create connection
-            //Create connection
-            //Create connection
-            //Create connection
-            //Create connection
-            System.out.println("1");
+            //System.out.println("1");
             URL url = new URL(targetURL);
-            System.out.println("2");
+            //System.out.println("2");
             connection = (HttpURLConnection) url.openConnection();
-            System.out.println("3");
+            //System.out.println("3");
             connection.setRequestMethod("GET");
-            System.out.println("4");
+            //System.out.println("4");
             connection.setDoOutput(true);
-            System.out.println("4");
+            //System.out.println("4");
             //Send request
             DataOutputStream wr = new DataOutputStream(
                     connection.getOutputStream());
-            System.out.println("5");
+            //System.out.println("5");
             wr.writeBytes(targetURL);
+            //System.out.println("6");
             wr.flush();
+            //System.out.println("wr = " + wr);
+            //System.out.println("7");
             wr.close();
+            //System.out.println("8");
             //Get Response  
             InputStream is = connection.getInputStream();
             BufferedReader rd = new BufferedReader(new InputStreamReader(is));
@@ -261,6 +152,9 @@ public class SmsManagerEjb {
 
     public boolean sendSms(String number, String message, String username, String password, String sendingAlias) {
 
+        //System.out.println("number = " + number);
+        //System.out.println("message = " + message);
+        //System.out.println("username = " + username);
 
         Map<String, String> m = new HashMap();
         m.put("userName", username);
@@ -269,7 +163,7 @@ public class SmsManagerEjb {
         m.put("number", number);
         m.put("message", message);
 
-        String res = executePost("http://localhost:7070/sms/faces/index.xhtml", m);
+        String res = executePost("http://localhost:8080/sms/faces/index.xhtml", m);
         if (res == null) {
             return false;
         } else if (res.toUpperCase().contains("200")) {
