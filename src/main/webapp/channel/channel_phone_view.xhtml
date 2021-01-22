@@ -21,44 +21,49 @@
                     <p:commandButton ajax="false" action="/channel/channel_booking" value="Back" ></p:commandButton>
                 </p:panelGrid>
 
-                <p:panelGrid columns="2">
-                    <p:outputLabel value="Consultant"/>
-                    <p:outputLabel value="#{channelReportController.serviceSession.staff.person.nameWithTitle}"/>
-                    <p:outputLabel value="Date"/>
-                    <h:outputLabel value="#{channelReportController.serviceSession.sessionAt}" >
-                        <f:convertDateTime pattern="dd MM yyyy"/>
-                    </h:outputLabel>
-                    <p:outputLabel value="Session Name"/>
-                    <h:outputLabel value="#{channelReportController.serviceSession.name}" />
-                </p:panelGrid>
-
-                <p:panelGrid columns="1" >
-                    <p:commandButton value="Send Arrival SMS" ajax="false" 
-                                     action="#{channelReportController.sendArrivalSms}"></p:commandButton>
-                    <p:commandButton value="Send Reminder SMS" ajax="false" 
-                                     action="#{channelReportController.sendReminderSms}"></p:commandButton>
-
-                    <p:panelGrid columns="4" >
-                        <p:outputLabel value="New Date/Time" ></p:outputLabel>
-                        <p:calendar value="#{channelReportController.newSessionDateTime}" pattern="dd MM yyyy hh:mm a" ></p:calendar>
-                        <p:spacer ></p:spacer>
-                        <p:commandButton value="Send Cancellation SMS" ajax="false" 
-                                         action="#{channelReportController.sendCancellationSms()}"></p:commandButton>
+                <p:panelGrid columns="2" >
+                    <p:panelGrid columns="2">
+                        <p:outputLabel value="Consultant"/>
+                        <p:outputLabel value="#{channelReportController.serviceSession.staff.person.nameWithTitle}"/>
+                        <p:outputLabel value="Date"/>
+                        <h:outputLabel value="#{channelReportController.serviceSession.sessionAt}" >
+                            <f:convertDateTime pattern="dd MM yyyy"/>
+                        </h:outputLabel>
+                        <p:outputLabel value="Session Name"/>
+                        <h:outputLabel value="#{channelReportController.serviceSession.name}" />
                     </p:panelGrid>
 
+                    <p:panelGrid columns="1" >
+                        <p:commandButton value="Send Arrival SMS" ajax="false" 
+                                         action="#{channelReportController.sendArrivalSms}"></p:commandButton>
+                        <p:commandButton value="Send Reminder SMS" ajax="false" 
+                                         action="#{channelReportController.sendReminderSms}"></p:commandButton>
 
-                    <p:panelGrid columns="4" >
-                        <p:outputLabel value="Custom SMS" ></p:outputLabel>
-                        <p:inputTextarea maxlength="160"
-                                         style="width: 40em;" rows="4"
-                                         value="#{channelReportController.sendingSmsText}" >
-                        </p:inputTextarea>
-                        <p:spacer ></p:spacer>
-                        <p:commandButton value="Send SMS" ajax="false" 
-                                         action="#{channelReportController.sendCustomSms}"></p:commandButton>
+                        <p:panelGrid columns="4" >
+                            <p:outputLabel value="New Date/Time" ></p:outputLabel>
+                            <p:calendar value="#{channelReportController.newSessionDateTime}" pattern="dd MM yyyy hh:mm a" ></p:calendar>
+                            <p:spacer ></p:spacer>
+                            <p:commandButton value="Send Cancellation SMS" ajax="false" 
+                                             action="#{channelReportController.sendCancellationSms()}"></p:commandButton>
+                        </p:panelGrid>
+
+
+                        <p:panelGrid columns="4" >
+                            <p:outputLabel value="Custom SMS" ></p:outputLabel>
+                            <p:inputTextarea maxlength="160"
+                                             style="width: 40em;" rows="4"
+                                             value="#{channelReportController.sendingSmsText}" >
+                            </p:inputTextarea>
+                            <p:spacer ></p:spacer>
+                            <p:commandButton value="Send SMS" ajax="false" 
+                                             action="#{channelReportController.sendCustomSms}"></p:commandButton>
+                        </p:panelGrid>
+
                     </p:panelGrid>
 
                 </p:panelGrid>
+
+
 
 
 

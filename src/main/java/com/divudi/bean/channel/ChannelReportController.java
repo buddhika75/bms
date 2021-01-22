@@ -3261,7 +3261,7 @@ public class ChannelReportController implements Serializable {
         m += " changed. New Session";
         m += " on " + CommonFunctions.dateToString(newSessionDateTime, "dd/MM/yyyy");
         m += " at " + CommonFunctions.dateToString(newSessionDateTime, "hh:mm a");
-        m += ".";
+        m += ". Sorry for the inconvenience";
         return m;
     }
 
