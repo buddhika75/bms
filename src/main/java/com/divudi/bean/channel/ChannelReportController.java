@@ -3207,6 +3207,7 @@ public class ChannelReportController implements Serializable {
         m += " on " + CommonFunctions.dateToString(new Date(), "dd/MM/yyyy");
         m += " at " + CommonFunctions.dateToString(new Date(), "hh:mm a");
         m += ".";
+        m += " For details 0912293700.";
         return m;
     }
 
@@ -3228,17 +3229,16 @@ public class ChannelReportController implements Serializable {
         if (ss.getStaff().getPerson().getNameWithTitle() == null) {
             return null;
         }
-        sendingSmsText = "REMINDER. APPOINTMENT TODAY DR Herath HMM @ Baddegama Medical Services Pvt Limited ,SESSION WILL START @ 18:00.YOUR N0 IS 8. CALL 0912293700 for NEXT APPOINTMENT.";
 
         String m = "REMINDER. APPOINTMENT FOR ";
         m += ss.getStaff().getPerson().getNameWithTitle();
         m += " for " + ss.getName();
-        m += " @ Baddegama Medical Services. ";
+        m += " @ Baddegama Medical Services ";
         m += " on " + CommonFunctions.dateToString(new Date(), "dd/MM/yyyy");
         m += " at " + CommonFunctions.dateToString(new Date(), "hh:mm a");
         m += ". YOUR N0 IS ";
         m += bs.getSerialNo();
-        m += ". CALL 0912293700 for NEXT APPOINTMENT";
+        m += ". For Details 0912293700.";
         return m;
     }
 
@@ -3258,9 +3258,14 @@ public class ChannelReportController implements Serializable {
         }
         String m = bs.getStaff().getPerson().getNameWithTitle();
         m += " for " + bs.getName();
-        m += " changed. New Session";
-        m += " on " + CommonFunctions.dateToString(newSessionDateTime, "dd/MM/yyyy");
-        m += " at " + CommonFunctions.dateToString(newSessionDateTime, "hh:mm a");
+        m += " CANCELLED.";
+        if (newSessionDateTime == null) {
+            m += " Next date will be informed";
+        } else {
+            m += " New Session";
+            m += " on " + CommonFunctions.dateToString(newSessionDateTime, "dd/MM/yyyy");
+            m += " at " + CommonFunctions.dateToString(newSessionDateTime, "hh:mm a");
+        }
         m += ". Sorry for the inconvenience";
         return m;
     }
@@ -3309,10 +3314,7 @@ public class ChannelReportController implements Serializable {
     }
 
     public void sendCancellationSms() {
-        if (newSessionDateTime == null) {
-            JsfUtil.addErrorMessage("Select new Date/Time");
-            return;
-        }
+
         if (serviceSession == null) {
             JsfUtil.addErrorMessage("No Service Session");
             return;
