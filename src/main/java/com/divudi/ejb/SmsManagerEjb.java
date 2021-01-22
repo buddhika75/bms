@@ -45,17 +45,22 @@ public class SmsManagerEjb {
     @SuppressWarnings("unused")
     @Schedule(second = "19", minute = "*/5", hour = "*", persistent = false)
     public void myTimer() {
+        System.out.println("myTimer");
+        System.out.println("new Date() = " + new Date());
         sendSmsAwaitingToSendInDatabase();
     }
 
     private void sendSmsAwaitingToSendInDatabase() {
+        System.out.println("sendSmsAwaitingToSendInDatabase");
         String j = "Select e from Sms e where e.sentSuccessfully=false and e.retired=false and e.createdAt>:d";
         Map m = new HashMap();
         Calendar c = Calendar.getInstance();
         c.set(Calendar.HOUR_OF_DAY, 0);
         m.put("d", c.getTime());
-        //System.out.println("m = " + m);
+        System.out.println("m = " + m);
+        System.out.println("j = " + j);
         List<Sms> smses = getSmsFacade().findBySQL(j,m,TemporalType.DATE);
+        System.out.println("smses = " + smses.size());
 //        if (false) {
 //            Sms e = new Sms();
 //            e.getSentSuccessfully();

@@ -422,6 +422,7 @@ public class ChannelBean {
     }
 
     public List<ServiceSession> generateDailyServiceSessionsFromWeekdaySessionsNew(List<ServiceSession> inputSessions, Date d) {
+        System.out.println("generateDailyServiceSessionsFromWeekdaySessionsNew");
         int sessionDayCount = 0;
         List<ServiceSession> createdSessions = new ArrayList<>();
 

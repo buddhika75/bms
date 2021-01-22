@@ -2,6 +2,8 @@ package com.divudi.ejb;
 
 import com.divudi.data.dataStructure.DateRange;
 import com.divudi.data.dataStructure.YearMonthDay;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.TimeZone;
@@ -13,8 +15,6 @@ import javax.ejb.Singleton;
  */
 @Singleton
 public class CommonFunctions {
-
-    
 
     public DateRange getDateRangeForOT(Date date) {
         DateRange dateRange = new DateRange();
@@ -240,7 +240,7 @@ public class CommonFunctions {
     public static Date getStartOfDay() {
         return getStartOfDay(new Date());
     }
-    
+
     public static Date getStartOfDay(Date date) {
         if (date == null) {
             date = new Date();
@@ -258,7 +258,7 @@ public class CommonFunctions {
     public static Date getStartOfMonth() {
         return getStartOfMonth(new Date());
     }
-    
+
     public static Date getStartOfMonth(Date date) {
         if (date == null) {
             date = new Date();
@@ -275,7 +275,7 @@ public class CommonFunctions {
     public static Date getEndOfDay() {
         return getEndOfDay(new Date());
     }
-    
+
     public static Date getEndOfDay(Date date) {
         if (date == null) {
             date = new Date();
@@ -294,7 +294,7 @@ public class CommonFunctions {
     public static Date getEndOfMonth() {
         return getStartOfMonth(new Date());
     }
-    
+
     public static Date getEndOfMonth(Date date) {
         if (date == null) {
             date = new Date();
@@ -326,8 +326,6 @@ public class CommonFunctions {
         ////System.out.println("Last : " + cal.getTime());
         return cal.getTime();
     }
-
-    
 
     public Date getFirstDayOfWeek(Date date) {
         // get today and clear time of day
@@ -385,14 +383,33 @@ public class CommonFunctions {
         return cal.getTime();
     }
 
-    public static double roundToTwoDecimalPlaces(double num){
+    public static double roundToTwoDecimalPlaces(double num) {
         return roundToTwoDecimalPlaces(num, 2);
     }
-    
-    public static double roundToTwoDecimalPlaces(double num, int decimalPlaces){
+
+    public static double roundToTwoDecimalPlaces(double num, int decimalPlaces) {
         double mul = Math.pow(10, decimalPlaces);
         double roundOff = (double) Math.round(num * mul) / mul;
         return roundOff;
     }
+
+    public static String timeToString(){
+        return dateToString(new Date(), "dd/MM/yyyy hh:mm a");
+    }
     
+    public static String dateToString(){
+        return dateToString(new Date());
+    }
+    
+    public static String dateToString(Date date ){
+        return dateToString(date, "dd/MM/yyyy");
+    }
+    
+    public static String dateToString(Date date, String format ){
+             date = Calendar.getInstance().getTime();
+        DateFormat dateFormat = new SimpleDateFormat(format);
+        String strDate = dateFormat.format(date);
+        return strDate;
+    }
+
 }

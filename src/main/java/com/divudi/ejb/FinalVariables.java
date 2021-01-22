@@ -64,13 +64,14 @@ public class FinalVariables {
 //            System.out.println("ss.getMaxTableRows() = " + ss.getMaxTableRows());
             if (maxRowNumber <ss.getMaxTableRows()) {
                 maxRowNumber = ss.getMaxTableRows();
-//                System.out.println("maxRowNumber = " + maxRowNumber);
+                System.out.println("maxRowNumber = " + maxRowNumber);
             }
         }
         
         if (maxRowNumber<14) {
             maxRowNumber=30;
         }
+        System.out.println("maxRowNumber = " + maxRowNumber);
         return maxRowNumber;
     }
 
