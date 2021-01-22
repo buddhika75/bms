@@ -2516,8 +2516,6 @@ public class ChannelReportController implements Serializable {
     public void createConsultantCountTableByCreatedDate() {
         createConsultantCountTable(false);
     }
-    
-    
 
     public void createConsultantCountTableBySessionDate() {
         createConsultantCountTable(true);
@@ -3158,9 +3156,17 @@ public class ChannelReportController implements Serializable {
     }
 
     public void sendReminderSms() {
-        sendingSmsText = "REMINDER. APPOINTMENT TODAY DR Herath HMM @ Baddegama Medical Services Pvt Limited ,SESSION WILL START @ 18:00.YOUR N0 IS 8. CALL 0912293700 for NEXT APPOINTMENT.";
+
+        if (serviceSession == null) {
+            JsfUtil.addErrorMessage("No Service Session");
+            return;
+        }
         int count = 0;
         for (BillSession bs : getBillSessionsNurse()) {
+            sendingSmsText = createReminderSmsBody(bs);
+            if (bs == null) {
+                continue;
+            }
             Sms e = new Sms();
             e.setCreatedAt(new Date());
             e.setCreater(sessionController.getLoggedUser());
@@ -3170,8 +3176,12 @@ public class ChannelReportController implements Serializable {
             e.setSendingMessage((sendingSmsText));
             e.setDepartment(getSessionController().getLoggedUser().getDepartment());
             e.setInstitution(getSessionController().getLoggedUser().getInstitution());
-            e.setSentSuccessfully(false);
+            e.setSentSuccessfully(true);
             smsFacade.create(e);
+            smsManagerEjb.sendSms(e.getReceipientNumber(), e.getSendingMessage(),
+                    e.getInstitution().getSmsSendingUsername(),
+                    e.getInstitution().getSmsSendingPassword(),
+                    e.getInstitution().getSmsSendingAlias());
             count++;
         }
         sendingSmsText = null;
@@ -3200,6 +3210,38 @@ public class ChannelReportController implements Serializable {
         return m;
     }
 
+    public String createReminderSmsBody(BillSession bs) {
+        if (bs == null) {
+            return null;
+        }
+        ServiceSession ss = bs.getServiceSession();
+        if (ss == null) {
+            return null;
+        }
+        if (ss.getStaff() == null) {
+            return null;
+        }
+
+        if (ss.getStaff().getPerson() == null) {
+            return null;
+        }
+        if (ss.getStaff().getPerson().getNameWithTitle() == null) {
+            return null;
+        }
+        sendingSmsText = "REMINDER. APPOINTMENT TODAY DR Herath HMM @ Baddegama Medical Services Pvt Limited ,SESSION WILL START @ 18:00.YOUR N0 IS 8. CALL 0912293700 for NEXT APPOINTMENT.";
+
+        String m = "REMINDER. APPOINTMENT FOR ";
+        m += ss.getStaff().getPerson().getNameWithTitle();
+        m += " for " + ss.getName();
+        m += " @ Baddegama Medical Services. ";
+        m += " on " + CommonFunctions.dateToString(new Date(), "dd/MM/yyyy");
+        m += " at " + CommonFunctions.dateToString(new Date(), "hh:mm a");
+        m += ". YOUR N0 IS ";
+        m += bs.getSerialNo();
+        m += ". CALL 0912293700 for NEXT APPOINTMENT";
+        return m;
+    }
+
     public String createCancellationSmsBody(ServiceSession bs) {
         if (bs == null) {
             return null;
@@ -3217,8 +3259,8 @@ public class ChannelReportController implements Serializable {
         String m = bs.getStaff().getPerson().getNameWithTitle();
         m += " for " + bs.getName();
         m += " changed. New Session";
-        m += " on " + CommonFunctions.dateToString(new Date(), "dd/MM/yyyy");
-        m += " at " + CommonFunctions.dateToString(new Date(), "hh:mm a");
+        m += " on " + CommonFunctions.dateToString(newSessionDateTime, "dd/MM/yyyy");
+        m += " at " + CommonFunctions.dateToString(newSessionDateTime, "hh:mm a");
         m += ".";
         return m;
     }
@@ -3236,6 +3278,10 @@ public class ChannelReportController implements Serializable {
 
     public void sendArrivalSms() {
         sendingSmsText = createArrivalSmsBody(serviceSession);
+        if (serviceSession == null) {
+            JsfUtil.addErrorMessage("No Service Session");
+            return;
+        }
         if (sendingSmsText == null) {
             JsfUtil.addErrorMessage("Error");
             return;
@@ -3263,8 +3309,15 @@ public class ChannelReportController implements Serializable {
     }
 
     public void sendCancellationSms() {
-        sendingSmsText = createArrivalSmsBody(serviceSession);
-        int count = 0;
+        if (newSessionDateTime == null) {
+            JsfUtil.addErrorMessage("Select new Date/Time");
+            return;
+        }
+        if (serviceSession == null) {
+            JsfUtil.addErrorMessage("No Service Session");
+            return;
+        }
+        sendingSmsText = createCancellationSmsBody(serviceSession);
         for (BillSession bs : getBillSessionsNurse()) {
             Sms e = new Sms();
             e.setCreatedAt(new Date());
@@ -3275,9 +3328,12 @@ public class ChannelReportController implements Serializable {
             e.setSendingMessage((sendingSmsText));
             e.setDepartment(getSessionController().getLoggedUser().getDepartment());
             e.setInstitution(getSessionController().getLoggedUser().getInstitution());
-            e.setSentSuccessfully(false);
+            e.setSentSuccessfully(true);
             smsFacade.create(e);
-            count++;
+            smsManagerEjb.sendSms(e.getReceipientNumber(), e.getSendingMessage(),
+                    e.getInstitution().getSmsSendingUsername(),
+                    e.getInstitution().getSmsSendingPassword(),
+                    e.getInstitution().getSmsSendingAlias());
         }
         sendingSmsText = null;
     }
@@ -4207,8 +4263,6 @@ public class ChannelReportController implements Serializable {
         public void setComments(String comments) {
             this.comments = comments;
         }
-        
-        
 
 //        private void calTot() {
 //            cashTotal = staffTotal = onCallTotal = agentTotal = 0.0;

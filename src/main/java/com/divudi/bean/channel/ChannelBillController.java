@@ -21,6 +21,7 @@ import com.divudi.data.dataStructure.PaymentMethodData;
 import com.divudi.ejb.BillNumberGenerator;
 import com.divudi.ejb.ChannelBean;
 import com.divudi.ejb.ServiceSessionBean;
+import com.divudi.ejb.SmsManagerEjb;
 import com.divudi.entity.AgentHistory;
 import com.divudi.entity.Area;
 import com.divudi.entity.Bill;
@@ -134,6 +135,8 @@ public class ChannelBillController implements Serializable {
     private ServiceSessionBean serviceSessionBean;
     @EJB
     private SmsFacade smsFacade;
+    @EJB
+    SmsManagerEjb smsManagerEjb;
     //////////////////////////////
     @Inject
     private SessionController sessionController;
@@ -1398,8 +1401,12 @@ public class ChannelBillController implements Serializable {
         e.setSendingMessage(chanellBookingSms(printingBill));
         e.setDepartment(getSessionController().getLoggedUser().getDepartment());
         e.setInstitution(getSessionController().getLoggedUser().getInstitution());
-        e.setSentSuccessfully(false);
+        e.setSentSuccessfully(true);
         getSmsFacade().create(e);
+        smsManagerEjb.sendSms(e.getReceipientNumber(), e.getSendingMessage(),
+                e.getInstitution().getSmsSendingUsername(),
+                e.getInstitution().getSmsSendingPassword(),
+                e.getInstitution().getSmsSendingAlias());
     }
 
     private String chanellBookingSms(Bill b) {
@@ -1424,7 +1431,7 @@ public class ChannelBillController implements Serializable {
 
         return s;
     }
-    
+
     private String chanellReminderSms(Bill b) {
         String s;
         String date = CommonController.getDateFormat(b.getSingleBillSession().getSessionDate(),
