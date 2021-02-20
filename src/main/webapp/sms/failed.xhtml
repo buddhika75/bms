@@ -23,9 +23,9 @@
                         <p:calendar pattern="dd MMMM yyyy" value="#{smsController.to}" >
                         </p:calendar>
 
-                        <p:commandButton value="Process" action="#{smsController.fillSuccess()}" ajax="false" ></p:commandButton>
+                        <p:commandButton value="Process" action="#{smsController.fillFailed()}" ajax="false" ></p:commandButton>
                         <p:commandButton ajax="false" value="Export" >
-                            <p:dataExporter target="tbl" type="xls" fileName="sms sent successfully.xls" ></p:dataExporter>
+                            <p:dataExporter target="tbl" type="xls" fileName="sms sent failed.xls" ></p:dataExporter>
                         </p:commandButton>
 
                     </p:panelGrid>
@@ -37,11 +37,11 @@
                             </f:facet>
                             <h:outputText value="#{item.receipientNumber}"/>
                         </p:column>
-                        <p:column  sortBy="#{item.sendingMessage}" filterBy="#{item.sendingMessage}" filterMatchMode="contains">
+                        <p:column  sortBy="#{item.receivedMessage}" filterBy="#{item.receivedMessage}" filterMatchMode="contains">
                             <f:facet name="header">
-                                <h:outputText value="Sending Message"/>
+                                <h:outputText value="Error Message"/>
                             </f:facet>
-                            <h:outputText value="#{item.sendingMessage}"/>
+                            <h:outputText value="#{item.receivedMessage}"/>
                         </p:column>
                         <p:column  sortBy="#{item.smsType}" filterBy="#{item.smsType}" filterMatchMode="contains">
                             <f:facet name="header">
@@ -49,11 +49,11 @@
                             </f:facet>
                             <h:outputText value="#{item.smsType}"/>
                         </p:column>
-                        <p:column  sortBy="#{item.sentSuccessfullyAt}" filterBy="#{item.sentSuccessfullyAt}" filterMatchMode="contains">
+                        <p:column  sortBy="#{item.sentFailedAt}" filterBy="#{item.sentFailedAt}" filterMatchMode="contains">
                             <f:facet name="header">
                                 <h:outputText value="Sent At"/>
                             </f:facet>
-                            <h:outputText value="#{item.sentSuccessfullyAt}">
+                            <h:outputText value="#{item.sentFailedAt}">
                                 <f:convertDateTime pattern="MM/dd/yyyy HH:mm:ss" />
                             </h:outputText>
                         </p:column>
