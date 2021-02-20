@@ -60,6 +60,47 @@ public class SmsController implements Serializable {
     List<SmsSummeryRow> smsSummeryRows;
 
     ReportKeyWord reportKeyWord;
+    
+    private Date from;
+    private Date to;
+    
+    public void fillSuccess(){
+        String j = "Select e "
+                + " from Sms e "
+                + " where e.sentSuccessfully=:suc"
+                + " and e.retired=false "
+                + " and e.createdAt between :fd and :td "
+                + " order by e.createdAt";
+        Map m = new HashMap();
+        m.put("fd", from);
+        m.put("td", to);
+        m.put("suc", true);
+        smses = getSmsFacade().findBySQL(j,m);
+    }
+    
+    public void fillFailed(){
+        String j = "Select e "
+                + " from Sms e "
+                + " where e.sentSuccessfully=:suc"
+                + " and e.retired=false "
+                + " and e.createdAt between :fd and :td "
+                + " order by e.createdAt";
+        Map m = new HashMap();
+        m.put("fd", from);
+        m.put("td", to);
+        m.put("suc", false);
+        smses = getSmsFacade().findBySQL(j,m);
+    }
+    
+    public String toFailed(){
+        return "/sms/failed";
+    }
+    
+    public String toSuccess(){
+        return "/sms/success";
+    }
+    
+    
 
     /**
      * Creates a new instance of SmsController
@@ -292,6 +333,22 @@ public class SmsController implements Serializable {
 
     public void setCommonFunctions(CommonFunctions commonFunctions) {
         this.commonFunctions = commonFunctions;
+    }
+
+    public Date getFrom() {
+        return from;
+    }
+
+    public void setFrom(Date from) {
+        this.from = from;
+    }
+
+    public Date getTo() {
+        return to;
+    }
+
+    public void setTo(Date to) {
+        this.to = to;
     }
 
     public class SmsSummeryRow {

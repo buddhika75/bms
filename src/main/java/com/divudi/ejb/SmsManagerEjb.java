@@ -5,6 +5,7 @@
  */
 package com.divudi.ejb;
 
+import com.divudi.data.MessageType;
 import com.divudi.entity.Sms;
 import com.divudi.facade.EmailFacade;
 import com.divudi.facade.SmsFacade;
@@ -45,35 +46,18 @@ public class SmsManagerEjb {
     @SuppressWarnings("unused")
     @Schedule(second = "19", minute = "*/5", hour = "*", persistent = false)
     public void myTimer() {
-        System.out.println("myTimer");
-        System.out.println("new Date() = " + new Date());
         sendSmsAwaitingToSendInDatabase();
     }
 
     private void sendSmsAwaitingToSendInDatabase() {
-        System.out.println("sendSmsAwaitingToSendInDatabase");
-        String j = "Select e from Sms e where e.sentSuccessfully=false and e.retired=false and e.createdAt>:d";
+        String j = "Select e from Sms e where e.awaitingToBeSent=true and e.retired=false and e.createdAt>:d";
         Map m = new HashMap();
         Calendar c = Calendar.getInstance();
         c.set(Calendar.HOUR_OF_DAY, 0);
         m.put("d", c.getTime());
-        System.out.println("m = " + m);
-        System.out.println("j = " + j);
-        List<Sms> smses = getSmsFacade().findBySQL(j,m,TemporalType.DATE);
-        System.out.println("smses = " + smses.size());
-//        if (false) {
-//            Sms e = new Sms();
-//            e.getSentSuccessfully();
-//            e.getInstitution();
-//        }
+        List<Sms> smses = getSmsFacade().findBySQL(j, m, TemporalType.DATE);
         for (Sms e : smses) {
-            e.setSentSuccessfully(Boolean.TRUE);
-            getSmsFacade().edit(e);
-
-            sendSms(e.getReceipientNumber(), e.getSendingMessage(),
-                    e.getInstitution().getSmsSendingUsername(),
-                    e.getInstitution().getSmsSendingPassword(),
-                    e.getInstitution().getSmsSendingAlias());
+            sendSms(e);
             e.setSentSuccessfully(true);
             e.setSentAt(new Date());
             getSmsFacade().edit(e);
@@ -155,11 +139,14 @@ public class SmsManagerEjb {
         }
     }
 
-    public boolean sendSms(String number, String message, String username, String password, String sendingAlias) {
+    public boolean sendSms(
+            Sms e) {
 
-        //System.out.println("number = " + number);
-        //System.out.println("message = " + message);
-        //System.out.println("username = " + username);
+        String number = e.getReceipientNumber();
+        String message = e.getSendingMessage();
+        String username = e.getInstitution().getSmsSendingUsername();
+        String password = e.getInstitution().getSmsSendingPassword();
+        String sendingAlias = e.getInstitution().getSmsSendingAlias();
 
         Map<String, String> m = new HashMap();
         m.put("userName", username);
@@ -169,11 +156,27 @@ public class SmsManagerEjb {
         m.put("message", message);
 
         String res = executePost("http://localhost:8080/sms/faces/index.xhtml", m);
+        e.setAwaitingToBeSent(false);
+        e.setResponseMessage(res);
         if (res == null) {
+            e.setSentFailed(true);
+            e.setSentSuccessfully(false);
+            e.setSentFailedAt(new Date());
+            smsFacade.edit(e);
             return false;
         } else if (res.toUpperCase().contains("200")) {
+            e.setSentFailed(false);
+            e.setSentSuccessfully(Boolean.TRUE);
+            e.setSentSuccessfullyAt(new Date());
+            e.setSentFailedAt(new Date());
+            smsFacade.edit(e);
             return true;
         } else {
+            e.setResponseMessage(res);
+            e.setSentFailed(true);
+            e.setSentSuccessfully(false);
+            e.setSentFailedAt(new Date());
+            smsFacade.edit(e);
             return false;
         }
 

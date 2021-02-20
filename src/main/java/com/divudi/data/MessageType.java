@@ -11,7 +11,11 @@ package com.divudi.data;
  */
 public enum MessageType {
     LabReport,
+    ChannelBooking,
     ChannelDoctorAraival,
+    ChannelCancellation,
+    ChannelReminder,
+    ChannelCustom,
     Marketing,
     BillCancellationInformationMail,
     BillReturnInfromationMail,

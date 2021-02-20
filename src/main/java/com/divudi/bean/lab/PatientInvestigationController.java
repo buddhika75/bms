@@ -418,9 +418,9 @@ public class PatientInvestigationController implements Serializable {
         Respons920 r920 = new Respons920();
         r920.setInputStringBytesSpaceSeperatedR920(msg);
         r920.analyzeTheReceivedMessage();
-        
-        Patient p=null;
-        
+
+        Patient p = null;
+
         if (r920.getRequestInformationRecord() != null) {
             for (TestOrderRecord tor : r920.getTestOrderRecords()) {
                 System.out.println("tor = " + tor);
@@ -1148,32 +1148,11 @@ public class PatientInvestigationController implements Serializable {
                 + sessionController.getLoggedUser().getDepartment().getPrintingName() + ".";
 
         s.setSendingMessage(messageBody);
-        s.setSentSuccessfully(true);
+        s.setAwaitingToBeSent(true);
         s.setSmsType(MessageType.LabReport);
         getSmsFacade().create(s);
-
-        System.out.println("getSmsManagerEjb() = " + getSmsManagerEjb());
-        System.out.println("s.getReceipientNumber() = " + messageBody);
-        System.out.println("messageBody = " + s.getReceipientNumber());
-        System.out.println("s.getSendingMessage() = " + s.getSendingMessage());
-        System.out.println("  s.getInstitution().getSmsSendingPassword() = " + s.getInstitution().getSmsSendingPassword());
         getSmsController();
-        boolean sent = getSmsManagerEjb().sendSms(s.getReceipientNumber(), s.getSendingMessage(),
-                s.getInstitution().getSmsSendingUsername(),
-                s.getInstitution().getSmsSendingPassword(),
-                s.getInstitution().getSmsSendingAlias());
-
-        if (sent) {
-            getCurrent().getBillItem().getBill().setSmsed(true);
-            getCurrent().getBillItem().getBill().setSmsedAt(new Date());
-            getCurrent().getBillItem().getBill().setSmsedUser(getSessionController().getLoggedUser());
-            getFacade().edit(current);
-            getCurrent().getBillItem().getBill().getSentSmses().add(s);
-            billFacade.edit(getCurrent().getBillItem().getBill());
-            UtilityController.addSuccessMessage("Sms send");
-        } else {
-            JsfUtil.addErrorMessage("Sending SMS Failed.");
-        }
+        boolean sent = getSmsManagerEjb().sendSms(s);
         getLabReportSearchByInstitutionController().createPatientInvestigaationList();
     }
 

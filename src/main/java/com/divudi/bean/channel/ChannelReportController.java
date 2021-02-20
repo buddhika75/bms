@@ -10,6 +10,7 @@ import com.divudi.bean.hr.StaffController;
 import com.divudi.data.BillType;
 import com.divudi.data.FeeType;
 import com.divudi.data.HistoryType;
+import com.divudi.data.MessageType;
 import com.divudi.data.PaymentMethod;
 import com.divudi.data.channel.DateEnum;
 import com.divudi.data.channel.PaymentEnum;
@@ -3143,14 +3144,10 @@ public class ChannelReportController implements Serializable {
             e.setSendingMessage((sendingSmsText));
             e.setDepartment(getSessionController().getLoggedUser().getDepartment());
             e.setInstitution(getSessionController().getLoggedUser().getInstitution());
-            e.setSentSuccessfully(true);
+            e.setSmsType(MessageType.ChannelCustom);
             smsFacade.create(e);
             count++;
-
-            smsManagerEjb.sendSms(e.getReceipientNumber(), e.getSendingMessage(),
-                    e.getInstitution().getSmsSendingUsername(),
-                    e.getInstitution().getSmsSendingPassword(),
-                    e.getInstitution().getSmsSendingAlias());
+            smsManagerEjb.sendSms(e);
         }
         sendingSmsText = null;
     }
@@ -3176,12 +3173,9 @@ public class ChannelReportController implements Serializable {
             e.setSendingMessage((sendingSmsText));
             e.setDepartment(getSessionController().getLoggedUser().getDepartment());
             e.setInstitution(getSessionController().getLoggedUser().getInstitution());
-            e.setSentSuccessfully(true);
+            e.setSmsType(MessageType.ChannelReminder);
             smsFacade.create(e);
-            smsManagerEjb.sendSms(e.getReceipientNumber(), e.getSendingMessage(),
-                    e.getInstitution().getSmsSendingUsername(),
-                    e.getInstitution().getSmsSendingPassword(),
-                    e.getInstitution().getSmsSendingAlias());
+            smsManagerEjb.sendSms(e);
             count++;
         }
         sendingSmsText = null;
@@ -3258,7 +3252,7 @@ public class ChannelReportController implements Serializable {
         }
         String m = bs.getStaff().getPerson().getNameWithTitle();
         m += " for " + bs.getName();
-        m += " CANCELLED.";
+        m += " IS CANCELLED.";
         if (newSessionDateTime == null) {
             m += " Next date will be informed";
         } else {
@@ -3302,12 +3296,9 @@ public class ChannelReportController implements Serializable {
             e.setSendingMessage((sendingSmsText));
             e.setDepartment(getSessionController().getLoggedUser().getDepartment());
             e.setInstitution(getSessionController().getLoggedUser().getInstitution());
-            e.setSentSuccessfully(true);
+            e.setSmsType(MessageType.ChannelDoctorAraival);
             smsFacade.create(e);
-            smsManagerEjb.sendSms(e.getReceipientNumber(), e.getSendingMessage(),
-                    e.getInstitution().getSmsSendingUsername(),
-                    e.getInstitution().getSmsSendingPassword(),
-                    e.getInstitution().getSmsSendingAlias());
+            smsManagerEjb.sendSms(e);
             count++;
         }
         sendingSmsText = null;
@@ -3330,12 +3321,9 @@ public class ChannelReportController implements Serializable {
             e.setSendingMessage((sendingSmsText));
             e.setDepartment(getSessionController().getLoggedUser().getDepartment());
             e.setInstitution(getSessionController().getLoggedUser().getInstitution());
-            e.setSentSuccessfully(true);
+            e.setSmsType(MessageType.ChannelCancellation);
             smsFacade.create(e);
-            smsManagerEjb.sendSms(e.getReceipientNumber(), e.getSendingMessage(),
-                    e.getInstitution().getSmsSendingUsername(),
-                    e.getInstitution().getSmsSendingPassword(),
-                    e.getInstitution().getSmsSendingAlias());
+            smsManagerEjb.sendSms(e);
         }
         sendingSmsText = null;
     }

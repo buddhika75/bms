@@ -16,6 +16,7 @@ import com.divudi.data.BillClassType;
 import com.divudi.data.BillType;
 import com.divudi.data.FeeType;
 import com.divudi.data.HistoryType;
+import com.divudi.data.MessageType;
 import com.divudi.data.PaymentMethod;
 import com.divudi.data.dataStructure.PaymentMethodData;
 import com.divudi.ejb.BillNumberGenerator;
@@ -1401,12 +1402,9 @@ public class ChannelBillController implements Serializable {
         e.setSendingMessage(chanellBookingSms(printingBill));
         e.setDepartment(getSessionController().getLoggedUser().getDepartment());
         e.setInstitution(getSessionController().getLoggedUser().getInstitution());
-        e.setSentSuccessfully(true);
+        e.setSmsType(MessageType.ChannelBooking);
         getSmsFacade().create(e);
-        smsManagerEjb.sendSms(e.getReceipientNumber(), e.getSendingMessage(),
-                e.getInstitution().getSmsSendingUsername(),
-                e.getInstitution().getSmsSendingPassword(),
-                e.getInstitution().getSmsSendingAlias());
+        boolean suc = smsManagerEjb.sendSms(e);
     }
 
     private String chanellBookingSms(Bill b) {
