@@ -842,9 +842,9 @@ public class PatientEncounterController implements Serializable {
         int c = 0;
         for (String t : titles) {
             if (c > 0) {
-                title = title + ", '" + title + "' ";
+                title = title + ", '" + t + "' ";
             } else {
-                title = title + " '" + title + "' ";
+                title = title + " '" + t + "' ";
             }
 
             c++;
