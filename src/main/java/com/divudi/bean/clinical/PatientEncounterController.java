@@ -119,6 +119,7 @@ public class PatientEncounterController implements Serializable {
     List<Bill> currentChannelBills;
     List<PatientInvestigation> currentPatientInvestigations;
     String selectText = "";
+    String[] selectTexts = null;
 
     ClinicalFindingItem diagnosis;
     String diagnosisComments;
@@ -384,24 +385,23 @@ public class PatientEncounterController implements Serializable {
     }
 
     public String createInvestigationChart() {
-        System.out.println("createInvestigationChart");
+//        System.out.println("createInvestigationChart");
         String s = "";
         int i = 0;
         SimpleDateFormat format = new SimpleDateFormat("yy-MM-dd");
         String val = "";
 
-        System.out.println("graphInvestigationItem = " + graphInvestigationItem);
-        System.out.println("current.getPatient() = " + current.getPatient());
-        
-        
-        List<PatientReportItemValue> privs = 
-                fillPatientReportItemValue(current.getPatient(), graphInvestigationItem);
-        System.out.println("privs = " + privs);
-        
+//        System.out.println("graphInvestigationItem = " + graphInvestigationItem);
+//        System.out.println("current.getPatient() = " + current.getPatient());
+
+        List<PatientReportItemValue> privs
+                = fillPatientReportItemValue(current.getPatient(), graphInvestigationItem);
+//        System.out.println("privs = " + privs);
+
         List<InvestigationResultForGraph> grs = new ArrayList<>();
 
         for (PatientReportItemValue v : privs) {
-            System.out.println("v = " + v);
+//            System.out.println("v = " + v);
             boolean dateFound = false;
             Double dblVal = null;
             try {
@@ -417,32 +417,33 @@ public class PatientEncounterController implements Serializable {
                     dateFound = true;
 
                     s += "'" + format.format(v.getPatientReport().getPatientInvestigation().getSampledAt()) + "', ";
-                    
 
                     val += dblVal + ", ";
-                    
+
                 }
 
             } catch (Exception e) {
 
             }
-//            System.out.println("grs = " + grs);
-//            for (InvestigationResultForGraph g : grs) {
-//                System.out.println("g = " + g);
-//                if (g.getDates().equals(v.getPatientReport().getApproveAt())) {
-//
-//                }
-//            }
+
 
         }
 
-        
-        
         setChartNameSeries(s);
         setChartDataSeries1(val);
         setValues1Name(graphInvestigationItem.getName());
-        setChartName(graphInvestigationItem.getName() +  " Chart");
-        setChartString(getSingleLineChartString());
+        setChartName(graphInvestigationItem.getName() + " Chart");
+        String title1 = graphInvestigationItem.getName() + " Chart";
+        String title2= "Name : " +  current.getPatient().getPerson().getNameWithTitle();
+        String title3= "Age : " + current.getPatient().getAge() ;
+        String title4= "Date : " + CommonFunctionsController.formatDate();
+        String[] titles
+                = {title1,title2, title3, title4};
+
+        setChartString(getSingleLineChartString(titles,
+                graphInvestigationItem.getName(),
+                s,
+                val));
         return "/chart";
     }
 
@@ -650,6 +651,211 @@ public class PatientEncounterController implements Serializable {
         s = s.replace("N1N1N1N1N1N1N1N1", getChartNameSeries());
         s = s.replace("My First dataset", getValues1Name());
         s = s.replace("Chart.js Line Chart", getChartName());
+        return s;
+    }
+
+    public String getSingleLineChartString(String title, String values1Name, String chartNameSeries, String chartDataSeries1) {
+        String s = "\n"
+                + "		var MONTHS = [N1N1N1N1N1N1N1N1];\n"
+                + "		var config = {\n"
+                + "			type: 'line',\n"
+                + "			data: {\n"
+                + "				labels: [N1N1N1N1N1N1N1N1],\n"
+                + "				datasets: [{\n"
+                + "					label: 'My First dataset',\n"
+                + "					backgroundColor: window.chartColors.red,\n"
+                + "					borderColor: window.chartColors.red,\n"
+                + "					data: [\n"
+                + "						D1D1D1D1D1D1D1D1 \n"
+                + "					],\n"
+                + "					fill: false,\n"
+                + "				}]\n"
+                + "			},\n"
+                + "			options: {\n"
+                + "				responsive: true,\n"
+                + "				title: {\n"
+                + "					display: true,\n"
+                + "					text: 'Chart.js Line Chart'\n"
+                + "				},\n"
+                + "				tooltips: {\n"
+                + "					mode: 'index',\n"
+                + "					intersect: false,\n"
+                + "				},\n"
+                + "				hover: {\n"
+                + "					mode: 'nearest',\n"
+                + "					intersect: true\n"
+                + "				},\n"
+                + "				scales: {\n"
+                + "					xAxes: [{\n"
+                + "						display: true,\n"
+                + "						scaleLabel: {\n"
+                + "							display: true,\n"
+                + "							labelString: 'Month'\n"
+                + "						}\n"
+                + "					}],\n"
+                + "					yAxes: [{\n"
+                + "						display: true,\n"
+                + "						scaleLabel: {\n"
+                + "							display: true,\n"
+                + "							labelString: 'Value'\n"
+                + "						}\n"
+                + "					}]\n"
+                + "				}\n"
+                + "			}\n"
+                + "		};\n"
+                + "\n"
+                + "		window.onload = function() {\n"
+                + "			var ctx = document.getElementById('canvas').getContext('2d');\n"
+                + "			window.myLine = new Chart(ctx, config);\n"
+                + "		};\n"
+                + "\n"
+                + "		document.getElementById('randomizeData').addEventListener('click', function() {\n"
+                + "			config.data.datasets.forEach(function(dataset) {\n"
+                + "				dataset.data = dataset.data.map(function() {\n"
+                + "					return randomScalingFactor();\n"
+                + "				});\n"
+                + "\n"
+                + "			});\n"
+                + "\n"
+                + "			window.myLine.update();\n"
+                + "		});\n"
+                + "\n"
+                + "		var colorNames = Object.keys(window.chartColors);\n"
+                + "		document.getElementById('addDataset').addEventListener('click', function() {\n"
+                + "			var colorName = colorNames[config.data.datasets.length % colorNames.length];\n"
+                + "			var newColor = window.chartColors[colorName];\n"
+                + "			var newDataset = {\n"
+                + "				label: 'Dataset ' + config.data.datasets.length,\n"
+                + "				backgroundColor: newColor,\n"
+                + "				borderColor: newColor,\n"
+                + "				data: [],\n"
+                + "				fill: false\n"
+                + "			};\n"
+                + "\n"
+                + "			for (var index = 0; index < config.data.labels.length; ++index) {\n"
+                + "				newDataset.data.push(randomScalingFactor());\n"
+                + "			}\n"
+                + "\n"
+                + "			config.data.datasets.push(newDataset);\n"
+                + "			window.myLine.update();\n"
+                + "		});\n"
+                + "	";
+
+        s = s.replace("D1D1D1D1D1D1D1D1", chartDataSeries1);
+        s = s.replace("N1N1N1N1N1N1N1N1", chartNameSeries);
+        s = s.replace("My First dataset", values1Name);
+        s = s.replaceAll("text: 'Chart.js Line Chart'",
+                "text: '"
+                + title
+                + "'");
+        return s;
+    }
+
+    public String getSingleLineChartString(String[] titles, String values1Name, String chartNameSeries, String chartDataSeries1) {
+        String s = "\n"
+                + "		var MONTHS = [N1N1N1N1N1N1N1N1];\n"
+                + "		var config = {\n"
+                + "			type: 'line',\n"
+                + "			data: {\n"
+                + "				labels: [N1N1N1N1N1N1N1N1],\n"
+                + "				datasets: [{\n"
+                + "					label: 'My First dataset',\n"
+                + "					backgroundColor: window.chartColors.red,\n"
+                + "					borderColor: window.chartColors.red,\n"
+                + "					data: [\n"
+                + "						D1D1D1D1D1D1D1D1 \n"
+                + "					],\n"
+                + "					fill: false,\n"
+                + "				}]\n"
+                + "			},\n"
+                + "			options: {\n"
+                + "				responsive: true,\n"
+                + "				title: {\n"
+                + "					display: true,\n"
+                + "					text: 'Chart.js Line Chart'\n"
+                + "				},\n"
+                + "				tooltips: {\n"
+                + "					mode: 'index',\n"
+                + "					intersect: false,\n"
+                + "				},\n"
+                + "				hover: {\n"
+                + "					mode: 'nearest',\n"
+                + "					intersect: true\n"
+                + "				},\n"
+                + "				scales: {\n"
+                + "					xAxes: [{\n"
+                + "						display: true,\n"
+                + "						scaleLabel: {\n"
+                + "							display: true,\n"
+                + "							labelString: 'Month'\n"
+                + "						}\n"
+                + "					}],\n"
+                + "					yAxes: [{\n"
+                + "						display: true,\n"
+                + "						scaleLabel: {\n"
+                + "							display: true,\n"
+                + "							labelString: 'Value'\n"
+                + "						}\n"
+                + "					}]\n"
+                + "				}\n"
+                + "			}\n"
+                + "		};\n"
+                + "\n"
+                + "		window.onload = function() {\n"
+                + "			var ctx = document.getElementById('canvas').getContext('2d');\n"
+                + "			window.myLine = new Chart(ctx, config);\n"
+                + "		};\n"
+                + "\n"
+                + "		document.getElementById('randomizeData').addEventListener('click', function() {\n"
+                + "			config.data.datasets.forEach(function(dataset) {\n"
+                + "				dataset.data = dataset.data.map(function() {\n"
+                + "					return randomScalingFactor();\n"
+                + "				});\n"
+                + "\n"
+                + "			});\n"
+                + "\n"
+                + "			window.myLine.update();\n"
+                + "		});\n"
+                + "\n"
+                + "		var colorNames = Object.keys(window.chartColors);\n"
+                + "		document.getElementById('addDataset').addEventListener('click', function() {\n"
+                + "			var colorName = colorNames[config.data.datasets.length % colorNames.length];\n"
+                + "			var newColor = window.chartColors[colorName];\n"
+                + "			var newDataset = {\n"
+                + "				label: 'Dataset ' + config.data.datasets.length,\n"
+                + "				backgroundColor: newColor,\n"
+                + "				borderColor: newColor,\n"
+                + "				data: [],\n"
+                + "				fill: false\n"
+                + "			};\n"
+                + "\n"
+                + "			for (var index = 0; index < config.data.labels.length; ++index) {\n"
+                + "				newDataset.data.push(randomScalingFactor());\n"
+                + "			}\n"
+                + "\n"
+                + "			config.data.datasets.push(newDataset);\n"
+                + "			window.myLine.update();\n"
+                + "		});\n"
+                + "	";
+
+        String title = "[";
+        int c = 0;
+        for (String t : titles) {
+            if (c > 0) {
+                title = title + ", '" + title + "' ";
+            } else {
+                title = title + " '" + title + "' ";
+            }
+
+            c++;
+        }
+        title += "]";
+
+        s = s.replace("D1D1D1D1D1D1D1D1", chartDataSeries1);
+        s = s.replace("N1N1N1N1N1N1N1N1", chartNameSeries);
+        s = s.replace("My First dataset", values1Name);
+        s = s.replaceAll("text: 'Chart.js Line Chart'",
+                "text: " + title);
         return s;
     }
 
