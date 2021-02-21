@@ -384,16 +384,24 @@ public class PatientEncounterController implements Serializable {
     }
 
     public String createInvestigationChart() {
-
+        System.out.println("createInvestigationChart");
         String s = "";
         int i = 0;
         SimpleDateFormat format = new SimpleDateFormat("yy-MM-dd");
         String val = "";
 
-        List<PatientReportItemValue> privs = fillPatientReportItemValue(current.getPatient(), graphInvestigationItem);
+        System.out.println("graphInvestigationItem = " + graphInvestigationItem);
+        System.out.println("current.getPatient() = " + current.getPatient());
+        
+        
+        List<PatientReportItemValue> privs = 
+                fillPatientReportItemValue(current.getPatient(), graphInvestigationItem);
+        System.out.println("privs = " + privs);
+        
         List<InvestigationResultForGraph> grs = new ArrayList<>();
 
         for (PatientReportItemValue v : privs) {
+            System.out.println("v = " + v);
             boolean dateFound = false;
             Double dblVal = null;
             try {
@@ -408,28 +416,28 @@ public class PatientEncounterController implements Serializable {
 
                     dateFound = true;
 
-                    s += "'" + format.format(v.getPatientReport().getPatientInvestigation().getSampledAt()) + "'";
-                    if (i != getCurrentPatientEncounters().size()) {
-                        s += ", ";
-                    }
+                    s += "'" + format.format(v.getPatientReport().getPatientInvestigation().getSampledAt()) + "', ";
+                    
 
-                    val += dblVal + "";
-                    if (i != getCurrentPatientEncounters().size()) {
-                        val += ", ";
-                    }
+                    val += dblVal + ", ";
+                    
                 }
 
             } catch (Exception e) {
 
             }
-            for (InvestigationResultForGraph g : grs) {
-                if (g.getDates().equals(v.getPatientReport().getApproveAt())) {
-
-                }
-            }
+//            System.out.println("grs = " + grs);
+//            for (InvestigationResultForGraph g : grs) {
+//                System.out.println("g = " + g);
+//                if (g.getDates().equals(v.getPatientReport().getApproveAt())) {
+//
+//                }
+//            }
 
         }
 
+        
+        
         setChartNameSeries(s);
         setChartDataSeries1(val);
         setValues1Name(graphInvestigationItem.getName());

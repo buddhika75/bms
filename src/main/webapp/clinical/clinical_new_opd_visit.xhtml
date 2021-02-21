@@ -145,9 +145,13 @@
                                                             itemLabel="#{ii.name}" 
                                                             itemValue="#{ii}">
                                                 <p:ajax process="@this" ></p:ajax>
-                                                <p:ajax event="itemSelect" process="@this" ></p:ajax>
+                                                <p:ajax event="blur" process="@this" ></p:ajax>
                                             </p:autoComplete>
-                                            <p:commandLink ajax="false" id="btnIxChart" process="@this acixItem" value="Chart" action="#{patientEncounterController.createInvestigationChart()}" target="_blank"></p:commandLink>
+                                            <p:commandLink ajax="false" id="btnIxChart" 
+                                                           process="@this acixItem" 
+                                                           value="Chart" 
+                                                           action="#{patientEncounterController.createInvestigationChart()}" 
+                                                           target="_blank"></p:commandLink>
                                         
                                         </p:panelGrid>
 
