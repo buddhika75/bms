@@ -380,7 +380,15 @@ public class PatientEncounterController implements Serializable {
         setValues1Name("SBP");
         setValues2Name("DBP");
         setChartName("Blood Pressure Chart");
-        setChartString(getDoubleLineChartString());
+
+        String title1 = "Blood Pressure Chart";
+        String title2 = "Name : " + current.getPatient().getPerson().getNameWithTitle();
+        String title3 = "Age : " + current.getPatient().getAge();
+        String title4 = "Date : " + CommonFunctionsController.formatDate();
+        String[] titles
+                = {title1, title2, title3, title4};
+
+        setChartString(getDoubleLineChartString(titles));
         return "/chart";
     }
 
@@ -393,7 +401,6 @@ public class PatientEncounterController implements Serializable {
 
 //        System.out.println("graphInvestigationItem = " + graphInvestigationItem);
 //        System.out.println("current.getPatient() = " + current.getPatient());
-
         List<PatientReportItemValue> privs
                 = fillPatientReportItemValue(current.getPatient(), graphInvestigationItem);
 //        System.out.println("privs = " + privs);
@@ -426,7 +433,6 @@ public class PatientEncounterController implements Serializable {
 
             }
 
-
         }
 
         setChartNameSeries(s);
@@ -434,11 +440,11 @@ public class PatientEncounterController implements Serializable {
         setValues1Name(graphInvestigationItem.getName());
         setChartName(graphInvestigationItem.getName() + " Chart");
         String title1 = graphInvestigationItem.getName() + " Chart";
-        String title2= "Name : " +  current.getPatient().getPerson().getNameWithTitle();
-        String title3= "Age : " + current.getPatient().getAge() ;
-        String title4= "Date : " + CommonFunctionsController.formatDate();
+        String title2 = "Name : " + current.getPatient().getPerson().getNameWithTitle();
+        String title3 = "Age : " + current.getPatient().getAge();
+        String title4 = "Date : " + CommonFunctionsController.formatDate();
         String[] titles
-                = {title1,title2, title3, title4};
+                = {title1, title2, title3, title4};
 
         setChartString(getSingleLineChartString(titles,
                 graphInvestigationItem.getName(),
@@ -452,11 +458,19 @@ public class PatientEncounterController implements Serializable {
         setChartDataSeries1(getCurrentPatientEncountersWeightStrings());
         setValues1Name("Weight");
         setChartName("Weight Chart");
-        setChartString(getSingleLineChartString());
+        String title1 =  "Weight Chart";
+        String title2 = "Name : " + current.getPatient().getPerson().getNameWithTitle();
+        String title3 = "Age : " + current.getPatient().getAge();
+        String title4 = "Date : " + CommonFunctionsController.formatDate();
+        String[] titles
+                = {title1, title2, title3, title4};
+        setChartString(getSingleLineChartString(
+                titles, values1Name, chartNameSeries, chartDataSeries1)
+        );
         return "/chart";
     }
 
-    public String getDoubleLineChartString() {
+    public String getDoubleLineChartString(String[] titles) {
         String s = "\n"
                 + "		var MONTHS = [N1N1N1N1N1N1N1N1];\n"
                 + "		var config = {\n"
@@ -556,7 +570,23 @@ public class PatientEncounterController implements Serializable {
         s = s.replace("N1N1N1N1N1N1N1N1", getChartNameSeries());
         s = s.replace("My First dataset", getValues1Name());
         s = s.replace("My Second dataset", getValues2Name());
-        s = s.replace("Chart.js Line Chart", getChartName());
+
+        String title = "[";
+        int c = 0;
+        for (String t : titles) {
+            if (c > 0) {
+                title = title + ", '" + t + "' ";
+            } else {
+                title = title + " '" + t + "' ";
+            }
+
+            c++;
+        }
+        title += "]";
+
+        s = s.replaceAll("text: 'Chart.js Line Chart'",
+                "text: " + title);
+
         return s;
     }
 
