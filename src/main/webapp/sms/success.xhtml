@@ -31,6 +31,13 @@
                     </p:panelGrid>
 
                     <p:dataTable value="#{smsController.smses}" var="item" id="tbl" paginator="true" rows="10">
+                        <p:column sortBy="#{item.bill.patient.person.nameWithTitle}"
+                                  filterBy="#{item.bill.patient.person.nameWithTitle}" filterMatchMode="contains">
+                            <f:facet name="header">
+                                <h:outputText value="Name"/>
+                            </f:facet>
+                            <h:outputText value="#{item.bill.patient.person.nameWithTitle}"/>
+                        </p:column>
                         <p:column sortBy="#{item.receipientNumber}" filterBy="#{item.receipientNumber}" filterMatchMode="contains">
                             <f:facet name="header">
                                 <h:outputText value="Number"/>

@@ -3137,6 +3137,7 @@ public class ChannelReportController implements Serializable {
         for (BillSession bs : getBillSessionsNurse()) {
             Sms e = new Sms();
             e.setCreatedAt(new Date());
+            e.setBill(bs.getBill());
             e.setCreater(sessionController.getLoggedUser());
             e.setCreatedAt(new Date());
             e.setCreater(sessionController.getLoggedUser());
@@ -3166,6 +3167,7 @@ public class ChannelReportController implements Serializable {
             }
             Sms e = new Sms();
             e.setCreatedAt(new Date());
+            e.setBill(bs.getBill());
             e.setCreater(sessionController.getLoggedUser());
             e.setCreatedAt(new Date());
             e.setCreater(sessionController.getLoggedUser());
@@ -3289,6 +3291,7 @@ public class ChannelReportController implements Serializable {
         for (BillSession bs : getBillSessionsNurse()) {
             Sms e = new Sms();
             e.setCreatedAt(new Date());
+            e.setBill(bs.getBill());
             e.setCreater(sessionController.getLoggedUser());
             e.setCreatedAt(new Date());
             e.setCreater(sessionController.getLoggedUser());
@@ -3314,6 +3317,7 @@ public class ChannelReportController implements Serializable {
         for (BillSession bs : getBillSessionsNurse()) {
             Sms e = new Sms();
             e.setCreatedAt(new Date());
+            e.setBill(bs.getBill());
             e.setCreater(sessionController.getLoggedUser());
             e.setCreatedAt(new Date());
             e.setCreater(sessionController.getLoggedUser());

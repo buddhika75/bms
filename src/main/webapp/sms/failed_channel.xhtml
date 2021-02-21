@@ -23,7 +23,7 @@
                         <p:calendar pattern="dd MMMM yyyy" value="#{smsController.to}" >
                         </p:calendar>
 
-                        <p:commandButton value="Process" action="#{smsController.fillFailed()}" ajax="false" ></p:commandButton>
+                        <p:commandButton value="Process" action="#{smsController.fillChannelFail()}" ajax="false" ></p:commandButton>
                         <p:commandButton ajax="false" value="Export" >
                             <p:dataExporter target="tbl" type="xls" fileName="sms sent failed.xls" ></p:dataExporter>
                         </p:commandButton>

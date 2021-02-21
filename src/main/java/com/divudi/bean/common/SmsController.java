@@ -60,206 +60,107 @@ public class SmsController implements Serializable {
     List<SmsSummeryRow> smsSummeryRows;
 
     ReportKeyWord reportKeyWord;
-    
+
     private Date from;
     private Date to;
-    
-    public void fillSuccess(){
+
+    public void fillSuccess() {
+        fillSuccess(null, true);;
+    }
+
+    public void fillLabSuccess() {
+        List<MessageType> ts = new ArrayList<>();
+        ts.add(MessageType.LabReport);
+        ts.add(MessageType.LabReportAll);
+        fillSuccess(ts, true);;
+    }
+
+    public void fillLabFail() {
+        List<MessageType> ts = new ArrayList<>();
+        ts.add(MessageType.LabReport);
+        ts.add(MessageType.LabReportAll);
+        fillSuccess(ts, false);;
+    }
+
+    public void fillChannelSuccess() {
+        List<MessageType> ts = new ArrayList<>();
+        ts.add(MessageType.ChannelBooking);
+        ts.add(MessageType.ChannelCancellation);
+        ts.add(MessageType.ChannelCustom);
+        ts.add(MessageType.ChannelDoctorAraival);
+        ts.add(MessageType.ChannelReminder);
+        fillSuccess(ts, true);;
+    }
+
+    public void fillChannelFail() {
+        List<MessageType> ts = new ArrayList<>();
+        ts.add(MessageType.ChannelBooking);
+        ts.add(MessageType.ChannelCancellation);
+        ts.add(MessageType.ChannelCustom);
+        ts.add(MessageType.ChannelDoctorAraival);
+        ts.add(MessageType.ChannelReminder);
+        fillSuccess(ts, false);;
+    }
+
+    public void fillSuccess(List<MessageType> ts, boolean success) {
         String j = "Select e "
                 + " from Sms e "
-                + " where e.sentSuccessfully=:suc"
+                + " where e.sentSuccessfully=:suc "
                 + " and e.retired=false "
-                + " and e.createdAt between :fd and :td "
-                + " order by e.createdAt";
+                + " and e.retired=false "
+                + " and e.createdAt between :fd and :td ";
+
         Map m = new HashMap();
         m.put("fd", from);
         m.put("td", to);
-        m.put("suc", true);
-        smses = getSmsFacade().findBySQL(j,m);
+        m.put("suc", success);
+        if (ts != null) {
+            j += " and e.smsType in :ts ";
+            m.put("ts", ts);
+        }
+
+        j += " order by e.createdAt";
+        smses = getSmsFacade().findBySQL(j, m);
     }
-    
-    public void fillFailed(){
-        String j = "Select e "
-                + " from Sms e "
-                + " where e.sentSuccessfully=:suc"
-                + " and e.retired=false "
-                + " and e.createdAt between :fd and :td "
-                + " order by e.createdAt";
-        Map m = new HashMap();
-        m.put("fd", from);
-        m.put("td", to);
-        m.put("suc", false);
-        smses = getSmsFacade().findBySQL(j,m);
+
+    public void fillFailed() {
+        fillSuccess(null, false);
     }
-    
-    public String toFailed(){
+
+    public String toFailed() {
+        smses = null;
         return "/sms/failed";
     }
-    
-    public String toSuccess(){
+
+    public String toSuccess() {
+        smses = null;
         return "/sms/success";
     }
     
+    public String toFailedLab() {
+        smses = null;
+        return "/sms/failed_lab";
+    }
+
+    public String toSuccessLab() {
+        smses = null;
+        return "/sms/success_lab";
+    }
     
+    public String toFailedChannel() {
+        smses = null;
+        return "/sms/failed_channel";
+    }
+
+    public String toSuccessChannel() {
+        smses = null;
+        return "/sms/success_channel";
+    }
 
     /**
      * Creates a new instance of SmsController
      */
     public SmsController() {
-    }
-
-    public void sendSmsAwaitingToSendInDatabase() {
-        String j = "Select e from Sms e where e.sentSuccessfully=false and e.retired=false";
-        List<Sms> smses = getSmsFacade().findBySQL(j);
-//        if (false) {
-//            Sms e = new Sms();
-//            e.getSentSuccessfully();
-//            e.getInstitution();
-//        }
-        for (Sms e : smses) {
-            e.setSentSuccessfully(Boolean.TRUE);
-            getSmsFacade().edit(e);
-
-            boolean sentSuccessfully = sendSms(e.getReceipientNumber(), e.getSendingMessage(),
-                    e.getInstitution().getSmsSendingUsername(),
-                    e.getInstitution().getSmsSendingPassword(),
-                    e.getInstitution().getSmsSendingAlias());
-            e.setSentSuccessfully(sentSuccessfully);
-            e.setSentAt(new Date());
-            getSmsFacade().edit(e);
-        }
-
-    }
-
-    public static String executePost(String targetURL, Map<String, Object> parameters) {
-        HttpURLConnection connection = null;
-        if (parameters != null && !parameters.isEmpty()) {
-            targetURL += "?";
-        }
-        Set s = parameters.entrySet();
-        Iterator it = s.iterator();
-        while (it.hasNext()) {
-            Map.Entry m = (Map.Entry) it.next();
-            Object pVal = m.getValue();
-            String pPara = (String) m.getKey();
-            targetURL += pPara + "=" + pVal.toString() + "&";
-        }
-        if (parameters != null && !parameters.isEmpty()) {
-            targetURL += "last=true";
-        }
-        try {
-            //Create connection
-            URL url = new URL(targetURL);
-            connection = (HttpURLConnection) url.openConnection();
-            connection.setRequestMethod("GET");
-
-            connection.setUseCaches(false);
-            connection.setDoOutput(true);
-            //Send request
-            DataOutputStream wr = new DataOutputStream(
-                    connection.getOutputStream());
-            wr.writeBytes(targetURL);
-            wr.flush();
-            wr.close();
-
-            //Get Response  
-            InputStream is = connection.getInputStream();
-            BufferedReader rd = new BufferedReader(new InputStreamReader(is));
-            StringBuilder response = new StringBuilder(); // or StringBuffer if Java version 5+
-            String line;
-            while ((line = rd.readLine()) != null) {
-                response.append(line);
-                response.append('\r');
-            }
-            rd.close();
-            return response.toString();
-        } catch (Exception e) {
-            return null;
-        } finally {
-            if (connection != null) {
-                connection.disconnect();
-            }
-        }
-    }
-
-    public boolean sendSms(String number, String message, String username, String password, String sendingAlias) {
-
-        //System.out.println("number = " + number);
-        //System.out.println("message = " + message);
-        //System.out.println("username = " + username);
-
-        Map m = new HashMap();
-        m.put("userName", username);
-        m.put("password", password);
-        m.put("userAlias", sendingAlias);
-        m.put("number", number);
-        m.put("message", message);
-
-        String res = executePost("http://localhost:8080/sms/faces/index.xhtml", m);
-        if (res == null) {
-            return false;
-        } else if (res.toUpperCase().contains("200")) {
-            return true;
-        } else {
-            return false;
-        }
-
-    }
-
-    public boolean sendSmsPromo(String number, String message, String username, String password, String sendingAlias) {
-
-        //System.out.println("number = " + number);
-        //System.out.println("message = " + message);
-        //System.out.println("username = " + username);
-
-        Map m = new HashMap();
-        m.put("userName", username);
-        m.put("password", password);
-        m.put("userAlias", sendingAlias);
-        m.put("number", number);
-        m.put("message", message);
-        m.put("promo", "yes");
-
-        String res = executePost("http://localhost:7070/sms/faces/index.xhtml", m);
-        if (res == null) {
-            return false;
-        } else if (res.toUpperCase().contains("200")) {
-            return true;
-        } else {
-            return false;
-        }
-
-    }
-
-    public void sendSmsToNumberList(String sendingNo, ApplicationInstitution ai, String msg, Bill b, MessageType smsType) {
-
-        if (sendingNo.contains("077") || sendingNo.contains("076")
-                || sendingNo.contains("071") || sendingNo.contains("070")
-                || sendingNo.contains("072")
-                || sendingNo.contains("075")
-                || sendingNo.contains("078")) {
-        } else {
-            return;
-        }
-
-        Sms e = new Sms();
-        e.setSentSuccessfully(Boolean.TRUE);
-
-        boolean sent = sendSmsPromo(sendingNo, msg, getSessionController().getInstitution().getSmsSendingUsername(),
-                getSessionController().getInstitution().getSmsSendingPassword(),
-                getSessionController().getInstitution().getSmsSendingAlias());
-
-        if (sent) {
-            e.setSentSuccessfully(true);
-            e.setSentAt(new Date());
-            e.setCreatedAt(new Date());
-            e.setCreater(getSessionController().getLoggedUser());
-            e.setBill(b);
-            e.setSmsType(smsType);
-            e.setSendingMessage(msg);
-            getSmsFacade().create(e);
-        }
-
     }
 
     public void createSmsTable() {
@@ -295,7 +196,6 @@ public class SmsController implements Serializable {
 
         m.put("fd", getReportKeyWord().getFromDate());
         m.put("td", getReportKeyWord().getToDate());
-
 
         if (getReportKeyWord().isAdditionalDetails()) {
             List<Object[]> objects = getSmsFacade().findAggregates(sql, m, TemporalType.TIMESTAMP);

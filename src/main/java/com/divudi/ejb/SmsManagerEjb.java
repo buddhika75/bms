@@ -5,7 +5,6 @@
  */
 package com.divudi.ejb;
 
-import com.divudi.data.MessageType;
 import com.divudi.entity.Sms;
 import com.divudi.facade.EmailFacade;
 import com.divudi.facade.SmsFacade;
@@ -29,7 +28,6 @@ import javax.ejb.EJB;
 import javax.ejb.Schedule;
 import javax.ejb.Stateless;
 import javax.persistence.TemporalType;
-import javax.swing.JOptionPane;
 
 /**
  *
@@ -158,6 +156,7 @@ public class SmsManagerEjb {
         String res = executePost("http://localhost:8080/sms/faces/index.xhtml", m);
         e.setAwaitingToBeSent(false);
         e.setResponseMessage(res);
+        e.setRetired(false);
         if (res == null) {
             e.setSentFailed(true);
             e.setSentSuccessfully(false);

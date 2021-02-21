@@ -23,6 +23,18 @@
                             </p:commandButton>
                             <p:commandButton ajax="false" value="Sent Failed" action="#{smsController.toFailed()}" >
                             </p:commandButton>
+                            <hr/>
+                            <p:outputLabel value="Lab" ></p:outputLabel>
+                            <p:commandButton ajax="false" value="Sent Successfully" action="#{smsController.toSuccessLab()}" >
+                            </p:commandButton>
+                            <p:commandButton ajax="false" value="Sent Failed" action="#{smsController.toFailedLab()}" >
+                            </p:commandButton>
+                            <hr/>
+                            <p:outputLabel value="Channelling" ></p:outputLabel>
+                            <p:commandButton ajax="false" value="Sent Successfully" action="#{smsController.toSuccessChannel()}" >
+                            </p:commandButton>
+                            <p:commandButton ajax="false" value="Sent Failed" action="#{smsController.toFailedChannel()}" >
+                            </p:commandButton>
                         </p:panelGrid>
                     </h:form>
 
