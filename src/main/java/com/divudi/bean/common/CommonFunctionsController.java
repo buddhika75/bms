@@ -4,6 +4,8 @@ import com.divudi.data.Sex;
 import com.divudi.data.Title;
 import com.divudi.data.dataStructure.DateRange;
 import com.divudi.data.dataStructure.YearMonthDay;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.TimeZone;
@@ -227,6 +229,17 @@ public class CommonFunctionsController {
         int day = calendar.get(Calendar.DATE);
         calendar.set(year, month, 1, 0, 0, 0);
         return calendar.getTime();
+    }
+
+    
+    public static String formatDate(){
+        return formatDateTime(new Date(), "dd MMMM yyyy");
+    }
+    
+    public static String formatDateTime(Date date, String format) {
+        DateFormat dateFormat = new SimpleDateFormat(format);
+        String strDate = dateFormat.format(date);
+        return strDate;
     }
 
     public static Date getFirstDayOfYear(Date date) {

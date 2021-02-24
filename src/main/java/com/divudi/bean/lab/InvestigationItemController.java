@@ -625,7 +625,7 @@ public class InvestigationItemController implements Serializable {
                 + " and upper(i.name) like :qry";
         m.put("vt", InvestigationItemType.Value);
         m.put("qry", "%" + qry.toUpperCase() + "%");
-        iivs = getEjbFacade().findBySQL(sql,m);
+        iivs = getEjbFacade().findBySQL(sql, m);
         if (iivs == null) {
             iivs = new ArrayList<>();
         }
@@ -2303,7 +2303,11 @@ public class InvestigationItemController implements Serializable {
 
         java.lang.Long getKey(String value) {
             java.lang.Long key;
-            key = Long.valueOf(value);
+            try {
+                key = Long.valueOf(value);
+            } catch (Exception e) {
+                key = null;
+            }
             return key;
         }
 

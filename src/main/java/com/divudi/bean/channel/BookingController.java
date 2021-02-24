@@ -655,30 +655,33 @@ public class BookingController implements Serializable {
     }
 
     public void generateSessions() {
+        System.out.println("generateSessions");
         serviceSessions = new ArrayList<>();
         String sql;
         Map m = new HashMap();
         m.put("staff", getStaff());
-        m.put("class", ServiceSession.class);
 
         if (staff != null) {
             sql = "Select s From ServiceSession s "
                     + " where s.retired=false "
                     + " and s.staff=:staff "
                     + " and s.originatingSession is null"
-                    + " and type(s)=:class "
                     + " order by s.sessionWeekday,s.startingTime ";
             List<ServiceSession> tmp = getServiceSessionFacade().findBySQL(sql, m);
+            System.out.println("tmp = " + tmp.size());
             calculateFee(tmp, channelBillController.getPaymentMethod());
             try {
                 serviceSessions = getChannelBean().generateDailyServiceSessionsFromWeekdaySessionsNew(tmp, sessionStartingDate);
+                System.out.println("serviceSessions.size() = " + serviceSessions.size());
             } catch (Exception e) {
             }
             generateSessionEvents(serviceSessions);
         }
+        System.out.println("serviceSessions.size() = " + serviceSessions.size());
     }
 
     public void generateSessionEvents(List<ServiceSession> sss) {
+        System.out.println("generateSessionEvents");
         eventModel = new DefaultScheduleModel();
         for (ServiceSession s : sss) {
             ChannelScheduleEvent e = new ChannelScheduleEvent();
@@ -688,6 +691,7 @@ public class BookingController implements Serializable {
             e.setEndDate(s.getTransEndTime());
             eventModel.addEvent(e);
         }
+        System.out.println("eventModel = " + eventModel);
     }
 
     public void onEventSelect(SelectEvent selectEvent) {

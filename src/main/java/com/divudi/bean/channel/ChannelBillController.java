@@ -5,6 +5,7 @@
 package com.divudi.bean.channel;
 
 import com.divudi.bean.common.BillBeanController;
+import com.divudi.bean.common.CommonController;
 import com.divudi.bean.common.DoctorSpecialityController;
 import com.divudi.bean.common.PriceMatrixController;
 import com.divudi.bean.common.SessionController;
@@ -15,11 +16,13 @@ import com.divudi.data.BillClassType;
 import com.divudi.data.BillType;
 import com.divudi.data.FeeType;
 import com.divudi.data.HistoryType;
+import com.divudi.data.MessageType;
 import com.divudi.data.PaymentMethod;
 import com.divudi.data.dataStructure.PaymentMethodData;
 import com.divudi.ejb.BillNumberGenerator;
 import com.divudi.ejb.ChannelBean;
 import com.divudi.ejb.ServiceSessionBean;
+import com.divudi.ejb.SmsManagerEjb;
 import com.divudi.entity.AgentHistory;
 import com.divudi.entity.Area;
 import com.divudi.entity.Bill;
@@ -36,7 +39,9 @@ import com.divudi.entity.Person;
 import com.divudi.entity.PriceMatrix;
 import com.divudi.entity.RefundBill;
 import com.divudi.entity.ServiceSession;
+import com.divudi.entity.Sms;
 import com.divudi.entity.Staff;
+import com.divudi.entity.UserPreference;
 import com.divudi.entity.channel.AgentReferenceBook;
 import com.divudi.entity.memberShip.MembershipScheme;
 import com.divudi.entity.memberShip.PaymentSchemeDiscount;
@@ -51,6 +56,7 @@ import com.divudi.facade.InstitutionFacade;
 import com.divudi.facade.PatientFacade;
 import com.divudi.facade.PersonFacade;
 import com.divudi.facade.ServiceSessionFacade;
+import com.divudi.facade.SmsFacade;
 import com.divudi.facade.util.JsfUtil;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -128,6 +134,10 @@ public class ChannelBillController implements Serializable {
     //////////////////////////////////
     @EJB
     private ServiceSessionBean serviceSessionBean;
+    @EJB
+    private SmsFacade smsFacade;
+    @EJB
+    SmsManagerEjb smsManagerEjb;
     //////////////////////////////
     @Inject
     private SessionController sessionController;
@@ -148,6 +158,8 @@ public class ChannelBillController implements Serializable {
     BillBeanController billBeanController;
     List<BillItem> billItems;
     int patientSearchTab;
+
+    private UserPreference pf;
 
     public PriceMatrixController getPriceMatrixController() {
         return priceMatrixController;
@@ -1374,8 +1386,83 @@ public class ChannelBillController implements Serializable {
         printingBill = getBillFacade().find(printingBill.getId());
         bookingController.fillBillSessions();
         bookingController.generateSessions();
+        sendSmsAfterBooking();
         settleSucessFully = true;
         UtilityController.addSuccessMessage("Channel Booking Added.");
+    }
+
+    public void sendSmsAfterBooking() {
+        Sms e = new Sms();
+        e.setCreatedAt(new Date());
+        e.setCreater(sessionController.getLoggedUser());
+        e.setBill(printingBill);
+        e.setCreatedAt(new Date());
+        e.setCreater(sessionController.getLoggedUser());
+        e.setReceipientNumber(printingBill.getPatient().getPerson().getPhone());
+        e.setSendingMessage(chanellBookingSms(printingBill));
+        e.setDepartment(getSessionController().getLoggedUser().getDepartment());
+        e.setInstitution(getSessionController().getLoggedUser().getInstitution());
+        e.setSmsType(MessageType.ChannelBooking);
+        getSmsFacade().create(e);
+        boolean suc = smsManagerEjb.sendSms(e);
+    }
+
+    private String chanellBookingSms(Bill b) {
+        String s;
+        String date = CommonController.getDateFormat(b.getSingleBillSession().getSessionDate(),
+                "dd MMM");
+        String time = CommonController.getDateFormat(
+                b.getSingleBillSession().getSessionTime(),
+                "hh:mm a");
+        String doc = b.getSingleBillSession().getStaff().getPerson().getNameWithTitle();
+        s = "Your Appointment with "
+                + ""
+                + doc
+                + " @ Baddegama Medical Services - "
+                + "No "
+                + b.getSingleBillSession().getSerialNo()
+                + " at "
+                + time
+                + " on "
+                + date
+                + ". 0912293700";
+
+        return s;
+    }
+
+    private String chanellReminderSms(Bill b) {
+        String s;
+        String date = CommonController.getDateFormat(b.getSingleBillSession().getSessionDate(),
+                "dd MMM");
+        String time = CommonController.getDateFormat(
+                b.getSingleBillSession().getSessionTime(),
+                "hh:mm a");
+        String doc = b.getSingleBillSession().getStaff().getPerson().getNameWithTitle();
+        s = "Your Appointment with "
+                + ""
+                + doc
+                + " @ Baddegama Medical Services - "
+                + "No "
+                + b.getSingleBillSession().getSerialNo()
+                + " at "
+                + time
+                + " on "
+                + date
+                + ". 0912293700";
+
+        return s;
+    }
+
+    public void loadUserPreferances() {
+        UserPreference pf = null;
+        System.out.println("pf = " + pf);
+        if (getSessionController().getLoggedPreference() != null) {
+            pf = getSessionController().getLoggedPreference();
+        } else if (getSessionController().getUserPreference() != null) {
+            pf = getSessionController().getUserPreference();
+        } else {
+            pf = null;
+        }
     }
 
     public void clearBillValues() {
@@ -1516,18 +1603,14 @@ public class ChannelBillController implements Serializable {
                 tmpDiscount += d;
             } else if (bill.getPatient().getPerson().getMembershipScheme() != null && f.getFeeType() == FeeType.OwnInstitution) {
 //                MembershipScheme membershipScheme = membershipSchemeController.fetchPatientMembershipScheme(bill.getPatient());
-                
-                
+
                 MembershipScheme membershipScheme = bill.getPatient().getPerson().getMembershipScheme();
-                
-                
-                PriceMatrix priceMatrix = getPriceMatrixController().getChannellingDisCount(paymentMethod, membershipScheme, f.getDepartment() );
+
+                PriceMatrix priceMatrix = getPriceMatrixController().getChannellingDisCount(paymentMethod, membershipScheme, f.getDepartment());
 //                priceMatrix.getDiscountPercent();
 //                System.out.println("priceMatrix.getDiscountPercent() = " + priceMatrix.getDiscountPercent());
 
                 if (priceMatrix != null) {
-                    
-
 
                     d = bf.getFeeValue() * (priceMatrix.getDiscountPercent() / 100);
                     bf.setFeeDiscount(d);
@@ -1599,7 +1682,6 @@ public class ChannelBillController implements Serializable {
         bill.setTotal(getAmount());
         bill.setNetTotal(getAmount());
         bill.setPaymentMethod(paymentMethod);
-
 
         if (getPatientTabId().equals("tabNewPt")) {
             bill.setPatient(newPatient);
@@ -1771,7 +1853,6 @@ public class ChannelBillController implements Serializable {
             insId = getBillNumberBean().institutionBillNumberGenerator(sessionController.getInstitution(), bts, billClassType, suffix);
         }
 
-
         return insId;
     }
 
@@ -1810,7 +1891,6 @@ public class ChannelBillController implements Serializable {
             billClassType = BillClassType.RefundBill;
             deptId = getBillNumberBean().departmentBillNumberGenerator(getSessionController().getInstitution(), getSessionController().getDepartment(), bts, billClassType, suffix);
         }
-
 
         return deptId;
     }
@@ -2266,6 +2346,21 @@ public class ChannelBillController implements Serializable {
 
     public void setCommentR(String commentR) {
         this.commentR = commentR;
+    }
+
+    public UserPreference getPf() {
+        if (pf == null) {
+            loadUserPreferances();
+        }
+        return pf;
+    }
+
+    public void setPf(UserPreference pf) {
+        this.pf = pf;
+    }
+
+    public SmsFacade getSmsFacade() {
+        return smsFacade;
     }
 
 }

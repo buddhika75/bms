@@ -13,6 +13,7 @@ import com.divudi.data.CalculationType;
 import com.divudi.data.InvestigationItemType;
 import com.divudi.data.InvestigationItemValueType;
 import com.divudi.data.InvestigationReportType;
+import com.divudi.data.MessageType;
 import com.divudi.data.Sex;
 import com.divudi.data.lab.Selectable;
 import com.divudi.ejb.EmailManagerEjb;
@@ -446,7 +447,6 @@ public class PatientReportController implements Serializable {
             message.setContent(multipart);
 
             Transport.send(message);
-
 
             JsfUtil.addSuccessMessage("Email Sent SUccessfully");
 
@@ -1173,6 +1173,12 @@ public class PatientReportController implements Serializable {
         return b;
     }
 
+    
+    public String smsBodyForAllApproved() {
+        String b = "Your Test Reports are ready for collection at BMS Health.";
+        return b;
+    }
+    
     public String smsBody(PatientReport r) {
         Calendar c = Calendar.getInstance();
         c.add(Calendar.MONTH, 1);
@@ -1337,9 +1343,51 @@ public class PatientReportController implements Serializable {
                 e.setDepartment(getSessionController().getLoggedUser().getDepartment());
                 e.setInstitution(getSessionController().getLoggedUser().getInstitution());
                 e.setSentSuccessfully(false);
+                e.setAwaitingToBeSent(true);
+                e.setSmsType(MessageType.LabReport);
                 getSmsFacade().create(e);
             }
         }
+
+        if (pf != null && pf.getSentSmsWithAllInvestigationsAreApproved()) {
+            if (!currentPtIx.getBillItem().getBill().getPatient().getPerson().getPhone().trim().equals("")) {
+
+                List<PatientInvestigation> billPis;
+                String j = "select pi "
+                        + " from PatientInvestigation pi "
+                        + " where pi.billItem.bill=:b";
+                Map m = new HashMap();
+                m.put("b", currentPtIx.getBillItem().getBill());
+                billPis = getPiFacade().findBySQL(j, m);
+
+                boolean allApproved = true;
+
+                for (PatientInvestigation tpi : billPis) {
+                    if (!tpi.getApproved()) {
+                        allApproved = false;
+                    }
+                }
+
+                if (allApproved) {
+                    Sms e = new Sms();
+                    e.setCreatedAt(new Date());
+                    e.setCreater(sessionController.getLoggedUser());
+                    e.setBill(currentPtIx.getBillItem().getBill());
+                    e.setCreatedAt(new Date());
+                    e.setCreater(sessionController.getLoggedUser());
+                    e.setReceipientNumber(currentPtIx.getBillItem().getBill().getPatient().getPerson().getPhone());
+                    e.setSendingMessage(smsBodyForAllApproved());
+                    e.setDepartment(getSessionController().getLoggedUser().getDepartment());
+                    e.setInstitution(getSessionController().getLoggedUser().getInstitution());
+                    e.setAwaitingToBeSent(true);
+                    e.setSmsType(MessageType.LabReportAll);
+                    e.setSentSuccessfully(false);
+                    getSmsFacade().create(e);
+                }
+
+            }
+        }
+
         UtilityController.addSuccessMessage("Approved");
         commonController.printReportDetails(null, null, startTime, "Lab Report Aprove.");
     }
@@ -1405,18 +1453,17 @@ public class PatientReportController implements Serializable {
     }
 
     public void printPatientReport() {
-        
+
         if (currentPatientReport == null) {
             UtilityController.addErrorMessage("Error. No currentPatientReport");
             return;
         }
-        
+
         if (currentPtIx == null) {
             UtilityController.addErrorMessage("Error. No currentPtIx");
             return;
         }
 
-        
         currentPtIx.setPrinted(true);
         currentPtIx.setPrintingAt(Calendar.getInstance().getTime());
         currentPtIx.setPrintingUser(getSessionController().getLoggedUser());

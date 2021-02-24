@@ -46,15 +46,15 @@ public class UserPreference implements Serializable {
     String channellingBillHeader;
     @Lob
     String channellingBillFooter;
-    
+
     @ManyToOne
     WebUser webUser;
     @ManyToOne
     Department department;
     @ManyToOne
     Institution institution;
-    boolean institutionSpecificItems=false;
-    private boolean institutionRestrictedBilling=false;
+    boolean institutionSpecificItems = false;
+    private boolean institutionRestrictedBilling = false;
     boolean printLabelForOPdBill;
     boolean partialPaymentOfOpdBillsAllowed;
     boolean partialPaymentOfOpdPreBillsAllowed;
@@ -74,11 +74,11 @@ public class UserPreference implements Serializable {
     boolean inwardChangeAdmissionFee;
     boolean pharmacyBillWithOutItem;
     boolean fiveFivePaperWithHeadings;
-    boolean showOnlyMarkedDoctors=false;
-    boolean channelSettleWithoutPatientPhoneNumber=false;
-    boolean opdSettleWithoutPatientPhoneNumber=false;
-    boolean channelBillDouble=false;
-    private boolean channelDoctorArivalMsgSend=false;
+    boolean showOnlyMarkedDoctors = false;
+    boolean channelSettleWithoutPatientPhoneNumber = false;
+    boolean opdSettleWithoutPatientPhoneNumber = false;
+    boolean channelBillDouble = false;
+    private boolean channelDoctorArivalMsgSend = false;
     String microBiologyFont;
     String logoName;
     @Enumerated(EnumType.STRING)
@@ -96,15 +96,15 @@ public class UserPreference implements Serializable {
     private boolean printBarcodeInOpdBill;
     private boolean sentEmailWithInvestigationReportApproval;
     private boolean sentSmsWithInvestigationRequestApproval;
+    private boolean sentSmsWithAllInvestigationsAreApproved;
     private boolean sentDailySmsSummeryForReferringDoctors;
-    
-    
+    private boolean sendSmsWithChannelBooking;
+
     @Lob
     private String patientRegistrationPrintTemplate;
-    
-    
+
     public ApplicationInstitution getApplicationInstitution() {
-        if(applicationInstitution==null){
+        if (applicationInstitution == null) {
             applicationInstitution = ApplicationInstitution.Ruhuna;
         }
         return applicationInstitution;
@@ -113,6 +113,8 @@ public class UserPreference implements Serializable {
     public void setApplicationInstitution(ApplicationInstitution applicationInstitution) {
         this.applicationInstitution = applicationInstitution;
     }
+    
+    
 
     public boolean isPaymentMethodAllowedInInwardMatrix() {
         return paymentMethodAllowedInInwardMatrix;
@@ -129,7 +131,7 @@ public class UserPreference implements Serializable {
     public void setChannelBillDouble(boolean channelBillDouble) {
         this.channelBillDouble = channelBillDouble;
     }
-    
+
     public boolean isPartialPaymentOfOpdBillsAllowed() {
         return partialPaymentOfOpdBillsAllowed;
     }
@@ -153,10 +155,9 @@ public class UserPreference implements Serializable {
     public void setPharmayPurchaseWithLastRate(boolean pharmayPurchaseWithLastRate) {
         this.pharmayPurchaseWithLastRate = pharmayPurchaseWithLastRate;
     }
-    
-    
+
     public PaperType getOpdBillPaperType() {
-        if(opdBillPaperType==null){
+        if (opdBillPaperType == null) {
             opdBillPaperType = PaperType.FiveFivePaper;
         }
         return opdBillPaperType;
@@ -171,7 +172,7 @@ public class UserPreference implements Serializable {
     }
 
     public void setChannelBillPaperType(PaperType channelBillPaperType) {
-        if(opdBillPaperType==null){
+        if (opdBillPaperType == null) {
             opdBillPaperType = PaperType.Paper24_2x9_3;
         }
         this.channelBillPaperType = channelBillPaperType;
@@ -215,8 +216,7 @@ public class UserPreference implements Serializable {
 
     public void setOpdPosBillWithoutLogo(boolean opdPosBillWithoutLogo) {
         this.opdPosBillWithoutLogo = opdPosBillWithoutLogo;
-    }   
-    
+    }
 
     public String getAbbreviationForHistory() {
         if (abbreviationForHistory == null || "".equals(abbreviationForHistory)) {
@@ -259,7 +259,7 @@ public class UserPreference implements Serializable {
     }
 
     public void setAbbreviationForTreatments(String abbreviationForTreatments) {
-        
+
         this.abbreviationForTreatments = abbreviationForTreatments;
     }
 
@@ -299,6 +299,8 @@ public class UserPreference implements Serializable {
     }
 
     
+    
+    
     public Long getId() {
         return id;
     }
@@ -314,8 +316,6 @@ public class UserPreference implements Serializable {
     public void setInstitutionSpecificItems(boolean institutionSpecificItems) {
         this.institutionSpecificItems = institutionSpecificItems;
     }
-    
-    
 
     public boolean isPrintLabelForOPdBill() {
         return printLabelForOPdBill;
@@ -340,10 +340,6 @@ public class UserPreference implements Serializable {
     public void setMicroBiologyFont(String microBiologyFont) {
         this.microBiologyFont = microBiologyFont;
     }
-
-    
-    
-    
 
     public String getPharmacyBillFooter() {
         return pharmacyBillFooter;
@@ -395,7 +391,7 @@ public class UserPreference implements Serializable {
     public void setInwardAddServiceBillTimeCheck(boolean inwardAddServiceBillTimeCheck) {
         this.inwardAddServiceBillTimeCheck = inwardAddServiceBillTimeCheck;
     }
-    
+
     public boolean isInwardMoChargeCalculateInitialTime() {
         return inwardMoChargeCalculateInitialTime;
     }
@@ -485,7 +481,7 @@ public class UserPreference implements Serializable {
     }
 
     public PaymentMethod getChannellingPaymentMethod() {
-        if(channellingPaymentMethod==null){
+        if (channellingPaymentMethod == null) {
             channellingPaymentMethod = PaymentMethod.OnCall;
         }
         return channellingPaymentMethod;
@@ -510,7 +506,7 @@ public class UserPreference implements Serializable {
     public void setOpdSettleWithoutPatientPhoneNumber(boolean opdSettleWithoutPatientPhoneNumber) {
         this.opdSettleWithoutPatientPhoneNumber = opdSettleWithoutPatientPhoneNumber;
     }
-    
+
     public boolean isChannelDoctorArivalMsgSend() {
         return channelDoctorArivalMsgSend;
     }
@@ -518,7 +514,7 @@ public class UserPreference implements Serializable {
     public void setChannelDoctorArivalMsgSend(boolean channelDoctorArivalMsgSend) {
         this.channelDoctorArivalMsgSend = channelDoctorArivalMsgSend;
     }
-    
+
     @Override
     public int hashCode() {
         int hash = 0;
@@ -543,7 +539,7 @@ public class UserPreference implements Serializable {
     public String toString() {
         return "com.divudi.entity.UserPreference[ id=" + id + " ]";
     }
-    
+
     public String getPatientRegistrationPrintTemplate() {
         return patientRegistrationPrintTemplate;
     }
@@ -561,7 +557,7 @@ public class UserPreference implements Serializable {
     }
 
     public boolean getSentEmailWithInvestigationReportApproval() {
-        
+
         return sentEmailWithInvestigationReportApproval;
     }
 
@@ -570,8 +566,16 @@ public class UserPreference implements Serializable {
     }
 
     public boolean getSentSmsWithInvestigationRequestApproval() {
-       
+
         return sentSmsWithInvestigationRequestApproval;
+    }
+
+    public boolean getSentSmsWithAllInvestigationsAreApproved() {
+        return sentSmsWithAllInvestigationsAreApproved;
+    }
+
+    public void setSentSmsWithAllInvestigationsAreApproved(boolean sentSmsWithAllInvestigationsAreApproved) {
+        this.sentSmsWithAllInvestigationsAreApproved = sentSmsWithAllInvestigationsAreApproved;
     }
 
     public void setSentSmsWithInvestigationRequestApproval(boolean sentSmsWithInvestigationRequestApproval) {
@@ -579,7 +583,7 @@ public class UserPreference implements Serializable {
     }
 
     public boolean getSentDailySmsSummeryForReferringDoctors() {
-       
+
         return sentDailySmsSummeryForReferringDoctors;
     }
 
@@ -603,6 +607,12 @@ public class UserPreference implements Serializable {
         this.printBarcodeInOpdBill = printBarcodeInOpdBill;
     }
 
-    
-    
+    public boolean isSendSmsWithChannelBooking() {
+        return sendSmsWithChannelBooking;
+    }
+
+    public void setSendSmsWithChannelBooking(boolean sendSmsWithChannelBooking) {
+        this.sendSmsWithChannelBooking = sendSmsWithChannelBooking;
+    }
+
 }

@@ -146,6 +146,10 @@
                         <f:selectItems value="#{enumController.paymentMethodsForChannel}"/>                                                               
                     </p:selectOneMenu>
 
+                    
+                    <h:outputLabel value="Automatically Send a SMS after booking"></h:outputLabel>
+                    <h:selectBooleanCheckbox value="#{sessionController.currentPreference.sendSmsWithChannelBooking}"/>
+
 
                 </h:panelGrid>
 
@@ -169,6 +173,17 @@
 
             <p:panel header="Lab" >
                 <h:panelGrid columns="2" styleClass="alignTop" >
+
+                    <h:outputLabel value="Automatically Send an Email with each Report Approval"></h:outputLabel>
+                    <h:selectBooleanCheckbox value="#{sessionController.currentPreference.sentEmailWithInvestigationReportApproval}"/>
+
+                    <h:outputLabel value="Automatically Send a SMS with each Report Approval"></h:outputLabel>
+                    <h:selectBooleanCheckbox value="#{sessionController.currentPreference.sentSmsWithInvestigationRequestApproval}"/>
+
+                    <h:outputLabel value="Automatically Send a SMS after all Reports are Approved."></h:outputLabel>
+                    <h:selectBooleanCheckbox value="#{sessionController.currentPreference.sentSmsWithAllInvestigationsAreApproved}"/>
+
+
                     <h:outputLabel value="Lab Micro-Biology Font" ></h:outputLabel>
                     <h:inputText id="fontName" value="#{sessionController.currentPreference.microBiologyFont}"/>
                     <p:watermark for="fontName" value="Eg- Courier New" />
