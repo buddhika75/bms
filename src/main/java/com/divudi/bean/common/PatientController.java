@@ -504,20 +504,20 @@ public class PatientController implements Serializable {
                 barcode = new DefaultStreamedContent(new FileInputStream(barcodeFile), "image/jpeg");
 
             } catch (Exception ex) {
-                //   //System.out.println("ex = " + ex.getMessage());
+                //   ////System.out.println("ex = " + ex.getMessage());
             }
         } else {
-            //   //System.out.println("else = ");
+            //   ////System.out.println("else = ");
             try {
                 Barcode bc = BarcodeFactory.createCode128A("0000");
                 bc.setBarHeight(5);
                 bc.setBarWidth(3);
                 bc.setDrawingText(true);
                 BarcodeImageHandler.saveJPEG(bc, barcodeFile);
-                //   //System.out.println("12");
+                //   ////System.out.println("12");
                 barcode = new DefaultStreamedContent(new FileInputStream(barcodeFile), "image/jpeg");
             } catch (Exception ex) {
-                //   //System.out.println("ex = " + ex.getMessage());
+                //   ////System.out.println("ex = " + ex.getMessage());
             }
         }
     }
@@ -549,7 +549,7 @@ public class PatientController implements Serializable {
     }
 
     public StreamedContent getPhoto(Patient p) {
-        ////System.out.println("p is " + p);
+        //////System.out.println("p is " + p);
         FacesContext context = FacesContext.getCurrentInstance();
         if (context.getRenderResponse()) {
             return new DefaultStreamedContent();
@@ -557,7 +557,7 @@ public class PatientController implements Serializable {
             return new DefaultStreamedContent();
         } else {
             if (p.getId() != null && p.getBaImage() != null) {
-                ////System.out.println("giving image");
+                //////System.out.println("giving image");
                 return new DefaultStreamedContent(new ByteArrayInputStream(p.getBaImage()), p.getFileType(), p.getFileName());
             } else {
                 return new DefaultStreamedContent();
@@ -567,14 +567,14 @@ public class PatientController implements Serializable {
     }
 
     public StreamedContent getPhotoByByte(byte[] p) {
-        ////System.out.println("p is " + p);
+        //////System.out.println("p is " + p);
         FacesContext context = FacesContext.getCurrentInstance();
         if (context.getRenderResponse()) {
             return new DefaultStreamedContent();
         } else if (p == null) {
             return new DefaultStreamedContent();
         } else {
-//   //System.out.println("giving image");
+//   ////System.out.println("giving image");
             return new DefaultStreamedContent(new ByteArrayInputStream(p), "image/png", "photo.");
         }
     }
@@ -585,7 +585,7 @@ public class PatientController implements Serializable {
         if (img == null) {
             return new DefaultStreamedContent();
         } else {
-//   //System.out.println("giving image");
+//   ////System.out.println("giving image");
             return new DefaultStreamedContent(new ByteArrayInputStream(img), "image/png");
         }
     }
@@ -660,7 +660,7 @@ public class PatientController implements Serializable {
                     + " and upper(p.person.name) like :q "
                     + "  order by p.person.name";
             hm.put("q", "%" + query.toUpperCase() + "%");
-            ////System.out.println(sql);
+            //////System.out.println(sql);
             suggestions = getFacade().findBySQL(sql, hm, 20);
         }
         return suggestions;
@@ -1249,19 +1249,19 @@ public class PatientController implements Serializable {
             }
             PatientController controller = (PatientController) facesContext.getApplication().getELResolver().
                     getValue(facesContext.getELContext(), null, "patientController");
-            ////System.out.println("value at converter getAsObject is " + value);
+            //////System.out.println("value at converter getAsObject is " + value);
             return controller.getEjbFacade().find(getKey(value));
         }
 
         java.lang.Long getKey(String value) {
             java.lang.Long key;
-            ////System.out.println(value);
+            //////System.out.println(value);
             if (value == null || value.equals("null") || value.trim().equals("")) {
                 key = 0l;
             } else {
                 key = Long.valueOf(value);
-                ////System.out.println(key);
-                ////System.out.println(value);
+                //////System.out.println(key);
+                //////System.out.println(value);
             }
             return key;
         }
@@ -1335,19 +1335,19 @@ public class PatientController implements Serializable {
             }
             PatientController controller = (PatientController) facesContext.getApplication().getELResolver().
                     getValue(facesContext.getELContext(), null, "patientController");
-            ////System.out.println("value at converter getAsObject is " + value);
+            //////System.out.println("value at converter getAsObject is " + value);
             return controller.getEjbFacade().find(getKey(value));
         }
 
         java.lang.Long getKey(String value) {
             java.lang.Long key;
-            ////System.out.println(value);
+            //////System.out.println(value);
             if (value == null || value.equals("null") || value.trim().equals("")) {
                 key = 0l;
             } else {
                 key = Long.valueOf(value);
-                ////System.out.println(key);
-                ////System.out.println(value);
+                //////System.out.println(key);
+                //////System.out.println(value);
             }
             return key;
         }

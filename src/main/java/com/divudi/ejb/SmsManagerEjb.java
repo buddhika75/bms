@@ -88,7 +88,7 @@ public class SmsManagerEjb {
         }
 
         try {
-            //System.out.println("targetURL = " + targetURL);
+            ////System.out.println("targetURL = " + targetURL);
             //Create connection
             //Create connection
             //Create connection
@@ -97,26 +97,26 @@ public class SmsManagerEjb {
             //Create connection
             //Create connection
             //Create connection
-            //System.out.println("1");
+            ////System.out.println("1");
             URL url = new URL(targetURL);
-            //System.out.println("2");
+            ////System.out.println("2");
             connection = (HttpURLConnection) url.openConnection();
-            //System.out.println("3");
+            ////System.out.println("3");
             connection.setRequestMethod("GET");
-            //System.out.println("4");
+            ////System.out.println("4");
             connection.setDoOutput(true);
-            //System.out.println("4");
+            ////System.out.println("4");
             //Send request
             DataOutputStream wr = new DataOutputStream(
                     connection.getOutputStream());
-            //System.out.println("5");
+            ////System.out.println("5");
             wr.writeBytes(targetURL);
-            //System.out.println("6");
+            ////System.out.println("6");
             wr.flush();
-            //System.out.println("wr = " + wr);
-            //System.out.println("7");
+            ////System.out.println("wr = " + wr);
+            ////System.out.println("7");
             wr.close();
-            //System.out.println("8");
+            ////System.out.println("8");
             //Get Response  
             InputStream is = connection.getInputStream();
             BufferedReader rd = new BufferedReader(new InputStreamReader(is));

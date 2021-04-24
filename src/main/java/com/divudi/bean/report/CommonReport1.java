@@ -351,7 +351,7 @@ public class CommonReport1 implements Serializable {
     }
 
     public void listBillItemsByReferringDoctor() {
-        //System.out.println("listBillItemsByReferringDoctor");
+        ////System.out.println("listBillItemsByReferringDoctor");
         Map temMap = new HashMap();
         List<Bill> tmp;
         temMap.put("fromDate", getFromDate());
@@ -371,8 +371,8 @@ public class CommonReport1 implements Serializable {
         }
 
         sql = sql + "order by bi.bill.referredBy.person.name ";
-        System.out.println("sql = " + sql);
-        System.out.println("temMap = " + temMap);
+        //System.out.println("sql = " + sql);
+        //System.out.println("temMap = " + temMap);
         referralBillItems = billItemFacade.findBySQL(sql, temMap, TemporalType.TIMESTAMP);
         if (referralBillItems == null) {
             referralBillItems = new ArrayList<>();

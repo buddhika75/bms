@@ -68,7 +68,7 @@ public class StockHistoryRecorder {
 //    @Schedule(second="*/1", minute="*",hour="*", persistent=false)
     public void myTimer() {
         Date startTime = new Date();
-        //System.out.println("Start writing stock history: " + startTime);
+        ////System.out.println("Start writing stock history: " + startTime);
         for (Department d : fetchStockDepartment()) {
             if (!d.isRetired()) {
                 for (Item amp : fetchStockItem(d)) {
@@ -92,11 +92,11 @@ public class StockHistoryRecorder {
                         getStockHistoryFacade().create(h);
                     }
                 }
-                //System.out.println("hx finished for = " + d);
+                ////System.out.println("hx finished for = " + d);
             }
         }
-        //System.out.println("End writing stock history: " + new Date());
-//        //System.out.println("TIme taken for Hx is " + (((new Date()) - startTime )/(1000*60*60)) + " minutes.");
+        ////System.out.println("End writing stock history: " + new Date());
+//        ////System.out.println("TIme taken for Hx is " + (((new Date()) - startTime )/(1000*60*60)) + " minutes.");
     }
 
     @SuppressWarnings("unused")
@@ -115,8 +115,8 @@ public class StockHistoryRecorder {
             fc.setDone(true);
             getFeeChangeFacade().edit(fc);
         }
-        //System.out.println("End writing stock history: " + new Date());
-//        //System.out.println("TIme taken for Hx is " + (((new Date()) - startTime )/(1000*60*60)) + " minutes.");
+        ////System.out.println("End writing stock history: " + new Date());
+//        ////System.out.println("TIme taken for Hx is " + (((new Date()) - startTime )/(1000*60*60)) + " minutes.");
     }
     
     public List<Department> fetchStockDepartment() {

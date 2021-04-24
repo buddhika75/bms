@@ -235,7 +235,7 @@ public class Institution implements Serializable, IdentifiableWithNameOrCode {
         }
         
         String arr[] = address.split(",");
-        //System.out.println(arr);
+        ////System.out.println(arr);
         if(arr==null){
             return;
         }
@@ -248,7 +248,7 @@ public class Institution implements Serializable, IdentifiableWithNameOrCode {
             transAddress6=arr[5];
             transAddress7=arr[6];
        }catch(Exception e){
-           //System.out.println(e.getMessage());
+           ////System.out.println(e.getMessage());
        }
         
     }

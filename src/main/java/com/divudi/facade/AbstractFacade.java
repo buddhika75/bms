@@ -79,11 +79,11 @@ public abstract class AbstractFacade<T> {
             if (m.getValue() instanceof Date) {
                 Date pVal = (Date) m.getValue();
                 qry.setParameter(pPara, pVal, TemporalType.DATE);
-//                ////System.out.println("Parameter " + pPara + "\tVal" + pVal);
+//                //////System.out.println("Parameter " + pPara + "\tVal" + pVal);
             } else {
                 Object pVal = (Object) m.getValue();
                 qry.setParameter(pPara, pVal);
-//                ////System.out.println("Parameter " + pPara + "\tVal" + pVal);
+//                //////System.out.println("Parameter " + pPara + "\tVal" + pVal);
             }
         }
         List<T> l = qry.getResultList();
@@ -174,18 +174,18 @@ public abstract class AbstractFacade<T> {
         TypedQuery<T> qry = getEntityManager().createQuery(temSQL, entityClass);
         Set s = parameters.entrySet();
         Iterator it = s.iterator();
-//        ////System.out.println("temSQL = " + temSQL);
+//        //////System.out.println("temSQL = " + temSQL);
         while (it.hasNext()) {
             Map.Entry m = (Map.Entry) it.next();
             String pPara = (String) m.getKey();
             if (m.getValue() instanceof Date) {
                 Date pVal = (Date) m.getValue();
                 qry.setParameter(pPara, pVal, TemporalType.DATE);
-//                ////System.out.println("Parameter " + pPara + "\t Val =" + pVal);
+//                //////System.out.println("Parameter " + pPara + "\t Val =" + pVal);
             } else {
                 Object pVal = (Object) m.getValue();
                 qry.setParameter(pPara, pVal);
-//                ////System.out.println("Parameter " + pPara + "\t Val =" + pVal);
+//                //////System.out.println("Parameter " + pPara + "\t Val =" + pVal);
             }
         }
         return qry.getResultList();
@@ -224,7 +224,7 @@ public abstract class AbstractFacade<T> {
             } else {
                 qry.setParameter(pPara, pVal);
             }
-            //    ////System.out.println("Parameter " + pPara + "\tVal" + pVal);
+            //    //////System.out.println("Parameter " + pPara + "\tVal" + pVal);
         }
         return qry.getResultList();
     }
@@ -243,7 +243,7 @@ public abstract class AbstractFacade<T> {
             } else {
                 qry.setParameter(pPara, pVal);
             }
-            //    ////System.out.println("Parameter " + pPara + "\tVal" + pVal);
+            //    //////System.out.println("Parameter " + pPara + "\tVal" + pVal);
         }
         return qry.getResultList();
     }
@@ -262,7 +262,7 @@ public abstract class AbstractFacade<T> {
             } else {
                 qry.setParameter(pPara, pVal);
             }
-            //    ////System.out.println("Parameter " + pPara + "\tVal" + pVal);
+            //    //////System.out.println("Parameter " + pPara + "\tVal" + pVal);
         }
         return qry.getResultList();
     }
@@ -282,7 +282,7 @@ public abstract class AbstractFacade<T> {
             } else {
                 qry.setParameter(pPara, pVal);
             }
-            //    ////System.out.println("Parameter " + pPara + "\tVal" + pVal);
+            //    //////System.out.println("Parameter " + pPara + "\tVal" + pVal);
         }
 
         qry.setMaxResults(1);
@@ -307,7 +307,7 @@ public abstract class AbstractFacade<T> {
             } else {
                 qry.setParameter(pPara, pVal);
             }
-            //    ////System.out.println("Parameter " + pPara + "\tVal" + pVal);
+            //    //////System.out.println("Parameter " + pPara + "\tVal" + pVal);
         }
         return qry.getSingleResult();
     }
@@ -330,7 +330,7 @@ public abstract class AbstractFacade<T> {
             } else {
                 qry.setParameter(pPara, pVal);
             }
-            //    ////System.out.println("Parameter " + pPara + "\tVal" + pVal);
+            //    //////System.out.println("Parameter " + pPara + "\tVal" + pVal);
         }
         return qry.getResultList();
     }
@@ -368,14 +368,14 @@ public abstract class AbstractFacade<T> {
             Object pVal = m.getValue();
             String pPara = (String) m.getKey();
             if (pVal instanceof Date) {
-//                ////System.out.println("pval is a date");
+//                //////System.out.println("pval is a date");
                 Date d = (Date) pVal;
                 qry.setParameter(pPara, d, tt);
             } else {
-//                ////System.out.println("p val is NOT a date");
+//                //////System.out.println("p val is NOT a date");
                 qry.setParameter(pPara, pVal);
             }
-//            ////System.out.println("Parameter " + pPara + "\t and Val\t " + pVal);
+//            //////System.out.println("Parameter " + pPara + "\t and Val\t " + pVal);
         }
         try {
             return (double) qry.getSingleResult();
@@ -403,14 +403,14 @@ public abstract class AbstractFacade<T> {
             Object pVal = m.getValue();
             String pPara = (String) m.getKey();
             if (pVal instanceof Date) {
-//                ////System.out.println("pval is a date");
+//                //////System.out.println("pval is a date");
                 Date d = (Date) pVal;
                 qry.setParameter(pPara, d, tt);
             } else {
-//                ////System.out.println("p val is NOT a date");
+//                //////System.out.println("p val is NOT a date");
                 qry.setParameter(pPara, pVal);
             }
-//            ////System.out.println("Parameter " + pPara + "\t and Val\t " + pVal);
+//            //////System.out.println("Parameter " + pPara + "\t and Val\t " + pVal);
         }
         try {
             return (Date) qry.getSingleResult();
@@ -441,7 +441,7 @@ public abstract class AbstractFacade<T> {
         try {
             return (long) qry.getSingleResult();
         } catch (Exception e) {
-            //   //System.out.println("e = " + e);
+            //   ////System.out.println("e = " + e);
             return 0l;
         }
     }
@@ -468,7 +468,7 @@ public abstract class AbstractFacade<T> {
             } else {
                 qry.setParameter(pPara, pVal);
             }
-//            ////System.out.println("Parameter " + pPara + "\tVal" + pVal);
+//            //////System.out.println("Parameter " + pPara + "\tVal" + pVal);
         }
         qry.setMaxResults(maxRecords);
 //        qry.setHint("javax.persistence.cache.storeMode", "REFRESH");
@@ -489,7 +489,7 @@ public abstract class AbstractFacade<T> {
             } else {
                 qry.setParameter(pPara, pVal);
             }
-//            ////System.out.println("Parameter " + pPara + "\tVal" + pVal);
+//            //////System.out.println("Parameter " + pPara + "\tVal" + pVal);
         }
         qry.setMaxResults(maxRecords);
         qry.setHint("javax.persistence.cache.storeMode", "REFRESH");
@@ -510,7 +510,7 @@ public abstract class AbstractFacade<T> {
             } else {
                 qry.setParameter(pPara, pVal);
             }
-//            ////System.out.println("Parameter " + pPara + "\tVal" + pVal);
+//            //////System.out.println("Parameter " + pPara + "\tVal" + pVal);
         }
 //        qry.setMaxResults(maxRecords);
         qry.setHint("javax.persistence.cache.storeMode", "REFRESH");
@@ -531,7 +531,7 @@ public abstract class AbstractFacade<T> {
             } else {
                 qry.setParameter(pPara, pVal);
             }
-//            ////System.out.println("Parameter " + pPara + "\tVal" + pVal);
+//            //////System.out.println("Parameter " + pPara + "\tVal" + pVal);
         }
         qry.setHint("javax.persistence.cache.storeMode", "REFRESH");
         return qry.getResultList();
@@ -672,10 +672,10 @@ public abstract class AbstractFacade<T> {
         List<T> lstAll = findExact(fieldName, fieldValue, true);
 
         if (lstAll.isEmpty()) {
-//            ////System.out.println("Null");
+//            //////System.out.println("Null");
             return null;
         } else {
-//            ////System.out.println("Not Null " + lstAll.get(0).toString());
+//            //////System.out.println("Not Null " + lstAll.get(0).toString());
             return lstAll.get(0);
         }
     }
@@ -684,10 +684,10 @@ public abstract class AbstractFacade<T> {
         List<T> lstAll = findContains(fieldName, fieldValue);
 
         if (lstAll.isEmpty()) {
-//            ////System.out.println("Null");
+//            //////System.out.println("Null");
             return "";
         } else {
-//            ////System.out.println("Not Null " + lstAll.get(0).toString());
+//            //////System.out.println("Not Null " + lstAll.get(0).toString());
             return lstAll.get(0).toString();
         }
     }
@@ -698,7 +698,7 @@ public abstract class AbstractFacade<T> {
         try {
             return qry.getResultList().get(0);
         } catch (Exception e) {
-//            ////System.out.println(e.getMessage());
+//            //////System.out.println(e.getMessage());
             return null;
         }
     }
@@ -718,7 +718,7 @@ public abstract class AbstractFacade<T> {
             } else {
                 qry.setParameter(pPara, pVal);
             }
-            //    ////System.out.println("Parameter " + pPara + "\tVal" + pVal);
+            //    //////System.out.println("Parameter " + pPara + "\tVal" + pVal);
         }
 
         if (!qry.getResultList().isEmpty()) {
@@ -778,7 +778,7 @@ public abstract class AbstractFacade<T> {
                 temd = 0.0;
             }
         } catch (Exception e) {
-            ////System.out.println(e.getMessage());
+            //////System.out.println(e.getMessage());
             temd = 0.0;
         }
         return temd;
@@ -812,7 +812,7 @@ public abstract class AbstractFacade<T> {
         try {
             return q.getResultList();
         } catch (Exception e) {
-//            ////System.out.println(e.getMessage());
+//            //////System.out.println(e.getMessage());
             return null;
         }
     }
@@ -841,7 +841,7 @@ public abstract class AbstractFacade<T> {
         try {
             return q.getResultList();
         } catch (Exception e) {
-//            ////System.out.println(e.getMessage());
+//            //////System.out.println(e.getMessage());
             return null;
         }
     }
@@ -859,7 +859,7 @@ public abstract class AbstractFacade<T> {
         try {
             return qry.getResultList();
         } catch (Exception e) {
-            //   //System.out.println("e = " + e.getMessage());
+            //   ////System.out.println("e = " + e.getMessage());
             return null;
         }
     }
@@ -951,22 +951,22 @@ public abstract class AbstractFacade<T> {
     }
 
     public Object[] findSingleAggregate(String temSQL, Map<String, Object> parameters) {
-//        ////System.out.println("find aggregates 2" );
+//        //////System.out.println("find aggregates 2" );
         return findSingleAggregate(temSQL, parameters, TemporalType.DATE);
     }
 
     public Object[] findSingleAggregate(String temSQL, Map<String, Object> parameters, TemporalType tt) {
-//        ////System.out.println("find aggregates 3");
+//        //////System.out.println("find aggregates 3");
         TypedQuery<Object[]> qry = getEntityManager().createQuery(temSQL, Object[].class);
-//        ////System.out.println("2");
+//        //////System.out.println("2");
         Set s = parameters.entrySet();
-//        ////System.out.println("m " + parameters);
-//        ////System.out.println("s = " + s);
-//        ////System.out.println("3");
+//        //////System.out.println("m " + parameters);
+//        //////System.out.println("s = " + s);
+//        //////System.out.println("3");
         Iterator it = s.iterator();
-//        ////System.out.println("4");
+//        //////System.out.println("4");
         while (it.hasNext()) {
-//            ////System.out.println("5");
+//            //////System.out.println("5");
             Map.Entry m = (Map.Entry) it.next();
             Object pVal = m.getValue();
             String pPara = (String) m.getKey();
@@ -976,13 +976,13 @@ public abstract class AbstractFacade<T> {
             } else {
                 qry.setParameter(pPara, pVal);
             }
-//            ////System.out.println("Parameter " + pPara + "\tVal" + pVal);
+//            //////System.out.println("Parameter " + pPara + "\tVal" + pVal);
         }
-//        ////System.out.println("6");
+//        //////System.out.println("6");
         try {
             return qry.getSingleResult();
         } catch (Exception e) {
-//            ////System.out.println(e.getMessage());
+//            //////System.out.println(e.getMessage());
             return null;
         }
     }
@@ -997,13 +997,13 @@ public abstract class AbstractFacade<T> {
             Date pVal = (Date) m.getValue();
             String pPara = (String) m.getKey();
             qry.setParameter(pPara, pVal, TemporalType.DATE);
-//            ////System.out.println("Parameter " + pPara + "\tVal" + pVal);
+//            //////System.out.println("Parameter " + pPara + "\tVal" + pVal);
         }
 
         try {
             return (Double) qry.getSingleResult();
         } catch (Exception e) {
-//            ////System.out.println(e.getMessage());
+//            //////System.out.println(e.getMessage());
             return 0.0;
         }
     }
@@ -1022,13 +1022,13 @@ public abstract class AbstractFacade<T> {
             } else {
                 qry.setParameter(pPara, pVal);
             }
-//            ////System.out.println("Parameter " + pPara + "\tVal" + pVal);
+//            //////System.out.println("Parameter " + pPara + "\tVal" + pVal);
         }
 
         try {
             return (Long) qry.getSingleResult();
         } catch (Exception e) {
-//            ////System.out.println(e.getMessage());
+//            //////System.out.println(e.getMessage());
             return 0L;
         }
     }

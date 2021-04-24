@@ -113,7 +113,7 @@ public class ChannelBean {
     }
 
     public int getBillSessionsCount(ServiceSession ss, Date date) {
-        System.out.println("getBillSessionsCount");
+        //System.out.println("getBillSessionsCount");
         
         BillType[] billTypes = {BillType.ChannelAgent, BillType.ChannelCash, BillType.ChannelOnCall, BillType.ChannelStaff};
         List<BillType> bts = Arrays.asList(billTypes);
@@ -213,7 +213,7 @@ public class ChannelBean {
                         newSs.setStaff(ss.getStaff());
                         //Temprory
                         newSs.setRoomNo(rowIndex++);
-                        //////System.out.println("Specific Count : " + sessionDayCount);
+                        ////////System.out.println("Specific Count : " + sessionDayCount);
                         serviceSessions.add(newSs);
 
                         if (tmp != ss.getSessionWeekday()) {
@@ -339,13 +339,13 @@ public class ChannelBean {
                         newSs.setTransCreditBillCount(getBillSessionsCountCrditBill(ss, nowDate));
                         newSs.setDeactivated(false);
                         newSs.setStaff(ss.getStaff());
-//                        System.out.println("getBillSessionsCountWithOutCancelRefund(ss, nowDate) = " + getBillSessionsCountWithOutCancelRefund(ss, nowDate));
-//                        System.out.println("getBillSessionsCountCrditBill(ss, nowDate) = " + getBillSessionsCountCrditBill(ss, nowDate));
-//                        System.out.println("newSs.getDepartment() = " + newSs.getDepartment());
-//                        System.out.println("newSs.getInstitution() = " + newSs.getInstitution());
+//                        //System.out.println("getBillSessionsCountWithOutCancelRefund(ss, nowDate) = " + getBillSessionsCountWithOutCancelRefund(ss, nowDate));
+//                        //System.out.println("getBillSessionsCountCrditBill(ss, nowDate) = " + getBillSessionsCountCrditBill(ss, nowDate));
+//                        //System.out.println("newSs.getDepartment() = " + newSs.getDepartment());
+//                        //System.out.println("newSs.getInstitution() = " + newSs.getInstitution());
                         //Temprory
                         newSs.setRoomNo(rowIndex++);
-                        //////System.out.println("Specific Count : " + sessionDayCount);
+                        ////////System.out.println("Specific Count : " + sessionDayCount);
                         createdSessions.add(newSs);
 
                         if (!Objects.equals(tmp, ss.getSessionWeekday())) {
@@ -380,19 +380,19 @@ public class ChannelBean {
                         newSs.setId(ss.getId());
                         newSs.setDepartment(ss.getDepartment());
                         newSs.setInstitution(ss.getInstitution());
-//                        System.out.println("newSs.getDepartment() 2= " + newSs.getDepartment());
-//                        System.out.println("newSs.getInstitution() 2= " + newSs.getInstitution());
+//                        //System.out.println("newSs.getDepartment() 2= " + newSs.getDepartment());
+//                        //System.out.println("newSs.getInstitution() 2= " + newSs.getInstitution());
                         newSs.setSessionAt(nowDate);
                         newSs.setDisplayCount(getBillSessionsCount(ss, nowDate));
                         newSs.setTransDisplayCountWithoutCancelRefund(getBillSessionsCountWithOutCancelRefund(ss, nowDate));
                         newSs.setTransCreditBillCount(getBillSessionsCountCrditBill(ss, nowDate));
-//                        System.out.println("getBillSessionsCountWithOutCancelRefund(ss, nowDate) = " + getBillSessionsCountWithOutCancelRefund(ss, nowDate));
-//                        System.out.println("getBillSessionsCountCrditBill(ss, nowDate) = " + getBillSessionsCountCrditBill(ss, nowDate));
+//                        //System.out.println("getBillSessionsCountWithOutCancelRefund(ss, nowDate) = " + getBillSessionsCountWithOutCancelRefund(ss, nowDate));
+//                        //System.out.println("getBillSessionsCountCrditBill(ss, nowDate) = " + getBillSessionsCountCrditBill(ss, nowDate));
                         newSs.setStaff(ss.getStaff());
                         newSs.setSessionDate(nowDate);
                         //Temprory
                         newSs.setRoomNo(rowIndex++);
-                        // ////System.out.println("Count : " + sessionDayCount);
+                        // //////System.out.println("Count : " + sessionDayCount);
 //                        System.err.println("@@@45");
                         createdSessions.add(newSs);
 //                        System.err.println("@@@46");
@@ -422,7 +422,7 @@ public class ChannelBean {
     }
 
     public List<ServiceSession> generateDailyServiceSessionsFromWeekdaySessionsNew(List<ServiceSession> inputSessions, Date d) {
-        System.out.println("generateDailyServiceSessionsFromWeekdaySessionsNew");
+        //System.out.println("generateDailyServiceSessionsFromWeekdaySessionsNew");
         int sessionDayCount = 0;
         List<ServiceSession> createdSessions = new ArrayList<>();
 
@@ -620,7 +620,7 @@ public class ChannelBean {
             newSs.setStaff(ss.getStaff());
             //Temprory
             newSs.setRoomNo(rowIndex++);
-            //////System.out.println("Specific Count : " + sessionDayCount);
+            ////////System.out.println("Specific Count : " + sessionDayCount);
             createdSessions.add(newSs);
 
         }

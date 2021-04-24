@@ -300,7 +300,7 @@ public class PharmacyController implements Serializable {
         }
         
 
-//        System.out.println("m = " + m);
+//        //System.out.println("m = " + m);
         itemTransactionSummeryRows = new ArrayList<>(m.values());
         
         for(ItemTransactionSummeryRow r:itemTransactionSummeryRows){
@@ -364,8 +364,8 @@ public class PharmacyController implements Serializable {
         }
         sql += " group by i.item";
         sql += " order by i.item.name";
-//        System.out.println("m = " + m);
-//        System.out.println("sql = " + sql);
+//        //System.out.println("m = " + m);
+//        //System.out.println("sql = " + sql);
         List<ItemQuantityAndValues> lst = getBillItemFacade().findItemQuantityAndValuesList(sql, m, TemporalType.DATE);
         return lst;
 
@@ -424,12 +424,12 @@ public class PharmacyController implements Serializable {
                         r.setAverage(avg);
                     }
 
-//                    ////System.out.println("calPerStock = " + calPerStock);
-//                    ////System.out.println("insStockTotal = " + insStockTotal);
-//                    ////System.out.println("insAverageTotal = " + insAverageTotal);
+//                    //////System.out.println("calPerStock = " + calPerStock);
+//                    //////System.out.println("insStockTotal = " + insStockTotal);
+//                    //////System.out.println("insAverageTotal = " + insAverageTotal);
                     if ((insStock < calPerStock) && r.getStock() != 0) {
-                        ////System.out.println("*insStock = " + insStock);
-                        ////System.out.println("*calPerStock = " + calPerStock);
+                        //////System.out.println("*insStock = " + insStock);
+                        //////System.out.println("*calPerStock = " + calPerStock);
                         insStockTotal += r.getStock();
                         insAverageTotal += r.getAverage();
                         newTable.getDepatmentStocks().add(r);
@@ -437,9 +437,9 @@ public class PharmacyController implements Serializable {
 
                 }
 
-//                ////System.out.println("calPerStock = " + calPerStock);
-//                ////System.out.println("insStockTotal = " + insStockTotal);
-//                ////System.out.println("insAverageTotal = " + insAverageTotal);
+//                //////System.out.println("calPerStock = " + calPerStock);
+//                //////System.out.println("insStockTotal = " + insStockTotal);
+//                //////System.out.println("insAverageTotal = " + insAverageTotal);
                 newTable.setInstitutionTotal(insStockTotal);
                 newTable.setInstitutionAverage(insAverageTotal);
 

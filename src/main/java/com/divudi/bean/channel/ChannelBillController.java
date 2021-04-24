@@ -222,12 +222,12 @@ public class ChannelBillController implements Serializable {
         b.setSingleBillSession(bs);
         getBillFacade().edit(b);
 //        System.err.println("*** Channel Credit Bill Settled ***");
-//        System.out.println("bs = " + bs);
-//        System.out.println("getBillSession() = " + getBillSession().getName());
-//        System.out.println("getBillSession().getBill() = " + getBillSession().getBill());
-//        System.out.println("getBillSession().getBill().getPaidBill() = " + getBillSession().getBill().getPaidBill());
-//        System.out.println("getBillSession().getPaidBillSession() = " + getBillSession().getPaidBillSession().getName());
-//        System.out.println("getBillSession().getPaidBillSession().getBill() = " + getBillSession().getPaidBillSession().getBill());
+//        //System.out.println("bs = " + bs);
+//        //System.out.println("getBillSession() = " + getBillSession().getName());
+//        //System.out.println("getBillSession().getBill() = " + getBillSession().getBill());
+//        //System.out.println("getBillSession().getBill().getPaidBill() = " + getBillSession().getBill().getPaidBill());
+//        //System.out.println("getBillSession().getPaidBillSession() = " + getBillSession().getPaidBillSession().getName());
+//        //System.out.println("getBillSession().getPaidBillSession().getBill() = " + getBillSession().getPaidBillSession().getBill());
 //        System.err.println("*** Channel Credit Bill Settled ***");
 //        editBillSession(b, bi);
         UtilityController.addSuccessMessage("Channel Booking Added");
@@ -1274,7 +1274,7 @@ public class ChannelBillController implements Serializable {
                 return true;
             }
         }
-        //System.out.println("getSessionController().getInstitutionPreference().isChannelWithOutReferenceNumber() = " + getSessionController().getInstitutionPreference().isChannelWithOutReferenceNumber());
+        ////System.out.println("getSessionController().getInstitutionPreference().isChannelWithOutReferenceNumber() = " + getSessionController().getInstitutionPreference().isChannelWithOutReferenceNumber());
         if (institution != null) {
             if (getAgentRefNo().trim().isEmpty() && !getSessionController().getInstitutionPreference().isChannelWithOutReferenceNumber()) {
                 errorText = "Please Enter Agent Ref No";
@@ -1282,14 +1282,14 @@ public class ChannelBillController implements Serializable {
                 return true;
             }
         }
-        //System.out.println("getSessionController().getInstitutionPreference().isChannelWithOutReferenceNumber() = " + getSessionController().getInstitutionPreference().isChannelWithOutReferenceNumber());
+        ////System.out.println("getSessionController().getInstitutionPreference().isChannelWithOutReferenceNumber() = " + getSessionController().getInstitutionPreference().isChannelWithOutReferenceNumber());
         if (getSs().getMaxNo() != 0.0 && getbookingController().getSelectedServiceSession().getTransDisplayCountWithoutCancelRefund() >= getSs().getMaxNo()) {
             errorText = "No Space to Book.";
             UtilityController.addErrorMessage("No Space to Book");
             return true;
         }
 
-        //System.out.println("getSessionController().getInstitutionPreference().isChannelWithOutReferenceNumber() = " + getSessionController().getInstitutionPreference().isChannelWithOutReferenceNumber());
+        ////System.out.println("getSessionController().getInstitutionPreference().isChannelWithOutReferenceNumber() = " + getSessionController().getInstitutionPreference().isChannelWithOutReferenceNumber());
         return false;
     }
 
@@ -1327,7 +1327,7 @@ public class ChannelBillController implements Serializable {
 
         }
 
-        //System.out.println("getSessionController().getInstitutionPreference().isChannelWithOutReferenceNumber() = " + getSessionController().getInstitutionPreference().isChannelWithOutReferenceNumber());
+        ////System.out.println("getSessionController().getInstitutionPreference().isChannelWithOutReferenceNumber() = " + getSessionController().getInstitutionPreference().isChannelWithOutReferenceNumber());
         return false;
     }
 
@@ -1408,12 +1408,40 @@ public class ChannelBillController implements Serializable {
     }
 
     private String chanellBookingSms(Bill b) {
+        System.out.println("chanellBookingSms");
         String s;
         String date = CommonController.getDateFormat(b.getSingleBillSession().getSessionDate(),
                 "dd MMM");
+        //System.out.println("date = " + date);
         String time = CommonController.getDateFormat(
                 b.getSingleBillSession().getSessionTime(),
                 "hh:mm a");
+        //System.out.println("time = " + time);
+        ServiceSession ss = null;
+        if (b != null && b.getSingleBillSession() != null && b.getSingleBillSession().getServiceSession() != null 
+                && b.getSingleBillSession().getServiceSession().getOriginatingSession() != null) {
+            ss = b.getSingleBillSession().getServiceSession().getOriginatingSession();
+        }
+//        if (b != null) {
+//            System.out.println("b = " + b);
+//            if (b.getSingleBillSession() != null) {
+//                System.out.println("b.getSingleBillSession() = " + b.getSingleBillSession());
+//                if(b.getSingleBillSession().getServiceSession()!=null){
+//                    System.out.println("b.getSingleBillSession().getServiceSession() = " + b.getSingleBillSession().getServiceSession());
+//                    if(b.getSingleBillSession().getServiceSession().getOriginatingSession()!=null){
+//                        System.out.println("b.getSingleBillSession().getServiceSession().getOriginatingSession() = " + b.getSingleBillSession().getServiceSession().getOriginatingSession());
+//                    }
+//                }
+//            }
+//        }
+        if (ss != null && ss.getSessionTime() != null) {
+            time = CommonController.getDateFormat(
+                    ss.getStartingTime(),
+                    "hh:mm a");
+            //System.out.println("2. time = " + time);
+        } else {
+            //System.out.println("Null Error");
+        }
         String doc = b.getSingleBillSession().getStaff().getPerson().getNameWithTitle();
         s = "Your Appointment with "
                 + ""
@@ -1455,7 +1483,7 @@ public class ChannelBillController implements Serializable {
 
     public void loadUserPreferances() {
         UserPreference pf = null;
-        System.out.println("pf = " + pf);
+        //System.out.println("pf = " + pf);
         if (getSessionController().getLoggedPreference() != null) {
             pf = getSessionController().getLoggedPreference();
         } else if (getSessionController().getUserPreference() != null) {
@@ -1608,7 +1636,7 @@ public class ChannelBillController implements Serializable {
 
                 PriceMatrix priceMatrix = getPriceMatrixController().getChannellingDisCount(paymentMethod, membershipScheme, f.getDepartment());
 //                priceMatrix.getDiscountPercent();
-//                System.out.println("priceMatrix.getDiscountPercent() = " + priceMatrix.getDiscountPercent());
+//                //System.out.println("priceMatrix.getDiscountPercent() = " + priceMatrix.getDiscountPercent());
 
                 if (priceMatrix != null) {
 
