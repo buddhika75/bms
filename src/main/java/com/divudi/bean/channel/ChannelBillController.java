@@ -1434,11 +1434,11 @@ public class ChannelBillController implements Serializable {
 //                }
 //            }
 //        }
-        if (ss != null && ss.getSessionTime() != null) {
+        if (ss != null && ss.getStartingTime() != null) {
             time = CommonController.getDateFormat(
                     ss.getStartingTime(),
                     "hh:mm a");
-            //System.out.println("2. time = " + time);
+            System.out.println("2. time = " + time);
         } else {
             //System.out.println("Null Error");
         }
