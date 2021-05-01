@@ -33,6 +33,8 @@
     <h:body>
         <div id="panelFullSpread" class="fullSpread ui-widget-content " >
             <p:growl id="publicGrowl" autoUpdate="true"   />
+                   
+        
             <h:panelGroup >
                 <h:form>
                     <h:panelGroup >
@@ -50,8 +52,7 @@
 
                             <f:facet name="header" >
                                 <h:outputLabel value="#{labels.topic}" />
-                            </f:facet>*
-
+                            </f:facet>
                             <p:menubar styleClass="nonPrintBlock bottomBorderOnly ui-widget-header"  >
                                 <p:menuitem  ajax="false"  action="/index" icon="ui-icon-home" styleClass="rightBordrOnly" ></p:menuitem>
                                 <p:submenu styleClass="rightBordrOnly" label="OPD" rendered="#{webUserController.hasPrivilege('Opd')}">
