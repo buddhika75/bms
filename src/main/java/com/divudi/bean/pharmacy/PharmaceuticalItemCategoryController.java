@@ -7,6 +7,7 @@
  * a Set of Related Tools
  */
 package com.divudi.bean.pharmacy;
+
 import com.divudi.bean.common.SessionController;
 import com.divudi.bean.common.UtilityController;
 import com.divudi.entity.pharmacy.PharmaceuticalItemCategory;
@@ -43,9 +44,9 @@ public class PharmaceuticalItemCategoryController implements Serializable {
     private PharmaceuticalItemCategory current;
     private List<PharmaceuticalItemCategory> items = null;
     List<PharmaceuticalItemCategory> pharmaceuticalItemCategoryList = null;
-  
+
     public List<PharmaceuticalItemCategory> completeCategory(String qry) {
-        
+
         Map m = new HashMap();
         m.put("n", "%" + qry + "%");
         String sql = "select c from PharmaceuticalItemCategory c where "
@@ -63,9 +64,6 @@ public class PharmaceuticalItemCategoryController implements Serializable {
     public void prepareAdd() {
         current = new PharmaceuticalItemCategory();
     }
-
-   
-    
 
     private void recreateModel() {
         items = null;
@@ -86,7 +84,6 @@ public class PharmaceuticalItemCategoryController implements Serializable {
         getItems();
     }
 
-   
     public PharmaceuticalItemCategoryFacade getEjbFacade() {
         return ejbFacade;
     }
@@ -139,7 +136,9 @@ public class PharmaceuticalItemCategoryController implements Serializable {
     }
 
     public List<PharmaceuticalItemCategory> getItems() {
-        items = getFacade().findAll("name", true);
+        if (items == null) {
+            items = getFacade().findAll("name", true);
+        }
         return items;
     }
 
