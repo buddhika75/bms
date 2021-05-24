@@ -884,16 +884,6 @@
 
                         <p:tab title="Search">
 
-
-                            <h1>Bill Paper Type : 
-                                #{sessionController.institutionPreference.channelBillPaperType}"
-                            </h1>
-
-                            <h1>Pharmacy Bill : 
-                                #{sessionController.institutionPreference.pharmacyBillPrabodha}"
-                            </h1>
-
-
                             <p:calendar id="calFrom"  value="#{channelSearchController.fromDate}" pattern="dd MMMM yyyy" >   
                                 <f:ajax event="dateSelect" execute="@this" render="bSessionSearch"/>
                             </p:calendar>
