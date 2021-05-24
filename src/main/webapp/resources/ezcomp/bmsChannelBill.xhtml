@@ -375,8 +375,10 @@
                 </tr>
                 <tr>
                     <td colspan="4" >
-                        <p:graphicImage cache="false" value="#{billController.getCreateBarcodeCode128(cc.attrs.bill.patient.phn)}" 
-                                        style="max-width: 7.5cm; padding: 10px; margin: 10px;" ></p:graphicImage>
+                        <p:graphicImage cache="false" value="#{barcodeController.createBarcodeCode128}" 
+                                        style="max-width: 7.5cm; padding: 10px; margin: 10px;" >
+                            <f:param name="code" value="#{cc.attrs.bill.patient.phn}" />
+                        </p:graphicImage>
                     </td>
                 </tr>
                 <tr>
