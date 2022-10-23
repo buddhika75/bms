@@ -606,8 +606,8 @@ public class BillBeanController implements Serializable {
         hm.put("refTypes", refBillTypes);
         hm.put("fromDate", fromDate);
         hm.put("toDate", toDate);
-        ////System.out.println("hm = " + hm);
-        ////System.out.println("sql = " + sql);
+        //System.out.println("hm = " + hm);
+        //System.out.println("sql = " + sql);
         return getBillItemFacade().findAggregates(sql, hm, TemporalType.TIMESTAMP);
 
     }
@@ -707,8 +707,8 @@ public class BillBeanController implements Serializable {
         hm.put("fromDate", fromDate);
         hm.put("toDate", toDate);
         Bill b;
-        ////System.out.println("hm = " + hm);
-        ////System.out.println("sql = " + sql);
+        //System.out.println("hm = " + hm);
+        //System.out.println("sql = " + sql);
         return getBillItemFacade().findAggregates(sql, hm, TemporalType.TIMESTAMP);
     }
 
@@ -729,8 +729,8 @@ public class BillBeanController implements Serializable {
         hm.put("refType2", BillType.InwardProfessional);
         hm.put("fromDate", fromDate);
         hm.put("toDate", toDate);
-        ////System.out.println("hm = " + hm);
-        ////System.out.println("sql = " + sql);
+        //System.out.println("hm = " + hm);
+        //System.out.println("sql = " + sql);
         return getBillItemFacade().findAggregates(sql, hm, TemporalType.TIMESTAMP);
 
     }
@@ -2341,7 +2341,7 @@ public class BillBeanController implements Serializable {
         temMap.put("billType", type);
         temMap.put("toDate", toDate);
         temMap.put("fromDate", fromDate);
-        //////System.out.println("sql ");
+        ////System.out.println("sql ");
         lstBills = getBillFacade().findBySQL(sql, temMap, TemporalType.TIMESTAMP);
 
         if (lstBills == null) {
@@ -2362,7 +2362,7 @@ public class BillBeanController implements Serializable {
         temMap.put("billType", type);
         temMap.put("toDate", toDate);
         temMap.put("fromDate", fromDate);
-        //////System.out.println("sql ");
+        ////System.out.println("sql ");
         lstBills = getBillFacade().findBySQL(sql, temMap, TemporalType.TIMESTAMP);
 
         if (lstBills == null) {
@@ -2510,7 +2510,7 @@ public class BillBeanController implements Serializable {
 //        bill.setNetTotal(net);
 //        bill.setDiscount(dis);
         if (sessionController.getInstitutionPreference().isPartialPaymentOfOpdBillsAllowed()) {
-            ////System.out.println("cashRemain" + billController.getCashRemain());
+            //System.out.println("cashRemain" + billController.getCashRemain());
             if (billController.getCashRemain() != 0) {
                 if (tot > billController.getCashRemain()) {
                     bill.setBalance(tot - billController.getCashRemain());
@@ -2535,7 +2535,7 @@ public class BillBeanController implements Serializable {
                 bill.setCashPaid(0.0);
                 bill.setDiscount(dis);
             }
-            ////System.out.println(".................");
+            //System.out.println(".................");
 
         } else {
             bill.setTotal(tot);
@@ -2640,7 +2640,7 @@ public class BillBeanController implements Serializable {
         if (e.getBillItem().getId() == null) {
             getBillItemFacade().create(e.getBillItem());
         }
-        ////////System.out.println("Saving Bill Item : " + e.getBillItem().getItem().getName());
+        //////System.out.println("Saving Bill Item : " + e.getBillItem().getItem().getName());
 
         saveBillComponent(e, b, wu);
         saveBillFee(e, b, wu);
@@ -2859,7 +2859,7 @@ public class BillBeanController implements Serializable {
             b.setBillItem(billItem);
             b.setCreatedAt(new Date());
             b.setItem(billItem.getItem());
-            //////System.out.println("Bill Item is " + billItem.getItem());
+            ////System.out.println("Bill Item is " + billItem.getItem());
             b.setName(billItem.getItem().getName());
             b.setPackege(null);
             b.setStaff(billItem.getItem().getStaff());
@@ -2895,7 +2895,7 @@ public class BillBeanController implements Serializable {
             f.setFee(i);
             f.setFeeValue(i.getFee());
             f.setFeeGrossValue(i.getFee());
-            //      //////System.out.println("Fee Value is " + f.getFeeValue());
+            //      ////System.out.println("Fee Value is " + f.getFeeValue());
             // f.setBill(billItem.getBill());
             f.setBillItem(billItem);
             f.setCreatedAt(new Date());
@@ -3025,7 +3025,7 @@ public class BillBeanController implements Serializable {
                 f.setFee(i);
                 f.setFeeValue(i.getFee());
                 f.setFeeGrossValue(i.getFee());
-                //////System.out.println("Fee Value is " + f.getFeeValue());
+                ////System.out.println("Fee Value is " + f.getFeeValue());
                 // f.setBill(billItem.getBill());
                 f.setBillItem(billItem);
                 f.setCreatedAt(new Date());

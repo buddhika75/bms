@@ -192,7 +192,7 @@ public class BookingController implements Serializable {
     public boolean errorCheckForSerial() {
         boolean alreadyExists = false;
         for (BillSession bs : billSessions) {
-            ////System.out.println("billSessions" + bs.getId());
+            //System.out.println("billSessions" + bs.getId());
 
             if (selectedBillSession.equals(bs)) {
 
@@ -247,9 +247,9 @@ public class BookingController implements Serializable {
 //    public void errorCheckChannelNumber() {
 //
 //        for (BillSession bs : billSessions) {
-//            ////System.out.println("billSessions" + bs.getName());
+//            //System.out.println("billSessions" + bs.getName());
 //            for (BillItem bi : getSelectedBillSession().getBill().getBillItems()) {
-//                ////System.out.println("billitem" + bi.getId());
+//                //System.out.println("billitem" + bi.getId());
 //                if (bs.getSerialNo() == bi.getBillSession().getSerialNo()) {
 //                    UtilityController.addErrorMessage("Number you entered already exist");
 //                    setSelectedBillSession(bs);
@@ -279,7 +279,7 @@ public class BookingController implements Serializable {
         }
 
         getBillSessionFacade().edit(getSelectedBillSession());
-        ////System.out.println(getSelectedBillSession().getBill().getPatient());
+        //System.out.println(getSelectedBillSession().getBill().getPatient());
         UtilityController.addSuccessMessage("Serial Updated");
     }
 
@@ -304,7 +304,7 @@ public class BookingController implements Serializable {
             } else {
                 sql = "select p from Staff p where p.retired=false and (upper(p.person.name) like '%" + query.toUpperCase() + "%'or  upper(p.code) like '%" + query.toUpperCase() + "%' ) order by p.person.name";
             }
-            //////System.out.println(sql);
+            ////System.out.println(sql);
             suggestions = getStaffFacade().findBySQL(sql);
         }
         return suggestions;
@@ -335,7 +335,7 @@ public class BookingController implements Serializable {
             sql = "select p from Staff p where p.retired=false order by p.person.name";
             consultants = getStaffFacade().findBySQL(sql);
         }
-//        ////System.out.println("consultants = " + consultants);
+//        //System.out.println("consultants = " + consultants);
         setStaff(null);
     }
 
@@ -343,7 +343,7 @@ public class BookingController implements Serializable {
         String sql;
         Map m = new HashMap();
 
-//        ////System.out.println("consultants = " + consultants);
+//        //System.out.println("consultants = " + consultants);
         if (selectTextConsultant == null || selectTextConsultant.trim().equals("")) {
             m.put("sp", getSpeciality());
             if (getSpeciality() != null) {
@@ -414,7 +414,7 @@ public class BookingController implements Serializable {
         }
         /*
          if (consultants.size() > 0) {
-         //System.out.println("consultants.size() = " + consultants.size());
+         System.out.println("consultants.size() = " + consultants.size());
          setStaff(consultants.get(0));
          setSpeciality(getStaff().getSpeciality());
          generateSessions();
@@ -655,33 +655,30 @@ public class BookingController implements Serializable {
     }
 
     public void generateSessions() {
-        //System.out.println("generateSessions");
         serviceSessions = new ArrayList<>();
         String sql;
         Map m = new HashMap();
         m.put("staff", getStaff());
+        m.put("class", ServiceSession.class);
 
         if (staff != null) {
             sql = "Select s From ServiceSession s "
                     + " where s.retired=false "
                     + " and s.staff=:staff "
                     + " and s.originatingSession is null"
+                    + " and type(s)=:class "
                     + " order by s.sessionWeekday,s.startingTime ";
             List<ServiceSession> tmp = getServiceSessionFacade().findBySQL(sql, m);
-            //System.out.println("tmp = " + tmp.size());
             calculateFee(tmp, channelBillController.getPaymentMethod());
             try {
                 serviceSessions = getChannelBean().generateDailyServiceSessionsFromWeekdaySessionsNew(tmp, sessionStartingDate);
-                //System.out.println("serviceSessions.size() = " + serviceSessions.size());
             } catch (Exception e) {
             }
             generateSessionEvents(serviceSessions);
         }
-        //System.out.println("serviceSessions.size() = " + serviceSessions.size());
     }
 
     public void generateSessionEvents(List<ServiceSession> sss) {
-        //System.out.println("generateSessionEvents");
         eventModel = new DefaultScheduleModel();
         for (ServiceSession s : sss) {
             ChannelScheduleEvent e = new ChannelScheduleEvent();
@@ -691,7 +688,6 @@ public class BookingController implements Serializable {
             e.setEndDate(s.getTransEndTime());
             eventModel.addEvent(e);
         }
-        //System.out.println("eventModel = " + eventModel);
     }
 
     public void onEventSelect(SelectEvent selectEvent) {
@@ -782,12 +778,12 @@ public class BookingController implements Serializable {
 //        hh.put("ssDate", getSelectedServiceSession().getSessionAt());
 //        hh.put("ss", getSelectedServiceSession());
 //        billSessions = getBillSessionFacade().findBySQL(sql, hh, TemporalType.DATE);
-//        //System.out.println("hh = " + hh);
-//        //System.out.println("getSelectedServiceSession().isTransLeave() = " + getSelectedServiceSession().isTransLeave());
+//        System.out.println("hh = " + hh);
+//        System.out.println("getSelectedServiceSession().isTransLeave() = " + getSelectedServiceSession().isTransLeave());
 //        if (getSelectedServiceSession().isTransLeave()) {
 //            billSessions=null;
 //        }
-//        //System.out.println("billSessions" + billSessions);
+//        System.out.println("billSessions" + billSessions);
 //
 //    }
     public void findArrivals() {

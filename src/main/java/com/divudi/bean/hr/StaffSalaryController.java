@@ -204,7 +204,7 @@ public class StaffSalaryController implements Serializable {
 //
 //    }
     public void onEdit(RowEditEvent event) {
-        ////////System.out.println("Runn");
+        //////System.out.println("Runn");
         StaffSalaryComponant tmp = (StaffSalaryComponant) event.getObject();
 
         getHumanResourceBean().setEpf(tmp, getHrmVariablesController().getCurrent().getEpfRate(), getHrmVariablesController().getCurrent().getEpfCompanyRate());
@@ -340,7 +340,7 @@ public class StaffSalaryController implements Serializable {
         if (value == 0) {
             return 0;
         }
-//        ////System.out.println("calculating value");
+//        //System.out.println("calculating value");
         //Check Employee Join Date Come within Salary Cycle
         if (checkDateRange(getCurrent().getStaff().getDateJoined())
                 //Check Employee Date Left within Salary Cycle
@@ -358,7 +358,7 @@ public class StaffSalaryController implements Serializable {
             }
 
         } else {
-//            ////System.out.println("returning full value");
+//            //System.out.println("returning full value");
 
             return value;
         }
@@ -503,14 +503,14 @@ public class StaffSalaryController implements Serializable {
 //        
         for (int i = 0; i < numOfWeeks; i++) {
 
-//            ////System.out.println("i = " + i);
+//            //System.out.println("i = " + i);
             double workedWithinTimeFrameVarified = getHumanResourceBean().calculateWorkTimeForOverTime(frmCal.getTime(), toCal.getTime(), getCurrent().getStaff());
 
 
             //The below line was commented by safrin. Buddhiks uncommented it. Please double check.
 //            workedWithinTimeFrameVarified += getHumanResourceBean().calculateLeaveTimeForOverTime(frmCal.getTime(), toCal.getTime(), getCurrent().getStaff());
             double otSec = humanResourceBean.getOverTimeFromRoster(getCurrent().getStaff().getWorkingTimeForOverTimePerWeek(), 1, workedWithinTimeFrameVarified);
-//            ////System.out.println("otSec = " + otSec);
+//            //System.out.println("otSec = " + otSec);
 //            System.err.println("Working Time : " + workedWithinTimeFrameVarified / (60 * 60));
 
 
@@ -557,7 +557,7 @@ public class StaffSalaryController implements Serializable {
 //        
         for (int i = 0; i < numOfWeeks; i++) {
 
-//            ////System.out.println("i = " + i);
+//            //System.out.println("i = " + i);
             double workedWithinTimeFrameVarified = getHumanResourceBean().calculateWorkTimeForOverTimeByDate(frmCal.getTime(), toCal.getTime(), getCurrent().getStaff());
 
             System.err.println("FROM " + i + frmCal.getTime());
@@ -914,13 +914,13 @@ public class StaffSalaryController implements Serializable {
     public void addSalaryComponent() {
 
         if (getCurrent().getStaff() != null) {
-            //System.out.println("getCurrent().getStaff() = " + getCurrent().getStaff().getPerson().getName());
+            System.out.println("getCurrent().getStaff() = " + getCurrent().getStaff().getPerson().getName());
 
             setBasic();
             setPerformaceAllovance();
 
             List<StaffPaysheetComponent> listAdd = getHumanResourceBean().fetchStaffPaysheetComponent(getCurrent().getStaff(), getSalaryCycle().getSalaryToDate(), PaysheetComponentType.addition.getUserDefinedComponentsAddidtions());
-            //System.out.println("listAdd = " + listAdd);
+            System.out.println("listAdd = " + listAdd);
 
             if (listAdd != null) {
                 for (StaffPaysheetComponent spc : listAdd) {
@@ -974,18 +974,18 @@ public class StaffSalaryController implements Serializable {
 
             //Set Extra Duty Value
             double extraTimeMinute = setExtraDuty(PaysheetComponentType.ExtraDutyNormal, DayType.Normal);
-            //System.out.println("extraTimeMinute(DayType.Normal) = " + extraTimeMinute);
+            System.out.println("extraTimeMinute(DayType.Normal) = " + extraTimeMinute);
 
             extraTimeMinute += setExtraDuty(PaysheetComponentType.ExtraDutyNormal, DayType.Extra);
-            //System.out.println("extraTimeMinute(DayType.Normal+DayType.Extra) = " + extraTimeMinute);
+            System.out.println("extraTimeMinute(DayType.Normal+DayType.Extra) = " + extraTimeMinute);
             getCurrent().setExtraDutyNormalMinute(extraTimeMinute);
 
             extraTimeMinute = setExtraDuty(PaysheetComponentType.ExtraDutyMerchantile, DayType.MurchantileHoliday);
-            //System.out.println("extraTimeMinute(DayType.MurchantileHoliday) = " + extraTimeMinute);
+            System.out.println("extraTimeMinute(DayType.MurchantileHoliday) = " + extraTimeMinute);
             getCurrent().setExtraDutyMerchantileMinute(extraTimeMinute);
 
             extraTimeMinute = setExtraDuty(PaysheetComponentType.ExtraDutyPoya, DayType.Poya);
-            //System.out.println("extraTimeMinute(DayType.Poya) = " + extraTimeMinute);
+            System.out.println("extraTimeMinute(DayType.Poya) = " + extraTimeMinute);
             getCurrent().setExtraDutyPoyaMinute(extraTimeMinute);
 
             extraTimeMinute = setExtraDuty(PaysheetComponentType.ExtraDutyDayOff, DayType.DayOff);

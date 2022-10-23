@@ -574,17 +574,17 @@ public class OpdPreSettleController implements Serializable {
 //            BilledBill bb = createBilledBillForPreBill(b);
 //            bb.setBackwardReferenceBill(tmp);
 //
-//            //System.out.println("dbl = " + dbl);
-//            //System.out.println("reminingCashPaid = " + reminingCashPaid);
-//            //System.out.println("cashPaid = " + cashPaid);
+//            System.out.println("dbl = " + dbl);
+//            System.out.println("reminingCashPaid = " + reminingCashPaid);
+//            System.out.println("cashPaid = " + cashPaid);
 //
 //            for (BillItem bi : bb.getBillItems()) {
 //
-//                //System.out.println("bi = " + bi);
+//                System.out.println("bi = " + bi);
 //                String sql = "Select bf From BillFee bf where bf.retired=false and bf.billItem.id=" + bi.getId();
 //
 //                List<BillFee> billFees = getBillFeeFacade().findBySQL(sql);
-//                //System.out.println("billFees = " + billFees.size());
+//                System.out.println("billFees = " + billFees.size());
 //                //for payments for billfees
 //
 //                calculateBillfeePayments(billFees, p);

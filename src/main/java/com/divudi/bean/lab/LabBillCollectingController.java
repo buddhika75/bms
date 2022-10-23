@@ -228,16 +228,16 @@ public class LabBillCollectingController implements Serializable {
         int c = 0;
         Department tdep = new Department();
         tdep.setId(0L);
-        // //////System.out.println("Check Dept 1 " + c);
+        // ////System.out.println("Check Dept 1 " + c);
         //Createa a list of bills
         for (BillEntry be : getLstBillEntries()) {
             if (be.getBillItem().getItem().getDepartment().getId() != tdep.getId()) {
                 tdep = be.getBillItem().getItem().getDepartment();
                 c++;
-                //  //////System.out.println("Check Dept  " + be.getBillItem().getItem().getDepartment().getName());
+                //  ////System.out.println("Check Dept  " + be.getBillItem().getItem().getDepartment().getName());
             }
         }
-        //////System.out.println("Check Dept 4 " + c);
+        ////System.out.println("Check Dept 4 " + c);
 
         return c;
     }
@@ -392,7 +392,7 @@ public class LabBillCollectingController implements Serializable {
         //  e.getBillItem().setDeptId(e.getBillItem().getItem().getDepartment().getId());
         e.getBillItem().setBill(b);
         getBillItemFacade().create(e.getBillItem());
-        ////////System.out.println("Saving Bill Item : " + temBi.getItem().getName());
+        //////System.out.println("Saving Bill Item : " + temBi.getItem().getName());
 
         saveBillComponent(e, b);
         saveBillFee(e, b);
@@ -408,7 +408,7 @@ public class LabBillCollectingController implements Serializable {
             e.getBillItem().setCreater(getSessionController().getLoggedUser());
             e.getBillItem().setBill(b);
             getBillItemFacade().create(e.getBillItem());
-            ////////System.out.println("Saving Bill Item : " + e.getBillItem().getItem().getName());
+            //////System.out.println("Saving Bill Item : " + e.getBillItem().getItem().getName());
 
             saveBillComponent(e, b);
             saveBillFee(e, b);
@@ -563,15 +563,15 @@ public class LabBillCollectingController implements Serializable {
 
             for (BillFee bf : be.getLstBillFees()) {
                 if (bf.getBillItem().getItem().isUserChangable() && bf.getBillItem().getItem().isDiscountAllowed() != true) {
-                    //////System.out.println("Total is " + tot);
-                    //       //////System.out.println("Bill Fee value is " + bf.getFeeValue());
+                    ////System.out.println("Total is " + tot);
+                    //       ////System.out.println("Bill Fee value is " + bf.getFeeValue());
                     tot += bf.getFeeValue();
-                    //////System.out.println("After addition is " + tot);
+                    ////System.out.println("After addition is " + tot);
                     bf.getBillItem().setNetValue(bf.getBillItem().getNetValue() + bf.getFeeValue());
                     bf.getBillItem().setGrossValue(bf.getBillItem().getGrossValue() + bf.getFeeValue());
 
                 } else {
-                    //////System.out.println("12");
+                    ////System.out.println("12");
                     if (bf.getBillItem().getItem().isDiscountAllowed() != null && bf.getBillItem().getItem().isDiscountAllowed() == true) {
                         if (getPaymentScheme() == null) {
                             bf.setFeeValue(bf.getFee().getFee());
@@ -587,7 +587,7 @@ public class LabBillCollectingController implements Serializable {
 
                         bf.getBillItem().setNetValue(bf.getBillItem().getNetValue() + bf.getBillItem().getGrossValue() - bf.getBillItem().getDiscount());
                     } else {
-                        //////System.out.println("13");
+                        ////System.out.println("13");
                         tot = tot + bf.getFeeValue();
                         bf.setFeeValue(bf.getFee().getFee());
                         bf.getBillItem().setGrossValue(bf.getBillItem().getGrossValue() + bf.getFee().getFee());
@@ -619,16 +619,16 @@ public class LabBillCollectingController implements Serializable {
     public void removeBillItem() {
 
         //TODO: Need to add Logic
-        //////System.out.println(getIndex());
+        ////System.out.println(getIndex());
         if (getIndex() != null) {
             boolean remove;
             BillEntry temp = getLstBillEntries().get(getIndex());
-            //////System.out.println("Removed Item:" + temp.getBillItem().getNetValue());
+            ////System.out.println("Removed Item:" + temp.getBillItem().getNetValue());
             recreateList(temp);
             // remove = getLstBillEntries().remove(getIndex());
 
             //  getLstBillEntries().remove(index);
-            ////////System.out.println("Is Removed:" + remove);
+            //////System.out.println("Is Removed:" + remove);
             calTotals();
 
         }
@@ -640,7 +640,7 @@ public class LabBillCollectingController implements Serializable {
         for (BillEntry b : getLstBillEntries()) {
             if (b.getBillItem().getItem() != r.getBillItem().getItem()) {
                 temp.add(b);
-                //////System.out.println(b.getBillItem().getNetValue());
+                ////System.out.println(b.getBillItem().getNetValue());
             }
         }
         lstBillEntries = temp;
