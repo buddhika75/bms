@@ -10,7 +10,6 @@ import com.divudi.bean.hr.StaffController;
 import com.divudi.data.BillType;
 import com.divudi.data.FeeType;
 import com.divudi.data.HistoryType;
-import com.divudi.data.MessageType;
 import com.divudi.data.PaymentMethod;
 import com.divudi.data.channel.DateEnum;
 import com.divudi.data.channel.PaymentEnum;
@@ -22,7 +21,6 @@ import com.divudi.data.table.String1Value1;
 import com.divudi.data.table.String1Value3;
 import com.divudi.ejb.ChannelBean;
 import com.divudi.ejb.CommonFunctions;
-import com.divudi.ejb.SmsManagerEjb;
 import com.divudi.entity.AgentHistory;
 import com.divudi.entity.Bill;
 import com.divudi.entity.BillFee;
@@ -34,7 +32,6 @@ import com.divudi.entity.Department;
 import com.divudi.entity.Institution;
 import com.divudi.entity.RefundBill;
 import com.divudi.entity.ServiceSession;
-import com.divudi.entity.Sms;
 import com.divudi.entity.Staff;
 import com.divudi.entity.WebUser;
 import com.divudi.facade.AgentHistoryFacade;
@@ -44,7 +41,6 @@ import com.divudi.facade.BillItemFacade;
 import com.divudi.facade.BillSessionFacade;
 import com.divudi.facade.DepartmentFacade;
 import com.divudi.facade.ServiceSessionFacade;
-import com.divudi.facade.SmsFacade;
 import com.divudi.facade.StaffFacade;
 import com.divudi.facade.WebUserFacade;
 import com.divudi.facade.util.JsfUtil;
@@ -104,7 +100,6 @@ public class ChannelReportController implements Serializable {
     ReportKeyWord reportKeyWord;
     Date fromDate;
     Date toDate;
-    private Date newSessionDateTime;
     Institution institution;
     WebUser webUser;
     Staff staff;
@@ -149,8 +144,6 @@ public class ChannelReportController implements Serializable {
     StaffFacade staffFacade;
     @EJB
     ServiceSessionFacade serviceSessionFacade;
-    @EJB
-    SmsManagerEjb smsManagerEjb;
 
     public Institution getInstitution() {
         return institution;
@@ -368,7 +361,7 @@ public class ChannelReportController implements Serializable {
         m.put("td", toDate);
         m.put("bts", bts);
 
-        ////System.out.println("j = " + j);
+        //System.out.println("j = " + j);
         //Bookings
         br = new ChannelReportColumnModel();
         m.put("bt", BilledBill.class);
@@ -660,17 +653,17 @@ public class ChannelReportController implements Serializable {
         totalCancel = calCashierNetTotal(new CancelledBill(), pay, bty);
         totalRefund = calCashierNetTotal(new RefundBill(), pay, bty);
 
-        ////System.out.println("Billed,Cancell,Refund" + totalBilled + "," + totalCancel + "," + totalRefund);
+        //System.out.println("Billed,Cancell,Refund" + totalBilled + "," + totalCancel + "," + totalRefund);
         if (pay == PaymentMethod.Cash) {
-            ////System.out.println("payment method=" + pay);
-            ////System.out.println("Billed,Cancell,Refund" + totalBilled + "," + totalCancel + "," + totalRefund);
+            //System.out.println("payment method=" + pay);
+            //System.out.println("Billed,Cancell,Refund" + totalBilled + "," + totalCancel + "," + totalRefund);
             totalBilled += calCashierNetTotal(new BilledBill(), pay, BillType.ChannelPaid);
             totalCancel += calCashierNetTotal(new CancelledBill(), pay, BillType.ChannelPaid);
             totalRefund += calCashierNetTotal(new RefundBill(), pay, BillType.ChannelPaid);
-            ////System.out.println("netTotal" + netTotal);
+            //System.out.println("netTotal" + netTotal);
         }
         netTotal = totalBilled + totalCancel + totalRefund;
-        ////System.out.println("netTotal = " + netTotal);
+        //System.out.println("netTotal = " + netTotal);
 
         chm.setPaymentMethod(pay);
         chm.setBilledTotal(totalBilled);
@@ -679,7 +672,7 @@ public class ChannelReportController implements Serializable {
 
         chm.setTotal(netTotal);
 
-        ////System.out.println("chmlst = " + chmlst);
+        //System.out.println("chmlst = " + chmlst);
         chmlst.add(chm);
     }
 
@@ -981,15 +974,15 @@ public class ChannelReportController implements Serializable {
 
         m.put("cla", b.getClass());
         m.put("bt", bt);
-        ////System.out.println("getBillSessionFacade().findBySQL(sql, m) = " + getBillSessionFacade().findBySQL(sql, m));
+        //System.out.println("getBillSessionFacade().findBySQL(sql, m) = " + getBillSessionFacade().findBySQL(sql, m));
         List<BillSession> billSessions = getBillSessionFacade().findBySQL(sql, m);
-        ////System.out.println("billSessions = " + billSessions.size());
+        //System.out.println("billSessions = " + billSessions.size());
         for (BillSession bs : billSessions) {
-            ////System.out.println("In");
+            //System.out.println("In");
             bs.getBill().setSingleBillSession(bs);
-            ////System.out.println("bs.getSingleBillSession() = " + bs.getBill().getSingleBillSession());
+            //System.out.println("bs.getSingleBillSession() = " + bs.getBill().getSingleBillSession());
             getBillFacade().edit(bs.getBill());
-            ////System.out.println("Out");
+            //System.out.println("Out");
         }
     }
 
@@ -1796,9 +1789,9 @@ public class ChannelReportController implements Serializable {
 //
 //        double d = getBillFeeFacade().findDoubleByJpql(sql, m, TemporalType.TIMESTAMP);
 //
-//        //System.out.println("sql = " + sql);
-//        //System.out.println("m = " + m);
-//        //System.out.println("getBillFeeFacade().findAggregateLong(sql, m, TemporalType.TIMESTAMP) = " + d);
+//        System.out.println("sql = " + sql);
+//        System.out.println("m = " + m);
+//        System.out.println("getBillFeeFacade().findAggregateLong(sql, m, TemporalType.TIMESTAMP) = " + d);
 //        return d;
 //    }
     public double countBillByBillType(Bill bill, BillType bt, boolean sessoinDate, Staff st) {
@@ -1853,7 +1846,7 @@ public class ChannelReportController implements Serializable {
 //        m.put("ft", FeeType.Service);
 //        m.put("class", bill.getClass());
 //        m.put("bt", bt);
-//        //System.out.println("getBillFeeFacade().findDoubleByJpql(sql, m, TemporalType.TIMESTAMP) = " + getBillFeeFacade().findDoubleByJpql(sql, m, TemporalType.TIMESTAMP));
+//        System.out.println("getBillFeeFacade().findDoubleByJpql(sql, m, TemporalType.TIMESTAMP) = " + getBillFeeFacade().findDoubleByJpql(sql, m, TemporalType.TIMESTAMP));
 //        return getBillFeeFacade().findAggregateLong(sql, m, TemporalType.TIMESTAMP);
 //    }
     FeeType feeType;
@@ -1984,6 +1977,7 @@ public class ChannelReportController implements Serializable {
                     }
                 }
 
+
                 dpsrs.setCashCount(cashCount);
                 dpsrs.setAgentCount(agentCount);
                 dpsrs.setOnCallCount(onCallCount);
@@ -2014,8 +2008,8 @@ public class ChannelReportController implements Serializable {
         while (nowDate.before(td)) {
             DateFormat df = new SimpleDateFormat("dd-MMM-yyyy");
             String formattedDate = df.format(nowDate);
-            //System.out.println("formattedDate = " + formattedDate);
-            //System.out.println("nowDate = " + nowDate);
+            System.out.println("formattedDate = " + formattedDate);
+            System.out.println("nowDate = " + nowDate);
 
             DoctorPaymentSummeryRowSub doctorPaymentSummeryRowSub = new DoctorPaymentSummeryRowSub();
 
@@ -2052,12 +2046,14 @@ public class ChannelReportController implements Serializable {
                     }
                 }
 
+
                 doctorPaymentSummeryRowSub.setCashCount(cashCount);
                 doctorPaymentSummeryRowSub.setAgentCount(agentCount);
                 doctorPaymentSummeryRowSub.setOnCallCount(onCallCount);
                 doctorPaymentSummeryRowSub.setStaffCount(staffCount);
 
             }
+
 
             Calendar nc = Calendar.getInstance();
             nc.setTime(nowDate);
@@ -2138,6 +2134,7 @@ public class ChannelReportController implements Serializable {
         Date fd = commonFunctions.getStartOfDay(d);
         Date td = commonFunctions.getEndOfDay(d);
 
+
         String sql = "SELECT distinct(bf.bill) FROM BillFee bf "
                 + " WHERE bf.retired = false "
                 + " and bf.bill.cancelled=false "
@@ -2180,7 +2177,7 @@ public class ChannelReportController implements Serializable {
                 DoctorPaymentSummeryRowSub doctorPaymentSummeryRowSub = new DoctorPaymentSummeryRowSub();
                 doctorPaymentSummeryRowSub.setServiceSession(ss);
                 doctorPaymentSummeryRowSub.setDate(nowDate);
-                //System.out.println("doctorPaymentSummeryRowSub.getServiceSession() = " + doctorPaymentSummeryRowSub.getServiceSession());
+                System.out.println("doctorPaymentSummeryRowSub.getServiceSession() = " + doctorPaymentSummeryRowSub.getServiceSession());
                 doctorPaymentSummeryRowSub.setBills(getChannelPaymentBillListbyClassTypes(bts, bt, nowDate, null, null, staff, ss));
 
                 doctorPaymentSummeryRowSub.setHospitalFeeTotal(getHospitalFeeTotal(doctorPaymentSummeryRowSub.getBills()));
@@ -2212,12 +2209,14 @@ public class ChannelReportController implements Serializable {
                         }
                     }
 
+
                     doctorPaymentSummeryRowSub.setCashCount(cashCount);
                     doctorPaymentSummeryRowSub.setAgentCount(agentCount);
                     doctorPaymentSummeryRowSub.setOnCallCount(onCallCount);
                     doctorPaymentSummeryRowSub.setStaffCount(staffCount);
 
                 }
+
 
                 Calendar nc = Calendar.getInstance();
                 nc.setTime(nowDate);
@@ -2285,6 +2284,7 @@ public class ChannelReportController implements Serializable {
 
         Date fd = new Date();
         Date td = new Date();
+
 
 //        String sql = "select bf from BillFee bf "
 //                + " where bf.bill.retired=false "
@@ -2360,6 +2360,7 @@ public class ChannelReportController implements Serializable {
 
         Date fd = commonFunctions.getStartOfDay(d);
         Date td = commonFunctions.getEndOfDay(d);
+
 
         String sql = "SELECT count(bi.paidForBillFee.bill) FROM BillItem bi "
                 + " WHERE bi.retired = false "
@@ -2561,7 +2562,7 @@ public class ChannelReportController implements Serializable {
 //        String sql = "select p from Staff p where p.retired=false ";
 //        
 //        if(st!=null){
-//            //System.out.println("1");
+//            System.out.println("1");
 //            sql+=" and type(p)=:class ";
 //            hm.put("class", st.getClass());
 //        }
@@ -2914,7 +2915,7 @@ public class ChannelReportController implements Serializable {
         }
         calTotals(valueList);
 
-        ////System.out.println("***Done***");
+        //System.out.println("***Done***");
     }
 
     public void setFeeTotals(List<String1Value3> s1v3s, FeeType feeType) {
@@ -2947,14 +2948,14 @@ public class ChannelReportController implements Serializable {
         s1v3.setValue2(totCan);
         s1v3.setValue3(totRef);
 
-        ////System.out.println("*************");
-        ////System.out.println("Fee - " + s1v3.getString());
-        ////System.out.println("Bill - " + s1v3.getValue1());
-        ////System.out.println("Can - " + s1v3.getValue2());
-        ////System.out.println("Ref - " + s1v3.getValue3());
+        //System.out.println("*************");
+        //System.out.println("Fee - " + s1v3.getString());
+        //System.out.println("Bill - " + s1v3.getValue1());
+        //System.out.println("Can - " + s1v3.getValue2());
+        //System.out.println("Ref - " + s1v3.getValue3());
         s1v3s.add(s1v3);
-        ////System.out.println("Add");
-        ////System.out.println("*************");
+        //System.out.println("Add");
+        //System.out.println("*************");
     }
 
     public double getFeeTotal(Bill bill, FeeType feeType) {
@@ -3118,222 +3119,13 @@ public class ChannelReportController implements Serializable {
             netTotal = 0.0;
             grantNetTotal = 0.0;
             for (BillSession bs : doctorViewSessions) {
-                if (Math.abs(bs.getBill().getBalance()) < 1) {
+                if (Math.abs(bs.getBill().getBalance())<1) {
                     netTotal += bs.getBill().getStaffFee();
                     grantNetTotal += bs.getBill().getNetTotal();
                 }
             }
         }
     }
-
-    private String sendingSmsText;
-
-    public void sendCustomSms() {
-        if (sendingSmsText == null) {
-            JsfUtil.addErrorMessage("No SMS Text");
-            return;
-        }
-        int count = 0;
-        for (BillSession bs : getBillSessionsNurse()) {
-            Sms e = new Sms();
-            e.setCreatedAt(new Date());
-            e.setBill(bs.getBill());
-            e.setCreater(sessionController.getLoggedUser());
-            e.setCreatedAt(new Date());
-            e.setCreater(sessionController.getLoggedUser());
-            e.setReceipientNumber(bs.getBill().getPatient().getPerson().getPhone());
-            e.setSendingMessage((sendingSmsText));
-            e.setDepartment(getSessionController().getLoggedUser().getDepartment());
-            e.setInstitution(getSessionController().getLoggedUser().getInstitution());
-            e.setSmsType(MessageType.ChannelCustom);
-            smsFacade.create(e);
-            count++;
-            smsManagerEjb.sendSms(e);
-        }
-        sendingSmsText = null;
-    }
-
-    public void sendReminderSms() {
-
-        if (serviceSession == null) {
-            JsfUtil.addErrorMessage("No Service Session");
-            return;
-        }
-        int count = 0;
-        for (BillSession bs : getBillSessionsNurse()) {
-            sendingSmsText = createReminderSmsBody(bs);
-            if (bs == null) {
-                continue;
-            }
-            Sms e = new Sms();
-            e.setCreatedAt(new Date());
-            e.setBill(bs.getBill());
-            e.setCreater(sessionController.getLoggedUser());
-            e.setCreatedAt(new Date());
-            e.setCreater(sessionController.getLoggedUser());
-            e.setReceipientNumber(bs.getBill().getPatient().getPerson().getPhone());
-            e.setSendingMessage((sendingSmsText));
-            e.setDepartment(getSessionController().getLoggedUser().getDepartment());
-            e.setInstitution(getSessionController().getLoggedUser().getInstitution());
-            e.setSmsType(MessageType.ChannelReminder);
-            smsFacade.create(e);
-            smsManagerEjb.sendSms(e);
-            count++;
-        }
-        sendingSmsText = null;
-    }
-
-    public String createArrivalSmsBody(ServiceSession bs) {
-        if (bs == null) {
-            return null;
-        }
-        if (bs.getStaff() == null) {
-            return null;
-        }
-
-        if (bs.getStaff().getPerson() == null) {
-            return null;
-        }
-        if (bs.getStaff().getPerson().getNameWithTitle() == null) {
-            return null;
-        }
-        String m = bs.getStaff().getPerson().getNameWithTitle();
-        m += " for " + bs.getName();
-        m += " arrived at Baddegama Medical Services";
-        m += " on " + CommonFunctions.dateToString(new Date(), "dd/MM/yyyy");
-        m += " at " + CommonFunctions.dateToString(new Date(), "hh:mm a");
-        m += ".";
-        m += " For details 0912293700.";
-        return m;
-    }
-
-    public String createReminderSmsBody(BillSession bs) {
-        if (bs == null) {
-            return null;
-        }
-        ServiceSession ss = bs.getServiceSession();
-        if (ss == null) {
-            return null;
-        }
-        if (ss.getStaff() == null) {
-            return null;
-        }
-
-        if (ss.getStaff().getPerson() == null) {
-            return null;
-        }
-        if (ss.getStaff().getPerson().getNameWithTitle() == null) {
-            return null;
-        }
-
-        String m = "REMINDER. APPOINTMENT FOR ";
-        m += ss.getStaff().getPerson().getNameWithTitle();
-        m += " for " + ss.getName();
-        m += " @ Baddegama Medical Services ";
-        m += " on " + CommonFunctions.dateToString(new Date(), "dd/MM/yyyy");
-        m += " at " + CommonFunctions.dateToString(new Date(), "hh:mm a");
-        m += ". YOUR N0 IS ";
-        m += bs.getSerialNo();
-        m += ". For Details 0912293700.";
-        return m;
-    }
-
-    public String createCancellationSmsBody(ServiceSession bs) {
-        if (bs == null) {
-            return null;
-        }
-        if (bs.getStaff() == null) {
-            return null;
-        }
-
-        if (bs.getStaff().getPerson() == null) {
-            return null;
-        }
-        if (bs.getStaff().getPerson().getNameWithTitle() == null) {
-            return null;
-        }
-        String m = bs.getStaff().getPerson().getNameWithTitle();
-        m += " for " + bs.getName();
-        m += " IS CANCELLED.";
-        if (newSessionDateTime == null) {
-            m += " Next date will be informed";
-        } else {
-            m += " New Session";
-            m += " on " + CommonFunctions.dateToString(newSessionDateTime, "dd/MM/yyyy");
-            m += " at " + CommonFunctions.dateToString(newSessionDateTime, "hh:mm a");
-        }
-        m += ". Sorry for the inconvenience";
-        return m;
-    }
-
-    public String createArrivalSmsBody(BillSession bs) {
-        if (bs == null) {
-            return null;
-        }
-
-        if (bs.getServiceSession() == null) {
-            return null;
-        }
-        return createArrivalSmsBody(bs.getServiceSession());
-    }
-
-    public void sendArrivalSms() {
-        sendingSmsText = createArrivalSmsBody(serviceSession);
-        if (serviceSession == null) {
-            JsfUtil.addErrorMessage("No Service Session");
-            return;
-        }
-        if (sendingSmsText == null) {
-            JsfUtil.addErrorMessage("Error");
-            return;
-        }
-        int count = 0;
-        for (BillSession bs : getBillSessionsNurse()) {
-            Sms e = new Sms();
-            e.setCreatedAt(new Date());
-            e.setBill(bs.getBill());
-            e.setCreater(sessionController.getLoggedUser());
-            e.setCreatedAt(new Date());
-            e.setCreater(sessionController.getLoggedUser());
-            e.setReceipientNumber(bs.getBill().getPatient().getPerson().getPhone());
-            e.setSendingMessage((sendingSmsText));
-            e.setDepartment(getSessionController().getLoggedUser().getDepartment());
-            e.setInstitution(getSessionController().getLoggedUser().getInstitution());
-            e.setSmsType(MessageType.ChannelDoctorAraival);
-            smsFacade.create(e);
-            smsManagerEjb.sendSms(e);
-            count++;
-        }
-        sendingSmsText = null;
-    }
-
-    public void sendCancellationSms() {
-
-        if (serviceSession == null) {
-            JsfUtil.addErrorMessage("No Service Session");
-            return;
-        }
-        sendingSmsText = createCancellationSmsBody(serviceSession);
-        for (BillSession bs : getBillSessionsNurse()) {
-            Sms e = new Sms();
-            e.setCreatedAt(new Date());
-            e.setBill(bs.getBill());
-            e.setCreater(sessionController.getLoggedUser());
-            e.setCreatedAt(new Date());
-            e.setCreater(sessionController.getLoggedUser());
-            e.setReceipientNumber(bs.getBill().getPatient().getPerson().getPhone());
-            e.setSendingMessage((sendingSmsText));
-            e.setDepartment(getSessionController().getLoggedUser().getDepartment());
-            e.setInstitution(getSessionController().getLoggedUser().getInstitution());
-            e.setSmsType(MessageType.ChannelCancellation);
-            smsFacade.create(e);
-            smsManagerEjb.sendSms(e);
-        }
-        sendingSmsText = null;
-    }
-
-    @EJB
-    SmsFacade smsFacade;
 
     public List<BillSession> getBillSessionsNurse() {
         billSessions = new ArrayList<>();
@@ -3658,6 +3450,7 @@ public class ChannelReportController implements Serializable {
 
         sql += " order by ah.createdAt ";
 
+
         return getAgentHistoryFacade().findBySQL(sql, m, TemporalType.TIMESTAMP);
 
     }
@@ -3964,22 +3757,6 @@ public class ChannelReportController implements Serializable {
 
     public void setPaid(boolean paid) {
         this.paid = paid;
-    }
-
-    public String getSendingSmsText() {
-        return sendingSmsText;
-    }
-
-    public void setSendingSmsText(String sendingSmsText) {
-        this.sendingSmsText = sendingSmsText;
-    }
-
-    public Date getNewSessionDateTime() {
-        return newSessionDateTime;
-    }
-
-    public void setNewSessionDateTime(Date newSessionDateTime) {
-        this.newSessionDateTime = newSessionDateTime;
     }
 
     public class ChannelReportColumnModelBundle implements Serializable {

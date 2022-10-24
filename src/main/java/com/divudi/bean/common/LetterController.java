@@ -364,9 +364,9 @@ public class LetterController implements Serializable {
             arr[1] = c.lastIndexOf(getSessionController().getUserPreference().getAbbreviationForExamination());
             arr[2] = c.lastIndexOf(getSessionController().getUserPreference().getAbbreviationForInvestigations());
             arr[3] = c.lastIndexOf(getSessionController().getUserPreference().getAbbreviationForTreatments());
-            //System.out.println("intHx = " + arr[0]);
-            //System.out.println("intEx = " + arr[1]);
-            //System.out.println("intIx = " + arr[2]);
+            System.out.println("intHx = " + arr[0]);
+            System.out.println("intEx = " + arr[1]);
+            System.out.println("intIx = " + arr[2]);
             String s;
             if (arr[0] > -1) {
                 String1Value1 sv = new String1Value1();
@@ -404,7 +404,7 @@ public class LetterController implements Serializable {
             }
             for (String1Value1 ss : list) {
             }
-//            //System.out.println("2.list.size() = " + list.size());
+//            System.out.println("2.list.size() = " + list.size());
             if (arr[2] > -1) {
                 String1Value1 sv = new String1Value1();
                 sv.setString("Ix");
@@ -415,8 +415,8 @@ public class LetterController implements Serializable {
                     List<String1Value1> temp = new ArrayList<>();
                     boolean b = false;
                     for (String1Value1 ss : list) {
-//                        //System.out.println("ss.getString() = " + ss.getString());
-//                        //System.out.println("ss.getValue() = " + ss.getValue());
+//                        System.out.println("ss.getString() = " + ss.getString());
+//                        System.out.println("ss.getValue() = " + ss.getValue());
                         if (!b) {
                             if (arr[2] < ss.getValue()) {
                                 temp.add(sv);
@@ -432,11 +432,11 @@ public class LetterController implements Serializable {
                     if (!b) {
                         temp.add(sv);
                     }
-//                    //System.out.println("2.temp.size() = " + temp.size());
+//                    System.out.println("2.temp.size() = " + temp.size());
                     list = temp;
                 }
             }
-//            //System.out.println("3.list.size() = " + list.size());
+//            System.out.println("3.list.size() = " + list.size());
             if (arr[3] > -1) {
                 String1Value1 sv = new String1Value1();
                 sv.setString("Rx");
@@ -447,8 +447,8 @@ public class LetterController implements Serializable {
                     List<String1Value1> temp = new ArrayList<>();
                     boolean b = false;
                     for (String1Value1 ss : list) {
-//                        //System.out.println("ss.getString() = " + ss.getString());
-//                        //System.out.println("ss.getValue() = " + ss.getValue());
+//                        System.out.println("ss.getString() = " + ss.getString());
+//                        System.out.println("ss.getValue() = " + ss.getValue());
                         if (!b) {
                             if (arr[3] < ss.getValue()) {
                                 temp.add(sv);
@@ -464,15 +464,15 @@ public class LetterController implements Serializable {
                     if (!b) {
                         temp.add(sv);
                     }
-//                    //System.out.println("3.temp.size() = " + temp.size());
+//                    System.out.println("3.temp.size() = " + temp.size());
                     list = temp;
                 }
             }
-//            //System.out.println("4.list.size() = " + list.size());
+//            System.out.println("4.list.size() = " + list.size());
             int i = 1;
             for (String1Value1 ss : list) {
-                ////System.out.println("ss.getString() = " + ss.getString());
-                ////System.out.println("ss.getString() = " + ss.getValue());
+                //System.out.println("ss.getString() = " + ss.getString());
+                //System.out.println("ss.getString() = " + ss.getValue());
                 if (i < list.size()) {
                     if (ss.getString().toUpperCase().equals("HX")) {
                         hx = c.substring((int) ss.getValue(), (int) list.get(i).getValue());

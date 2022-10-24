@@ -203,7 +203,7 @@ public class SheduleController implements Serializable {
         } else {
             sql = "select p from Staff p where p.retired=false order by p.person.name";
         }
-        //////System.out.println(sql);
+        ////System.out.println(sql);
         suggestions = getStaffFacade().findBySQL(sql);
 
         return suggestions;
@@ -486,7 +486,7 @@ public class SheduleController implements Serializable {
     }
 
     public void saveSelected() {
-        ////System.out.println("session name"+current.getName());
+        //System.out.println("session name"+current.getName());
         if (checkError()) {
             return;
         }
@@ -521,8 +521,8 @@ public class SheduleController implements Serializable {
 
     public void updateCreatedServicesesions(ServiceSession ss) {
         for (ServiceSession i : fetchCreatedServiceSessions(ss)) {
-            //System.out.println("i.getName() = " + i.getName());
-            //System.out.println("i.getInstitution() = " + i.getInstitution());
+            System.out.println("i.getName() = " + i.getName());
+            System.out.println("i.getInstitution() = " + i.getInstitution());
 
             i.setName(ss.getName());
             i.setInstitution(ss.getInstitution());
@@ -674,10 +674,10 @@ public class SheduleController implements Serializable {
                             && (fc.getValidFrom().getTime() == c.getValidFrom().getTime())) {
                         JsfUtil.addErrorMessage("This Fee Already Add - " + c.getFee().getName() + " , " + c.getFee().getFeeType() + " , " + c.getValidFrom());
                     } else {
-                        //System.out.println("fc.getFee().getName() = " + fc.getFee().getName());
-                        //System.out.println("c.getFee().getName() = " + c.getFee().getName());
-                        //System.out.println("fc.getFee().getFeeType() = " + fc.getFee().getFeeType());
-                        //System.out.println("c.getFee().getFeeType() = " + c.getFee().getFeeType());
+                        System.out.println("fc.getFee().getName() = " + fc.getFee().getName());
+                        System.out.println("c.getFee().getName() = " + c.getFee().getName());
+                        System.out.println("fc.getFee().getFeeType() = " + fc.getFee().getFeeType());
+                        System.out.println("c.getFee().getFeeType() = " + c.getFee().getFeeType());
                         if ((fc.getFee().getFee() != 0 || fc.getFee().getFfee() != 0) && (fc.getFee().getFee() != c.getFee().getFee() || fc.getFee().getFfee() != fc.getFee().getFfee())) {
                             fc.setValidFrom(effectiveDate);
                             fc.setCreatedAt(new Date());

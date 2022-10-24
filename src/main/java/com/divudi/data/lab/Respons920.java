@@ -520,7 +520,7 @@ public class Respons920 {
                 Byte b = Byte.parseByte(s);
                 bytesR920.add(b);
             } catch (Exception e) {
-//                //System.out.println("e = " + e);
+//                System.out.println("e = " + e);
                 bytesR920.add(null);
             }
         }
@@ -576,7 +576,7 @@ public class Respons920 {
                 Byte b = (byte) s;
                 bytesR920.add(b);
             } catch (Exception e) {
-//                //System.out.println("e = " + e);
+//                System.out.println("e = " + e);
                 bytesR920.add(null);
             }
         }

@@ -31,7 +31,7 @@ public class ImageViewController {
         if (p == null) {
             return new DefaultStreamedContent();
         } else {
-//   ////System.out.println("giving image");
+//   //System.out.println("giving image");
                         return new DefaultStreamedContent(new ByteArrayInputStream((byte[])p), "image/png");
         }
     }
