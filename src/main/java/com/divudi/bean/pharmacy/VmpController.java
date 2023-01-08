@@ -144,16 +144,12 @@ public class VmpController implements Serializable {
             UtilityController.addErrorMessage("Select Vtm");
             return true;
         }
-//        TODO:Message
+
         if (current == null) {
             return true;
         }
         if (addingVtmInVmp.getStrength() == 0.0) {
             UtilityController.addErrorMessage("Type Strength");
-            return true;
-        }
-        if (current.getCategory() == null) {
-            UtilityController.addErrorMessage("Select Category");
             return true;
         }
         if (addingVtmInVmp.getStrengthUnit() == null) {

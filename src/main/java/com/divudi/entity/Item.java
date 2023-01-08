@@ -128,8 +128,13 @@ public class Item implements Serializable, Comparable<Item> {
     private double dblValue = 0.0f;
     SessionNumberType sessionNumberType;
     boolean priceByBatch;
-    @ManyToOne
+    @ManyToOne //Strength Units in VMP & AMP
     MeasurementUnit measurementUnit;
+    @ManyToOne
+    private MeasurementUnit baseUnit;
+    @ManyToOne
+    private MeasurementUnit issueUnit;
+    private Double baseUnitsPerIssueUnit;
     @ManyToOne
     Category worksheet;
     @ManyToOne
@@ -1145,6 +1150,30 @@ public class Item implements Serializable, Comparable<Item> {
 
     public void setPriority(Priority priority) {
         this.priority = priority;
+    }
+
+    public MeasurementUnit getBaseUnit() {
+        return baseUnit;
+    }
+
+    public void setBaseUnit(MeasurementUnit baseUnit) {
+        this.baseUnit = baseUnit;
+    }
+
+    public MeasurementUnit getIssueUnit() {
+        return issueUnit;
+    }
+
+    public void setIssueUnit(MeasurementUnit issueUnit) {
+        this.issueUnit = issueUnit;
+    }
+
+    public Double getBaseUnitsPerIssueUnit() {
+        return baseUnitsPerIssueUnit;
+    }
+
+    public void setBaseUnitsPerIssueUnit(Double baseUnitsPerIssueUnit) {
+        this.baseUnitsPerIssueUnit = baseUnitsPerIssueUnit;
     }
 
 

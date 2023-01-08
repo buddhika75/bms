@@ -48,8 +48,6 @@
                                 <h:panelGrid id="gpDetailText" columns="2">
                                     <h:outputText id="lblName" value="Name" ></h:outputText>
                                     <h:inputText autocomplete="off" id="txtName" value="#{doseUnitController.current.name}"  ></h:inputText>
-                                    <h:outputText  value="Duration in hours" style="white-space: nowrap;" ></h:outputText>
-                                    <h:inputText autocomplete="off"  value="#{doseUnitController.current.dblValue}" ></h:inputText>
                                 </h:panelGrid>
                                 <h:panelGrid id="gpDetailButtons" columns="2">
                                     <p:commandButton ajax="false" id="btnSave" value="Save" action="#{doseUnitController.saveSelected()}" styleClass="buttons">

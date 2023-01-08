@@ -17,7 +17,7 @@ import javax.persistence.InheritanceType;
  */
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
-public class DoseUnit extends Category implements Serializable {
+public class DoseUnit extends MeasurementUnit implements Serializable {
     private static final long serialVersionUID = 1L;
    
  
