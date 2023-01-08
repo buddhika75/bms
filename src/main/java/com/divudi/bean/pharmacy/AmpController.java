@@ -434,6 +434,10 @@ public class AmpController implements Serializable {
 
         current.setDepartmentType(DepartmentType.Pharmacy);
 
+        current.setMeasurementUnit(current.getVmp().getMeasurementUnit());
+        current.setIssueUnit(current.getVmp().getIssueUnit());
+        current.setBaseUnit(current.getVmp().getBaseUnit());
+        current.setBaseUnitsPerIssueUnit(current.getVmp().getBaseUnitsPerIssueUnit());
         
         
         if (getCurrent().getId() != null && getCurrent().getId() > 0) {
