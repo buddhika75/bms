@@ -143,6 +143,7 @@ public class DoseUnitController implements Serializable {
         if(measurementUnits==null){
             measurementUnits = new ArrayList<>();
             for(DoseUnit du: getItems()){
+                System.out.println("du = " + du);
                 measurementUnits.add(du);
             }
         }

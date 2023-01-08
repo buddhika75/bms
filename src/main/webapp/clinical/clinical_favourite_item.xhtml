@@ -50,8 +50,9 @@
                             <p:commandButton value="Add New"
                                              id="btnAdd"
                                              process="btnAdd acItem"
-                                             onclick="PF('dlg2').show();"
-                                             action="#{favouriteController.prepareAddingFavouriteItem()}" >
+                                             update="dlgDetails"
+                                             oncomplete="PF('dlg2').show();"
+                                             actionListener="#{favouriteController.prepareAddingFavouriteItem()}" >
                             </p:commandButton>
 
 
