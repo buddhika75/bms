@@ -113,6 +113,7 @@ public class FavouriteController implements Serializable {
             JsfUtil.addErrorMessage("No Item Selected");
             return;
         }
+        System.out.println("item = " + item);
         current = new ItemUsage();
         current.setForItem(item);
         current.setItem(item);
@@ -121,10 +122,12 @@ public class FavouriteController implements Serializable {
 
         availableDoseUnits = new ArrayList<>();
         availableItems = new ArrayList<>();
+        System.out.println("item.getMedicineType() = " + item.getMedicineType());
         switch (item.getMedicineType()) {
             case Vmp:
                 availableDoseUnits.add(item.getBaseUnit());
                 availableDoseUnits.add(item.getIssueUnit());
+                availableItems.add(item);
                 availableItems.addAll(vmpController.ampsOfVmp(item));
                 break;
             case Amp:
@@ -135,16 +138,19 @@ public class FavouriteController implements Serializable {
             case Vtm:
                 availableDoseUnits = doseUnitController.getMeasurementUnits();
                 availableItems.addAll(vmpController.ampsAndVmpsContainingVtm(item));
+                availableItems.add(item);
                 break;
             case Atm:
                 availableDoseUnits = doseUnitController.getMeasurementUnits();
                 availableItems.addAll(vmpController.ampsAndVmpsContainingVtm(item));
+                availableItems.add(item);
                 break;
             case Ampp:
                 break;
             case Vmpp:
                 break;
             case Medicine:
+                System.out.println("subtype");
                 JsfUtil.addErrorMessage("Selected needs a subtype");
                 break;
             case AnalyzerTest:
