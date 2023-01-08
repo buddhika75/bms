@@ -437,7 +437,9 @@ public class PracticeBookingController implements Serializable {
 
         bs.setBill(b);
         bs.setBillItem(bi);
-        billFacade.edit(b);
+//        billFacade.edit(b);
+
+        getBillSessionFacade().edit(bs);
 
     }
 
