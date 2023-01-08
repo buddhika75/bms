@@ -115,6 +115,8 @@ public class PatientEncounterController implements Serializable {
     private List<PatientEncounter> items = null;
     List<PatientEncounter> currentPatientEncounters;
     List<ItemUsage> currentPatientAllergies;
+    private List<ItemUsage> currentEncounterMedicines;
+    private List<ItemUsage> currentEncounterDiagnosis;
     List<Bill> currentPatientBills;
     List<Bill> currentChannelBills;
     List<PatientInvestigation> currentPatientInvestigations;
@@ -740,6 +742,8 @@ public class PatientEncounterController implements Serializable {
         return currentPatientAllergies;
     }
 
+    
+    
     public List<PatientEncounter> fillCurrentPatientEncounters(PatientEncounter pe) {
         Map m = new HashMap();
         m.put("p", pe.getPatient());
@@ -761,6 +765,32 @@ public class PatientEncounterController implements Serializable {
                 + " order by e.id desc";
         return itemUsageFacade.findBySQL(sql, m);
     }
+    
+    public List<ItemUsage> fillCurrentEncounterMedicines() {
+        Map m = new HashMap();
+        m.put("e", getCurrent());
+        m.put("t", ItemUsageType.EncounterItems);
+        String sql;
+        sql = "Select e "
+                + " from ItemUsage e "
+                + " where e.encounter=:p "
+                + " and e.type=:t "
+                + " order by e.id desc";
+        return itemUsageFacade.findBySQL(sql, m);
+    }
+    
+    public List<ItemUsage> fillCurrentEncounterDiagnosis() {
+        Map m = new HashMap();
+        m.put("e", getCurrent());
+        m.put("t", ItemUsageType.EncounterDiagnosis);
+        String sql;
+        sql = "Select e "
+                + " from ItemUsage e "
+                + " where e.encounter=:p "
+                + " and e.type=:t "
+                + " order by e.id desc";
+        return itemUsageFacade.findBySQL(sql, m);
+    }
 
     public void fillCurrentPatientLists(Patient patient) {
         currentPatientEncounters = fillPatientEncounters(patient);
@@ -768,6 +798,8 @@ public class PatientEncounterController implements Serializable {
         currentChannelBills = fillPatientChannelBills(patient);
         currentPatientInvestigations = fillPatientInvestigations(patient);
         currentPatientAllergies = fillCurrentPatientAllergies();
+        currentEncounterMedicines = fillCurrentEncounterMedicines();
+        currentEncounterDiagnosis = fillCurrentEncounterDiagnosis();
     }
 
     public List<Bill> fillPatientBills(Patient patient) {
@@ -1262,6 +1294,14 @@ public class PatientEncounterController implements Serializable {
 
     public void setGraphInvestigationItem(InvestigationItem graphInvestigationItem) {
         this.graphInvestigationItem = graphInvestigationItem;
+    }
+
+    public List<ItemUsage> getCurrentEncounterMedicines() {
+        return currentEncounterMedicines;
+    }
+
+    public List<ItemUsage> getCurrentEncounterDiagnosis() {
+        return currentEncounterDiagnosis;
     }
 
 }
