@@ -2,8 +2,6 @@ package com.divudi.ejb;
 
 import com.divudi.data.dataStructure.DateRange;
 import com.divudi.data.dataStructure.YearMonthDay;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.TimeZone;
@@ -15,6 +13,8 @@ import javax.ejb.Singleton;
  */
 @Singleton
 public class CommonFunctions {
+
+    
 
     public DateRange getDateRangeForOT(Date date) {
         DateRange dateRange = new DateRange();
@@ -123,25 +123,25 @@ public class CommonFunctions {
     }
 
     public Date guessDob(String docStr) {
-        //////System.out.println("year string is " + docStr);
+        ////System.out.println("year string is " + docStr);
         try {
             int years = Integer.valueOf(docStr);
-            //////System.out.println("int year is " + years);
+            ////System.out.println("int year is " + years);
             Calendar now = Calendar.getInstance(TimeZone.getTimeZone("IST"));
-            //////System.out.println("now before is " + now);
+            ////System.out.println("now before is " + now);
             now.add(Calendar.YEAR, -years);
-            //////System.out.println("now after is " + now);
-            //////System.out.println("now time is " + now.getTime());
+            ////System.out.println("now after is " + now);
+            ////System.out.println("now time is " + now.getTime());
             return now.getTime();
         } catch (Exception e) {
-            //////System.out.println("Error is " + e.getMessage());
+            ////System.out.println("Error is " + e.getMessage());
             return new Date();
 
         }
     }
 
     public Date guessDob(YearMonthDay yearMonthDay) {
-        // //////System.out.println("year string is " + docStr);
+        // ////System.out.println("year string is " + docStr);
         int years = 0;
         int month = 0;
         int day = 0;
@@ -164,25 +164,25 @@ public class CommonFunctions {
 
             return now.getTime();
         } catch (Exception e) {
-            //////System.out.println("Error is " + e.getMessage());
+            ////System.out.println("Error is " + e.getMessage());
             return new Date();
 
         }
     }
 
     public Date guessDobFromMonth(String docStr) {
-        //////System.out.println("year string is " + docStr);
+        ////System.out.println("year string is " + docStr);
         try {
             int month = Integer.valueOf(docStr);
-            //////System.out.println("int month is " + month);
+            ////System.out.println("int month is " + month);
             Calendar now = Calendar.getInstance(TimeZone.getTimeZone("IST"));
-            //////System.out.println("now before is " + now);
+            ////System.out.println("now before is " + now);
             now.add(Calendar.MONTH, -month);
-            //////System.out.println("now after is " + now);
-            //////System.out.println("now time is " + now.getTime());
+            ////System.out.println("now after is " + now);
+            ////System.out.println("now time is " + now.getTime());
             return now.getTime();
         } catch (Exception e) {
-            //////System.out.println("Error is " + e.getMessage());
+            ////System.out.println("Error is " + e.getMessage());
             return new Date();
 
         }
@@ -197,7 +197,7 @@ public class CommonFunctions {
         if (ageInDays < 0) {
             return "";
         }
-        //////System.out.println("Age in days " + ageInDays);
+        ////System.out.println("Age in days " + ageInDays);
         if (ageInDays < 60) {
             return ageInDays + " days";
         } else if (ageInDays < 366) {
@@ -240,7 +240,7 @@ public class CommonFunctions {
     public static Date getStartOfDay() {
         return getStartOfDay(new Date());
     }
-
+    
     public static Date getStartOfDay(Date date) {
         if (date == null) {
             date = new Date();
@@ -251,14 +251,14 @@ public class CommonFunctions {
         int month = calendar.get(Calendar.MONTH);
         int day = calendar.get(Calendar.DATE);
         calendar.set(year, month, day, 0, 0, 0);
-        ////System.out.println("calendar.getTime() = " + calendar.getTime());
+        //System.out.println("calendar.getTime() = " + calendar.getTime());
         return calendar.getTime();
     }
 
     public static Date getStartOfMonth() {
         return getStartOfMonth(new Date());
     }
-
+    
     public static Date getStartOfMonth(Date date) {
         if (date == null) {
             date = new Date();
@@ -275,7 +275,7 @@ public class CommonFunctions {
     public static Date getEndOfDay() {
         return getEndOfDay(new Date());
     }
-
+    
     public static Date getEndOfDay(Date date) {
         if (date == null) {
             date = new Date();
@@ -287,14 +287,14 @@ public class CommonFunctions {
         int day = calendar.get(Calendar.DATE);
         calendar.set(year, month, day, 23, 59, 59);
         calendar.set(Calendar.MILLISECOND, 999);
-        ////System.out.println("calendar.getTime() = " + calendar.getTime());
+        //System.out.println("calendar.getTime() = " + calendar.getTime());
         return calendar.getTime();
     }
 
     public static Date getEndOfMonth() {
         return getStartOfMonth(new Date());
     }
-
+    
     public static Date getEndOfMonth(Date date) {
         if (date == null) {
             date = new Date();
@@ -314,7 +314,7 @@ public class CommonFunctions {
         cal.setTime(date);
         cal.set(Calendar.MONTH, 0);
         cal.set(Calendar.DATE, 1);
-        //////System.out.println("First : " + cal.getTime());
+        ////System.out.println("First : " + cal.getTime());
         return cal.getTime();
     }
 
@@ -323,9 +323,11 @@ public class CommonFunctions {
         cal.setTime(date);
         cal.set(Calendar.MONTH, 11);
         cal.set(Calendar.DATE, 31);
-        //////System.out.println("Last : " + cal.getTime());
+        ////System.out.println("Last : " + cal.getTime());
         return cal.getTime();
     }
+
+    
 
     public Date getFirstDayOfWeek(Date date) {
         // get today and clear time of day
@@ -338,13 +340,13 @@ public class CommonFunctions {
 
 // get start of this week in milliseconds
         cal.set(Calendar.DAY_OF_WEEK, cal.getFirstDayOfWeek());
-        //      //////System.out.println("Start of this week:       " + cal.getTime());
-        //       //////System.out.println("... in milliseconds:      " + cal.getTimeInMillis());
+        //      ////System.out.println("Start of this week:       " + cal.getTime());
+        //       ////System.out.println("... in milliseconds:      " + cal.getTimeInMillis());
 
 // start of the next week
 //        cal.add(Calendar.WEEK_OF_YEAR, 1);
-//        //////System.out.println("Start of the next week:   " + cal.getTime());
-//        //////System.out.println("... in milliseconds:      " + cal.getTimeInMillis());
+//        ////System.out.println("Start of the next week:   " + cal.getTime());
+//        ////System.out.println("... in milliseconds:      " + cal.getTimeInMillis());
         return cal.getTime();
     }
 
@@ -359,15 +361,15 @@ public class CommonFunctions {
 
 // get start of this week in milliseconds
         cal.set(Calendar.DAY_OF_WEEK, cal.getFirstDayOfWeek());
-        //   //////System.out.println("Start of this week:       " + cal.getTime());
-        //     //////System.out.println("... in milliseconds:      " + cal.getTimeInMillis());
+        //   ////System.out.println("Start of this week:       " + cal.getTime());
+        //     ////System.out.println("... in milliseconds:      " + cal.getTimeInMillis());
 
         cal.add(Calendar.DATE, 7);
 
 // start of the next week
 //        cal.add(Calendar.WEEK_OF_YEAR, 1);
-//        //////System.out.println("Start of the next week:   " + cal.getTime());
-//        //////System.out.println("... in milliseconds:      " + cal.getTimeInMillis());
+//        ////System.out.println("Start of the next week:   " + cal.getTime());
+//        ////System.out.println("... in milliseconds:      " + cal.getTimeInMillis());
         return cal.getTime();
     }
 
@@ -383,33 +385,14 @@ public class CommonFunctions {
         return cal.getTime();
     }
 
-    public static double roundToTwoDecimalPlaces(double num) {
+    public static double roundToTwoDecimalPlaces(double num){
         return roundToTwoDecimalPlaces(num, 2);
     }
-
-    public static double roundToTwoDecimalPlaces(double num, int decimalPlaces) {
+    
+    public static double roundToTwoDecimalPlaces(double num, int decimalPlaces){
         double mul = Math.pow(10, decimalPlaces);
         double roundOff = (double) Math.round(num * mul) / mul;
         return roundOff;
     }
-
-    public static String timeToString(){
-        return dateToString(new Date(), "dd/MM/yyyy hh:mm a");
-    }
     
-    public static String dateToString(){
-        return dateToString(new Date());
-    }
-    
-    public static String dateToString(Date date ){
-        return dateToString(date, "dd/MM/yyyy");
-    }
-    
-    public static String dateToString(Date date, String format ){
-             date = Calendar.getInstance().getTime();
-        DateFormat dateFormat = new SimpleDateFormat(format);
-        String strDate = dateFormat.format(date);
-        return strDate;
-    }
-
 }

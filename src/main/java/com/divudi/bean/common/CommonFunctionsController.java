@@ -4,8 +4,6 @@ import com.divudi.data.Sex;
 import com.divudi.data.Title;
 import com.divudi.data.dataStructure.DateRange;
 import com.divudi.data.dataStructure.YearMonthDay;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.TimeZone;
@@ -205,7 +203,7 @@ public class CommonFunctionsController {
         int month = calendar.get(Calendar.MONTH);
         int day = calendar.get(Calendar.DATE);
         calendar.set(year, month, day, 0, 0, 0);
-        ////System.out.println("calendar.getTime() = " + calendar.getTime());
+        //System.out.println("calendar.getTime() = " + calendar.getTime());
         return calendar.getTime();
     }
 
@@ -217,7 +215,7 @@ public class CommonFunctionsController {
         int day = calendar.get(Calendar.DATE);
         calendar.set(year, month, day, 23, 59, 59);
         calendar.set(Calendar.MILLISECOND, 999);
-        ////System.out.println("calendar.getTime() = " + calendar.getTime());
+        //System.out.println("calendar.getTime() = " + calendar.getTime());
         return calendar.getTime();
     }
 
@@ -231,23 +229,12 @@ public class CommonFunctionsController {
         return calendar.getTime();
     }
 
-    
-    public static String formatDate(){
-        return formatDateTime(new Date(), "dd MMMM yyyy");
-    }
-    
-    public static String formatDateTime(Date date, String format) {
-        DateFormat dateFormat = new SimpleDateFormat(format);
-        String strDate = dateFormat.format(date);
-        return strDate;
-    }
-
     public static Date getFirstDayOfYear(Date date) {
         Calendar cal = Calendar.getInstance();
         cal.setTime(date);
         cal.set(Calendar.MONTH, 0);
         cal.set(Calendar.DATE, 1);
-        //////System.out.println("First : " + cal.getTime());
+        ////System.out.println("First : " + cal.getTime());
         return cal.getTime();
     }
 
@@ -256,7 +243,7 @@ public class CommonFunctionsController {
         cal.setTime(date);
         cal.set(Calendar.MONTH, 11);
         cal.set(Calendar.DATE, 31);
-        //////System.out.println("Last : " + cal.getTime());
+        ////System.out.println("Last : " + cal.getTime());
         return cal.getTime();
     }
 
@@ -304,13 +291,13 @@ public class CommonFunctionsController {
 
 // get start of this week in milliseconds
         cal.set(Calendar.DAY_OF_WEEK, cal.getFirstDayOfWeek());
-        //      //////System.out.println("Start of this week:       " + cal.getTime());
-        //       //////System.out.println("... in milliseconds:      " + cal.getTimeInMillis());
+        //      ////System.out.println("Start of this week:       " + cal.getTime());
+        //       ////System.out.println("... in milliseconds:      " + cal.getTimeInMillis());
 
 // start of the next week
 //        cal.add(Calendar.WEEK_OF_YEAR, 1);
-//        //////System.out.println("Start of the next week:   " + cal.getTime());
-//        //////System.out.println("... in milliseconds:      " + cal.getTimeInMillis());
+//        ////System.out.println("Start of the next week:   " + cal.getTime());
+//        ////System.out.println("... in milliseconds:      " + cal.getTimeInMillis());
         return cal.getTime();
     }
 
@@ -325,15 +312,15 @@ public class CommonFunctionsController {
 
 // get start of this week in milliseconds
         cal.set(Calendar.DAY_OF_WEEK, cal.getFirstDayOfWeek());
-        //   //////System.out.println("Start of this week:       " + cal.getTime());
-        //     //////System.out.println("... in milliseconds:      " + cal.getTimeInMillis());
+        //   ////System.out.println("Start of this week:       " + cal.getTime());
+        //     ////System.out.println("... in milliseconds:      " + cal.getTimeInMillis());
 
         cal.add(Calendar.DATE, 7);
 
 // start of the next week
 //        cal.add(Calendar.WEEK_OF_YEAR, 1);
-//        //////System.out.println("Start of the next week:   " + cal.getTime());
-//        //////System.out.println("... in milliseconds:      " + cal.getTimeInMillis());
+//        ////System.out.println("Start of the next week:   " + cal.getTime());
+//        ////System.out.println("... in milliseconds:      " + cal.getTimeInMillis());
         return cal.getTime();
     }
 

@@ -61,106 +61,152 @@ public class SmsController implements Serializable {
 
     ReportKeyWord reportKeyWord;
 
-    private Date from;
-    private Date to;
-
-    public void fillSuccess() {
-        fillSuccess(null, true);;
-    }
-
-    public void fillLabSuccess() {
-        List<MessageType> ts = new ArrayList<>();
-        ts.add(MessageType.LabReport);
-        ts.add(MessageType.LabReportAll);
-        fillSuccess(ts, true);;
-    }
-
-    public void fillLabFail() {
-        List<MessageType> ts = new ArrayList<>();
-        ts.add(MessageType.LabReport);
-        ts.add(MessageType.LabReportAll);
-        fillSuccess(ts, false);;
-    }
-
-    public void fillChannelSuccess() {
-        List<MessageType> ts = new ArrayList<>();
-        ts.add(MessageType.ChannelBooking);
-        ts.add(MessageType.ChannelCancellation);
-        ts.add(MessageType.ChannelCustom);
-        ts.add(MessageType.ChannelDoctorAraival);
-        ts.add(MessageType.ChannelReminder);
-        fillSuccess(ts, true);;
-    }
-
-    public void fillChannelFail() {
-        List<MessageType> ts = new ArrayList<>();
-        ts.add(MessageType.ChannelBooking);
-        ts.add(MessageType.ChannelCancellation);
-        ts.add(MessageType.ChannelCustom);
-        ts.add(MessageType.ChannelDoctorAraival);
-        ts.add(MessageType.ChannelReminder);
-        fillSuccess(ts, false);;
-    }
-
-    public void fillSuccess(List<MessageType> ts, boolean success) {
-        String j = "Select e "
-                + " from Sms e "
-                + " where e.sentSuccessfully=:suc "
-                + " and e.retired=false "
-                + " and e.retired=false "
-                + " and e.createdAt between :fd and :td ";
-
-        Map m = new HashMap();
-        m.put("fd", from);
-        m.put("td", to);
-        m.put("suc", success);
-        if (ts != null) {
-            j += " and e.smsType in :ts ";
-            m.put("ts", ts);
-        }
-
-        j += " order by e.createdAt";
-        smses = getSmsFacade().findBySQL(j, m);
-    }
-
-    public void fillFailed() {
-        fillSuccess(null, false);
-    }
-
-    public String toFailed() {
-        smses = null;
-        return "/sms/failed";
-    }
-
-    public String toSuccess() {
-        smses = null;
-        return "/sms/success";
-    }
-    
-    public String toFailedLab() {
-        smses = null;
-        return "/sms/failed_lab";
-    }
-
-    public String toSuccessLab() {
-        smses = null;
-        return "/sms/success_lab";
-    }
-    
-    public String toFailedChannel() {
-        smses = null;
-        return "/sms/failed_channel";
-    }
-
-    public String toSuccessChannel() {
-        smses = null;
-        return "/sms/success_channel";
-    }
-
     /**
      * Creates a new instance of SmsController
      */
     public SmsController() {
+    }
+
+    private void sendSmsAwaitingToSendInDatabase() {
+        String j = "Select e from Sms e where e.sentSuccessfully=false and e.retired=false";
+        List<Sms> smses = getSmsFacade().findBySQL(j);
+//        if (false) {
+//            Sms e = new Sms();
+//            e.getSentSuccessfully();
+//            e.getInstitution();
+//        }
+        for (Sms e : smses) {
+            e.setSentSuccessfully(Boolean.TRUE);
+            getSmsFacade().edit(e);
+
+            sendSms(e.getReceipientNumber(), e.getSendingMessage(),
+                    e.getInstitution().getSmsSendingUsername(),
+                    e.getInstitution().getSmsSendingPassword(),
+                    e.getInstitution().getSmsSendingAlias());
+            e.setSentSuccessfully(true);
+            e.setSentAt(new Date());
+            getSmsFacade().edit(e);
+        }
+
+    }
+
+    public static String executePost(String targetURL, Map<String, Object> parameters) {
+        HttpURLConnection connection = null;
+        if (parameters != null && !parameters.isEmpty()) {
+            targetURL += "?";
+        }
+        Set s = parameters.entrySet();
+        Iterator it = s.iterator();
+        while (it.hasNext()) {
+            Map.Entry m = (Map.Entry) it.next();
+            Object pVal = m.getValue();
+            String pPara = (String) m.getKey();
+            targetURL += pPara + "=" + pVal.toString() + "&";
+        }
+        if (parameters != null && !parameters.isEmpty()) {
+            targetURL += "last=true";
+        }
+        try {
+            //Create connection
+            URL url = new URL(targetURL);
+            connection = (HttpURLConnection) url.openConnection();
+            connection.setRequestMethod("GET");
+
+            connection.setUseCaches(false);
+            connection.setDoOutput(true);
+            //Send request
+            DataOutputStream wr = new DataOutputStream(
+                    connection.getOutputStream());
+            wr.writeBytes(targetURL);
+            wr.flush();
+            wr.close();
+
+            //Get Response  
+            InputStream is = connection.getInputStream();
+            BufferedReader rd = new BufferedReader(new InputStreamReader(is));
+            StringBuilder response = new StringBuilder(); // or StringBuffer if Java version 5+
+            String line;
+            while ((line = rd.readLine()) != null) {
+                response.append(line);
+                response.append('\r');
+            }
+            rd.close();
+            return response.toString();
+        } catch (Exception e) {
+            return null;
+        } finally {
+            if (connection != null) {
+                connection.disconnect();
+            }
+        }
+    }
+
+    public boolean sendSms(String number, String message, String username, String password, String sendingAlias) {
+
+
+        Map m = new HashMap();
+        m.put("userName", username);
+        m.put("password", password);
+        m.put("userAlias", sendingAlias);
+        m.put("number", number);
+        m.put("message", message);
+
+        String res = executePost("http://localhost:7070/sms/faces/index.xhtml", m);
+        if (res == null) {
+            return false;
+        } else if (res.toUpperCase().contains("200")) {
+            return true;
+        } else {
+            return false;
+        }
+
+    }
+
+    public void sendSmsToNumberList(String sendingNo, ApplicationInstitution ai, String msg, Bill b, MessageType smsType) {
+
+        if (sendingNo.contains("077") || sendingNo.contains("076")
+                || sendingNo.contains("071") || sendingNo.contains("070")
+                || sendingNo.contains("072")
+                || sendingNo.contains("075")
+                || sendingNo.contains("078")) {
+        } else {
+            return;
+        }
+
+        if (ai == ApplicationInstitution.Ruhuna) {
+            StringBuilder sb = new StringBuilder(sendingNo);
+            sb.deleteCharAt(3);
+            sendingNo = sb.toString();
+
+            String url = "https://cpsolutions.dialog.lk/index.php/cbs/sms/send?destination=94";
+            HttpResponse<String> stringResponse;
+            String pw = "&q=14488825498722";
+
+            String messageBody2 = msg;
+
+            final StringBuilder request = new StringBuilder(url);
+            request.append(sendingNo.substring(1, 10));
+            request.append(pw);
+
+            try {
+
+                stringResponse = Unirest.post(request.toString()).field("message", messageBody2).asString();
+
+            } catch (Exception ex) {
+                ex.printStackTrace();
+                return;
+            }
+
+            Sms sms = new Sms();
+            sms.setPassword(pw);
+            sms.setCreatedAt(new Date());
+            sms.setCreater(getSessionController().getLoggedUser());
+            sms.setBill(b);
+            sms.setSmsType(smsType);
+            sms.setSendingUrl(url);
+            sms.setSendingMessage(messageBody2);
+            getSmsFacade().create(sms);
+        }
     }
 
     public void createSmsTable() {
@@ -196,6 +242,7 @@ public class SmsController implements Serializable {
 
         m.put("fd", getReportKeyWord().getFromDate());
         m.put("td", getReportKeyWord().getToDate());
+
 
         if (getReportKeyWord().isAdditionalDetails()) {
             List<Object[]> objects = getSmsFacade().findAggregates(sql, m, TemporalType.TIMESTAMP);
@@ -233,22 +280,6 @@ public class SmsController implements Serializable {
 
     public void setCommonFunctions(CommonFunctions commonFunctions) {
         this.commonFunctions = commonFunctions;
-    }
-
-    public Date getFrom() {
-        return from;
-    }
-
-    public void setFrom(Date from) {
-        this.from = from;
-    }
-
-    public Date getTo() {
-        return to;
-    }
-
-    public void setTo(Date to) {
-        this.to = to;
     }
 
     public class SmsSummeryRow {

@@ -33,8 +33,6 @@
     <h:body>
         <div id="panelFullSpread" class="fullSpread ui-widget-content " >
             <p:growl id="publicGrowl" autoUpdate="true"   />
-                   
-        
             <h:panelGroup >
                 <h:form>
                     <h:panelGroup >
@@ -53,6 +51,7 @@
                             <f:facet name="header" >
                                 <h:outputLabel value="#{labels.topic}" />
                             </f:facet>
+
                             <p:menubar styleClass="nonPrintBlock bottomBorderOnly ui-widget-header"  >
                                 <p:menuitem  ajax="false"  action="/index" icon="ui-icon-home" styleClass="rightBordrOnly" ></p:menuitem>
                                 <p:submenu styleClass="rightBordrOnly" label="OPD" rendered="#{webUserController.hasPrivilege('Opd')}">
@@ -640,7 +639,7 @@
                                     <p:menuitem  ajax="false"  action="/hr/hr_admin" value="Administration"  ></p:menuitem>
                                 </p:submenu>
 
-                                <p:submenu styleClass="rightBordrOnly" label="EMR"  rendered="#{webUserController.hasPrivilege('Clinical')}">
+                                <p:submenu styleClass="rightBordrOnly" label="EHR"  rendered="#{webUserController.hasPrivilege('Clinical')}">
                                     <p:menuitem ajax="false" action="/clinical/patient_search" value="Patient Search and Add"/>
                                     <p:menuitem ajax="false" action="/clinical/clinical_patient_for_receptionist" value="Patients Search"/>
                                     <p:menuitem ajax="false" action="/clinical/clinical_queue" value="Queue"/>
@@ -661,7 +660,7 @@
                                     <p:menuitem  ajax="false"  action="/dataAdmin/report_entered_data" value="Check Entered Data"  ></p:menuitem>
                                     <p:menuitem  ajax="false"  action="/dataAdmin/update_entered_data" value="Update Entered Data"  ></p:menuitem>
                                     <p:menuitem  ajax="false"  action="/analysis/index" value="Analysis"  ></p:menuitem>
-                                    <p:menuitem  ajax="false"  action="/sms/index" value="SMS Reports"  ></p:menuitem>
+
                                 </p:submenu>
 
                                 <p:submenu styleClass="rightBordrOnly" label="User"  >

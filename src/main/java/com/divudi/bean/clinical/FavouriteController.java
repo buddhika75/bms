@@ -49,18 +49,17 @@ public class FavouriteController implements Serializable {
     /**
      * Methods
      */
-    
-    public void fillFavouriteMedicines(){
+    public void fillFavouriteMedicines() {
         fillFavouriteItems(ItemUsageType.FavoutireMedicine);
     }
-    
-    public void fillFavouriteDisgnosis(){
+
+    public void fillFavouriteDisgnosis() {
         fillFavouriteItems(ItemUsageType.FavouriteDiagnosis);
     }
-    
+
     /**
-     * 
-     * @param type 
+     *
+     * @param type
      */
     public void fillFavouriteItems(ItemUsageType type) {
         String j;
@@ -83,10 +82,19 @@ public class FavouriteController implements Serializable {
         items = favouriteItemFacade.findBySQL(j, m);
     }
 
-    public void prepareAddingFavouriteItem(){
+    public void prepareAddingFavouriteItem() {
         current = new ItemUsage();
     }
-    
+
+    public String toViewFavouriteMedicines() {
+        listMyFavouriteMedicines();
+        return "/clinical/clinical_favourite_item";
+    }
+
+    public void listMyFavouriteMedicines() {
+
+    }
+
     public void addToFavouriteMedicine() {
         if (item == null) {
             JsfUtil.addErrorMessage("Please select an item");
@@ -100,24 +108,23 @@ public class FavouriteController implements Serializable {
         current.setForItem(item);
         current.setForWebUser(sessionController.getLoggedUser());
         favouriteItemFacade.create(current);
-        current=null;
+        current = null;
         fillFavouriteItems(ItemUsageType.FavoutireMedicine);
         JsfUtil.addSuccessMessage("Saved");
 
     }
 
-    public void updateSelected(){
+    public void updateSelected() {
         updateSelected(selected);
     }
-    
-    public void updateSelected(ItemUsage updatingItem){
-        if(updatingItem!=null){
+
+    public void updateSelected(ItemUsage updatingItem) {
+        if (updatingItem != null) {
             favouriteItemFacade.edit(updatingItem);
             JsfUtil.addSuccessMessage("Updated");
         }
     }
-    
-    
+
     /**
      * Creates a new instance of FavouriteController
      */
