@@ -66,7 +66,10 @@
                                 <pa:slip paymentMethodData="#{billController.paymentMethodData}"/>
                             </h:panelGroup>
 
-                            <p:commandButton  value="Settle" action="#{billController.settleBill}" ajax="false"  style="width: 200px; padding: 1px;border: 1px solid ; margin: auto;">
+                            <p:commandButton  value="Settle" 
+                                              action="#{billController.settleBill}" 
+                                              ajax="false" 
+                                              style="width: 200px; padding: 1px;border: 1px solid ; margin: auto;">
                             </p:commandButton>
                             <p:commandButton value="New Bill" ajax="false" action="#{billController.prepareNewBill()}" >
                             </p:commandButton>
@@ -131,23 +134,22 @@
                                                             <p:inputText autocomplete="off"  id="year"  
                                                                          value="#{billController.yearMonthDay.year}" 
                                                                          style="width: 50px; ">
-                                                                <f:ajax event="keyup" execute="@this month day" render="calNewPtDob" 
-
+                                                                <p:ajax event="keyup" process="@this month day" update="calNewPtDob" 
                                                                         listener="#{billController.dateChangeListen()}"  />
                                                             </p:inputText>
                                                             <p:inputText autocomplete="off" id="month"
                                                                          style="width: 50px; " value="#{billController.yearMonthDay.month}">
-                                                                <f:ajax event="keyup" execute="@this year day" render="calNewPtDob" listener="#{billController.dateChangeListen()}"  />
+                                                                <p:ajax event="keyup" process="@this year day" update="calNewPtDob" listener="#{billController.dateChangeListen()}"  />
                                                             </p:inputText>
                                                             <p:inputText autocomplete="off" id="day" 
                                                                          style="width: 50px;" value="#{billController.yearMonthDay.day}">
-                                                                <f:ajax event="keyup" execute="@this year month" render="calNewPtDob" listener="#{billController.dateChangeListen()}" />
+                                                                <p:ajax event="keyup" process="@this year month" update="calNewPtDob" listener="#{billController.dateChangeListen()}" />
                                                             </p:inputText>
                                                             <p:calendar  value="#{billController.newPatient.person.dob}" 
                                                                          id="calNewPtDob"  navigator="true" pattern="dd/MM/yyyy" 
                                                                          style="width: 100px!important;"
                                                                          styleClass="shortinput">
-                                                                <f:ajax event="dateSelect" />
+                                                                <p:ajax event="dateSelect" />
                                                             </p:calendar>
                                                         </h:panelGrid>
                                                     </td>
@@ -228,8 +230,8 @@
                                                             <f:convertDateTime pattern="dd MMMM yyyy"/>
                                                         </h:outputLabel>
                                                     </p:column>
-                                                    <f:ajax event="itemSelect" execute=":#{p:component('cmbPs')} @this" 
-                                                            render="panSearch :#{p:component('tblBillItem')} :#{p:component('pBillDetails')}" 
+                                                    <p:ajax event="itemSelect" process=":#{p:component('cmbPs')} @this" 
+                                                            update="panSearch :#{p:component('tblBillItem')} :#{p:component('pBillDetails')}" 
                                                             listener="#{billController.calTotals()}" />
                                                 </p:autoComplete>   
 
@@ -276,16 +278,8 @@
                                                 <h:outputLabel value="#{ix.total}"></h:outputLabel>
                                             </p:column>
                                             <p:ajax event="itemSelect"  listener="#{billController.fillBillSessions}" 
-                                                    process="acIx" update="tblSs lblItem" ></p:ajax>
+                                                    process="acIx" update="tblSs" ></p:ajax>
                                         </p:autoComplete>
-
-                                        <h1>
-                                            A
-                                            <h:outputLabel id="lblItem" value="#{billController.currentBillItem.item}" ></h:outputLabel><!-- comment -->
-                                            B
-                                        </h1>
-
-
                                         <p:commandButton
                                             id="btnAddIx" 
                                             value="Add" 
@@ -297,7 +291,7 @@
                                         <p:defaultCommand target="btnAddIx" />
                                         <p:panel header="Session"  >
                                             <p:calendar id="calS" mode="inline" value="#{billController.sessionDate}" pattern="dd MMMM yyyy" >
-                                                <f:ajax event="dateSelect" execute="calS" render="tblSs :#{p:component('lblTemS')}" />
+                                                <p:ajax event="dateSelect" process="calS" update="tblSs :#{p:component('lblTemS')}" />
                                             </p:calendar>
 
                                             <p:dataTable id="tblSs" value="#{billController.billSessions}" var="bs" emptyMessage="No Numbers Yet">
@@ -377,9 +371,9 @@
                                                                 completeMethod="#{creditCompanyController.completeCredit}" var="ix" 
                                                                 itemLabel="#{ix.name}" itemValue="#{ix}" size="30"  style="width: 300px;">
 
-                                                    <f:ajax  event="itemSelect" listener="#{billController.calTotals()}"
-                                                             execute="@this" 
-                                                             render=":#{p:component('panelBillTotals')}  :#{p:component('tblRequests')} :#{p:component('tblBillItem')}" />
+                                                    <p:ajax  event="itemSelect" listener="#{billController.calTotals()}"
+                                                             process="@this" 
+                                                             update=":#{p:component('panelBillTotals')}  :#{p:component('tblRequests')} :#{p:component('tblBillItem')}" />
                                                 </p:autoComplete> 
 
 
@@ -514,8 +508,8 @@
                                                                  id="txtFeeVal"
                                                                  value="#{bif.feeGrossValue}" disabled="#{!bif.billItem.item.userChangable}" >
                                                         <f:convertNumber pattern="#,##0.00" />
-                                                        <f:ajax event="keyup" execute="@this" 
-                                                                render=":#{p:component('tblRequests')}  :#{p:component('pBillDetails')}"
+                                                        <p:ajax event="keyup" process="@this" 
+                                                                update=":#{p:component('tblRequests')}  :#{p:component('pBillDetails')}"
                                                                 listener="#{billController.feeChangeListener(bif)}" />
                                                     </h:inputText>
                                                 </p:column>
