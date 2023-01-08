@@ -6,9 +6,14 @@
 package com.divudi.bean.clinical;
 
 import com.divudi.bean.common.SessionController;
+import com.divudi.bean.pharmacy.DoseUnitController;
+import com.divudi.bean.pharmacy.VmpController;
 import com.divudi.data.clinical.ItemUsageType;
 import com.divudi.entity.Item;
 import com.divudi.entity.clinical.ItemUsage;
+import com.divudi.entity.pharmacy.DoseUnit;
+import com.divudi.entity.pharmacy.MeasurementUnit;
+import com.divudi.entity.pharmacy.Vmp;
 import com.divudi.facade.ItemUsageFacade;
 import com.divudi.facade.util.JsfUtil;
 import java.io.Serializable;
@@ -39,12 +44,18 @@ public class FavouriteController implements Serializable {
      */
     @Inject
     SessionController sessionController;
+    @Inject
+    DoseUnitController doseUnitController;
+    @Inject
+    VmpController vmpController;
     /**
      * Properties
      */
     Item item;
     ItemUsage current;
     List<ItemUsage> items;
+    private List<MeasurementUnit> availableDoseUnits;
+    private List<Item> availableItems;
 
     /**
      * Methods
@@ -89,19 +100,33 @@ public class FavouriteController implements Serializable {
         }
         current = new ItemUsage();
         current.setForItem(item);
+        current.setItem(item);
+        current.setDoseUnit(item.getIssueUnit());
+        
+        availableDoseUnits = new ArrayList<>();
+        availableItems = new ArrayList<>();
         switch (item.getMedicineType()) {
+            case Vmp:
+                availableDoseUnits.add(item.getBaseUnit());
+                availableDoseUnits.add(item.getIssueUnit());
+                availableItems.addAll(vmpController.ampsOfVmp(item));
+                break;
             case Amp:
+                availableDoseUnits.add(item.getVmp().getBaseUnit());
+                availableDoseUnits.add(item.getVmp().getIssueUnit());
+                availableItems.add(item);
+                break;
+            case Vtm:
+                availableDoseUnits = doseUnitController.getMeasurementUnits();
+                availableItems.addAll(vmpController.ampsAndVmpsContainingVtm(item));
+                break;
+            case Atm:
+                availableDoseUnits = doseUnitController.getMeasurementUnits();
+                availableItems.addAll(vmpController.ampsAndVmpsContainingVtm(item));
                 break;
             case Ampp:
                 break;
-            case Atm:
-
-                break;
-            case Vmp:
-                break;
             case Vmpp:
-                break;
-            case Vtm:
                 break;
             case Medicine:
                 JsfUtil.addErrorMessage("Selected needs a subtype");
@@ -126,9 +151,9 @@ public class FavouriteController implements Serializable {
     public void listMyFavouriteMedicines() {
 
     }
-    
-    public void removeFavourite(){
-        if(current==null){
+
+    public void removeFavourite() {
+        if (current == null) {
             JsfUtil.addErrorMessage("Nothing current");
             return;
         }
@@ -179,14 +204,14 @@ public class FavouriteController implements Serializable {
                 current.setToKg(null);
                 break;
             case months:
-                current.setFromDays(current.getFavouriteFrom()*30.4167);
-                current.setToDays(current.getFavouriteTo()*30.4167);
+                current.setFromDays(current.getFavouriteFrom() * 30.4167);
+                current.setToDays(current.getFavouriteTo() * 30.4167);
                 current.setFromKg(null);
                 current.setToKg(null);
                 break;
             case years:
-                current.setFromDays(current.getFavouriteFrom()*365);
-                current.setToDays(current.getFavouriteTo()*365);
+                current.setFromDays(current.getFavouriteFrom() * 365);
+                current.setToDays(current.getFavouriteTo() * 365);
                 current.setFromKg(null);
                 current.setToKg(null);
                 break;
@@ -199,7 +224,7 @@ public class FavouriteController implements Serializable {
         current.setForItem(item);
         current.setItem(item);
         current.setForWebUser(sessionController.getLoggedUser());
-        current.setOrderNo(getItems().size()+1.0);
+        current.setOrderNo(getItems().size() + 1.0);
         favouriteItemFacade.create(current);
         current = null;
         fillFavouriteItems(ItemUsageType.FavoutireMedicine);
@@ -236,7 +261,7 @@ public class FavouriteController implements Serializable {
     }
 
     public List<ItemUsage> getItems() {
-        if(items==null){
+        if (items == null) {
             items = new ArrayList<>();
         }
         return items;
@@ -256,6 +281,22 @@ public class FavouriteController implements Serializable {
 
     public void setCurrent(ItemUsage current) {
         this.current = current;
+    }
+
+    public List<MeasurementUnit> getAvailableDoseUnits() {
+        return availableDoseUnits;
+    }
+
+    public void setAvailableDoseUnits(List<MeasurementUnit> availableDoseUnits) {
+        this.availableDoseUnits = availableDoseUnits;
+    }
+
+    public List<Item> getAvailableItems() {
+        return availableItems;
+    }
+
+    public void setAvailableItems(List<Item> availableItems) {
+        this.availableItems = availableItems;
     }
 
 }

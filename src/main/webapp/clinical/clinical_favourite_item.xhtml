@@ -26,20 +26,26 @@
 
                         </f:facet>
 
-                        <h:panelGrid columns="2" >
+                        <h:panelGrid columns="5" >
                             <p:outputLabel value="Select Medicine" ></p:outputLabel>
-
                             <p:autoComplete id="acItem" 
                                             value="#{favouriteController.item}" 
                                             forceSelection="true"
                                             completeMethod="#{itemController.completeMedicine}" 
-                                            var="vt" itemLabel="#{vt.name}" itemValue="#{vt}" >
+                                            var="vt" itemLabel="#{vt.name}" itemValue="#{vt}"
+                                            placeholder="Select Medicine">
                                 <p:column headerText="Item" >
                                     <h:outputLabel value="#{vt.name}"></h:outputLabel>
                                 </p:column>
                                 <p:ajax event="itemSelect" process="acItem" update="dlgDetails" ></p:ajax>
                             </p:autoComplete>
-                            <p:watermark for="acItem" value="Select Medicine"/>
+                            <p:spacer height="1" width="10" ></p:spacer>
+                            <p:commandButton value="Fill"
+                                             id="btnFill"
+                                             process="btnFill"
+                                             update="tbl"
+                                             actionListener="#{favouriteController.fillFavouriteMedicines()}" >
+                            </p:commandButton>
 
                             <p:commandButton value="Add New"
                                              id="btnAdd"
@@ -48,12 +54,7 @@
                                              action="#{favouriteController.prepareAddingFavouriteItem()}" >
                             </p:commandButton>
 
-                            <p:commandButton value="Fill"
-                                             id="btnFill"
-                                             process="btnFill"
-                                             update="tbl"
-                                             actionListener="#{favouriteController.fillFavouriteMedicines()}" >
-                            </p:commandButton>
+
 
 
 
