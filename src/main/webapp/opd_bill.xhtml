@@ -275,11 +275,24 @@
                                             <p:column style="text-align: right; max-width: 80px;" headerText="Value">
                                                 <h:outputLabel value="#{ix.total}"></h:outputLabel>
                                             </p:column>
-                                            <p:ajax event="itemSelect"  listener="#{billController.fillBillSessions}" process="acIx" update="tblSs" ></p:ajax>
+                                            <p:ajax event="itemSelect"  listener="#{billController.fillBillSessions}" 
+                                                    process="acIx" update="tblSs lblItem" ></p:ajax>
                                         </p:autoComplete>
-                                        <h:commandButton id="btnAddIx" value="Add" action="#{billController.addToBill()}"  style="width: 75px;"  >
-                                            <f:ajax execute="acIx btnAddIx :#{p:component('cmbPs')} :#{p:component('pay')} panelBillItems" render="focusIx tblBillItem  :#{p:component('pBillDetails')}  pIxAdd" />
-                                        </h:commandButton>
+
+                                        <h1>
+                                            A
+                                            <h:outputLabel id="lblItem" value="#{billController.currentBillItem.item}" ></h:outputLabel><!-- comment -->
+                                            B
+                                        </h1>
+
+
+                                        <p:commandButton
+                                            id="btnAddIx" 
+                                            value="Add" 
+                                            action="#{billController.addToBill()}"   
+                                            process="acIx btnAddIx :#{p:component('cmbPs')} :#{p:component('pay')} panelBillItems"
+                                            update="focusIx tblBillItem  :#{p:component('pBillDetails')}  pIxAdd">
+                                        </p:commandButton>
                                         <p:calendar value="#{billController.currentBillItem.item}" pattern="dd MMMM yyyy hh:mm a" ></p:calendar>
                                         <p:defaultCommand target="btnAddIx" />
                                         <p:panel header="Session"  >
@@ -753,14 +766,14 @@
                                                 <table style="width: 100%; margin-left:0.5cm;" >
                                                     <tr>
                                                         <td style="width: 15%; text-align: left;" >
-                                                            <h:outputLabel value="Date" style="text-align: center!important;   
+                                                            <h:outputLabel value="Date" style="text-align: center!important;
                                                                            font-size: 12px!important;
                                                                            font-family:Arial, Helvetica, sans-serif!important;"></h:outputLabel>
                                                         </td>
                                                         <td>:</td>
                                                         <td style="width: 85%" >
                                                             <!--<h:outputLabel value=": &npsp;" ></h:outputLabel>-->
-                                                            <h:outputLabel value="#{b.createdAt}" style="text-align: center!important;   
+                                                            <h:outputLabel value="#{b.createdAt}" style="text-align: center!important;
                                                                            font-size: 12px!important;
                                                                            font-family:Arial, Helvetica, sans-serif!important;">
                                                                 <f:convertDateTime pattern="dd/MM/yy" ></f:convertDateTime>
@@ -784,14 +797,14 @@
 
                                                     <tr>
                                                         <td style="width: 15%; text-align: left;" >
-                                                            <h:outputLabel value="Time" style="text-align: center!important;   
+                                                            <h:outputLabel value="Time" style="text-align: center!important;
                                                                            font-size: 12px!important;
                                                                            font-family:Arial, Helvetica, sans-serif!important;"></h:outputLabel>
                                                         </td>
                                                         <td>:</td>
                                                         <td style="width: 30%" >
                                                             <!--<h:outputLabel value=": &npsp;" ></h:outputLabel>-->
-                                                            <h:outputLabel value="#{b.createdAt}"  style="text-align: center!important;   
+                                                            <h:outputLabel value="#{b.createdAt}"  style="text-align: center!important;
                                                                            font-size: 12px!important;
                                                                            font-family:Arial, Helvetica, sans-serif!important;">
                                                                 <f:convertDateTime pattern="hh:mm a" ></f:convertDateTime>
