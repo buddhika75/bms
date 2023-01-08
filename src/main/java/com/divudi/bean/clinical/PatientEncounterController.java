@@ -768,12 +768,12 @@ public class PatientEncounterController implements Serializable {
     
     public List<ItemUsage> fillCurrentEncounterMedicines() {
         Map m = new HashMap();
-        m.put("e", getCurrent());
+        m.put("pe", getCurrent());
         m.put("t", ItemUsageType.EncounterItems);
         String sql;
         sql = "Select e "
                 + " from ItemUsage e "
-                + " where e.patientEncounter=:p "
+                + " where e.patientEncounter=:pe "
                 + " and e.type=:t "
                 + " order by e.id desc";
         return itemUsageFacade.findBySQL(sql, m);
@@ -781,12 +781,12 @@ public class PatientEncounterController implements Serializable {
     
     public List<ItemUsage> fillCurrentEncounterDiagnosis() {
         Map m = new HashMap();
-        m.put("e", getCurrent());
+        m.put("pe", getCurrent());
         m.put("t", ItemUsageType.EncounterDiagnosis);
         String sql;
         sql = "Select e "
                 + " from ItemUsage e "
-                + " where e.patientEncounter=:p "
+                + " where e.patientEncounter=:pe "
                 + " and e.type=:t "
                 + " order by e.id desc";
         return itemUsageFacade.findBySQL(sql, m);
