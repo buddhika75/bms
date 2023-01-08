@@ -20,6 +20,7 @@ import com.divudi.data.ReportItemType;
 import com.divudi.data.SessionNumberType;
 import com.divudi.data.Sex;
 import com.divudi.data.Title;
+import com.divudi.data.clinical.FavouriteType;
 import com.divudi.data.hr.DayType;
 import com.divudi.data.hr.LeaveType;
 import com.divudi.data.hr.PaysheetComponentType;
@@ -54,6 +55,10 @@ public class EnumController implements Serializable {
         return sessionNumberTypes;
     }
 
+     public FavouriteType[] getFavouriteTypes() {
+        return FavouriteType.values();
+    }
+    
     public CssVerticalAlign[] getCssVerticalAlign() {
         return CssVerticalAlign.values();
     }

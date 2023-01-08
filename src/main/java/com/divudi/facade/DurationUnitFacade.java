@@ -4,8 +4,7 @@
  */
 package com.divudi.facade;
 
-import com.divudi.entity.pharmacy.DoseUnit;
-import com.divudi.entity.pharmacy.FrequencyUnit;
+import com.divudi.entity.pharmacy.DurationUnit;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -15,7 +14,7 @@ import javax.persistence.PersistenceContext;
  * @author safrin
  */
 @Stateless
-public class FrequencyUnitFacade extends AbstractFacade<FrequencyUnit> {
+public class DurationUnitFacade extends AbstractFacade<DurationUnit> {
     @PersistenceContext(unitName = "hmisPU")
     private EntityManager em;
 
@@ -24,8 +23,8 @@ public class FrequencyUnitFacade extends AbstractFacade<FrequencyUnit> {
         if(em == null){}return em;
     }
 
-    public FrequencyUnitFacade() {
-        super(FrequencyUnit.class);
+    public DurationUnitFacade() {
+        super(DurationUnit.class);
     }
     
 }

@@ -186,6 +186,8 @@ public class Item implements Serializable, Comparable<Item> {
     @Enumerated(EnumType.STRING)
     private ItemType itemType;
     @Enumerated(EnumType.STRING)
+    private ItemType medicineType;
+    @Enumerated(EnumType.STRING)
     private Priority priority;
 
     private boolean hasMoreThanOneComponant;
@@ -204,6 +206,11 @@ public class Item implements Serializable, Comparable<Item> {
 
     @Transient
     String transName;
+
+    
+    
+    
+    
 
     public double getVatPercentage() {
         if (vatable && vatPercentage == 0.0) {
@@ -1076,6 +1083,39 @@ public class Item implements Serializable, Comparable<Item> {
         return itemType;
     }
 
+    public ItemType getMedicineType() {
+        if (medicineType == null) {
+            if (this instanceof Amp) {
+                medicineType = ItemType.Amp;
+            }
+            if (this instanceof Ampp) {
+                medicineType = ItemType.Ampp;
+            }
+            if (this instanceof Atm) {
+                medicineType = ItemType.Atm;
+            }
+            if (this instanceof Vmp) {
+                medicineType = ItemType.Vmp;
+            }
+            if (this instanceof Vmpp) {
+                medicineType = ItemType.Vmpp;
+            }
+            if (this instanceof Vtm) {
+                medicineType = ItemType.Vtm;
+            }
+            if (this instanceof Service) {
+                medicineType = ItemType.Service;
+            }
+            if (this instanceof Investigation) {
+                medicineType = ItemType.Investigation;
+            }
+            if (this instanceof Atm) {
+                medicineType = ItemType.Medicine;
+            }
+        }
+        return medicineType;
+    }
+
     public void setItemType(ItemType itemType) {
         this.itemType = itemType;
     }
@@ -1107,8 +1147,8 @@ public class Item implements Serializable, Comparable<Item> {
         this.priority = priority;
     }
 
-    
-    
+
+
     static class ReportItemComparator implements Comparator<ReportItem> {
 
         @Override

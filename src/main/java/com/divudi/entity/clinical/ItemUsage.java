@@ -6,6 +6,7 @@
 package com.divudi.entity.clinical;
 
 import com.divudi.data.Sex;
+import com.divudi.data.clinical.FavouriteType;
 import com.divudi.data.clinical.ItemUsageType;
 import com.divudi.entity.Category;
 import com.divudi.entity.Department;
@@ -14,6 +15,9 @@ import com.divudi.entity.Item;
 import com.divudi.entity.Patient;
 import com.divudi.entity.PatientEncounter;
 import com.divudi.entity.WebUser;
+import com.divudi.entity.pharmacy.DoseUnit;
+import com.divudi.entity.pharmacy.DurationUnit;
+import com.divudi.entity.pharmacy.FrequencyUnit;
 import com.divudi.entity.pharmacy.MeasurementUnit;
 import java.io.Serializable;
 import java.util.Date;
@@ -27,6 +31,7 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
+import javax.persistence.Transient;
 
 /**
  *
@@ -59,25 +64,50 @@ public class ItemUsage implements Serializable {
 
     @Enumerated(EnumType.STRING)
     private ItemUsageType type;
+    
 
+    
+    
     @ManyToOne
     private Item item;
     @ManyToOne
     private Category category;
-    private Double dblValue1;
+    
+    private Double favouriteFrom;
+    private Double favouriteTo;
+    @Enumerated
+    private FavouriteType favouriteType;
+    
+    private Double fromDays;
+    private Double toDays;
+    private Double fromKg;
+    private Double toKg;
+    
+    
     Integer intValue1;
     @ManyToOne
-    private MeasurementUnit measurementUnit1;
-    private Double dblValue2;
+    private DoseUnit doseUnit;
+    private Double dose;
     Integer intValue2;
     @ManyToOne
-    private MeasurementUnit measurementUnit2;
+    private FrequencyUnit frequencyUnit;
     @Enumerated(EnumType.STRING)
     private Sex sex;
     private Long ageInMonthsFrom;
     private Long ageInMonthsTo;
-    private int orderNo;
+    private Double orderNo;
+    @ManyToOne
+    private DurationUnit durationUnit;
+    private Double duration;
 
+    @ManyToOne
+    private MeasurementUnit issueUnit;
+    private Double issue;
+    
+    
+    
+    
+    
     @OneToMany(mappedBy = "parent")
     private List<ItemUsage> children;
 
@@ -98,6 +128,52 @@ public class ItemUsage implements Serializable {
     private WebUser editer;
     @Temporal(javax.persistence.TemporalType.TIMESTAMP)
     private Date editedAt;
+    
+    
+
+    @Transient
+    boolean needDosageForm;
+
+    @Transient
+    private boolean doseUnitFixed;
+
+    public boolean isNeedDosageForm() {
+        needDosageForm = false;
+        if (this.getItem() == null) {
+            return needDosageForm;
+        }
+        if (this.getItem().getMedicineType() == null) {
+            return needDosageForm;
+        }
+        switch (this.getItem().getMedicineType()) {
+            case Vtm:
+            case Atm:
+                needDosageForm = true;
+                break;
+            default:
+                needDosageForm = false;
+        }
+        return needDosageForm;
+    }
+
+    public boolean isDoseUnitFixed() {
+        doseUnitFixed = false;
+        if (this.getItem() == null) {
+            return doseUnitFixed;
+        }
+        if (this.getItem().getMedicineType() == null) {
+            return doseUnitFixed;
+        }
+        switch (this.getItem().getMedicineType()) {
+            case Vtm:
+            case Atm:
+                doseUnitFixed = false;
+                break;
+            default:
+                doseUnitFixed = true;
+        }
+        return doseUnitFixed;
+    }
 
     public Long getId() {
         return id;
@@ -139,8 +215,6 @@ public class ItemUsage implements Serializable {
         this.intValue2 = intValue2;
     }
 
-    
-    
     @Override
     public int hashCode() {
         int hash = 0;
@@ -206,36 +280,36 @@ public class ItemUsage implements Serializable {
         this.item = item;
     }
 
-    public Double getDblValue1() {
-        return dblValue1;
+    public Double getFavouriteFrom() {
+        return favouriteFrom;
     }
 
-    public void setDblValue1(Double dblValue1) {
-        this.dblValue1 = dblValue1;
+    public void setFavouriteFrom(Double favouriteFrom) {
+        this.favouriteFrom = favouriteFrom;
     }
 
-    public MeasurementUnit getMeasurementUnit1() {
-        return measurementUnit1;
+    public DoseUnit getDoseUnit() {
+        return doseUnit;
     }
 
-    public void setMeasurementUnit1(MeasurementUnit measurementUnit1) {
-        this.measurementUnit1 = measurementUnit1;
+    public void setDoseUnit(DoseUnit dosageUnit) {
+        this.doseUnit = dosageUnit;
     }
 
-    public Double getDblValue2() {
-        return dblValue2;
+    public Double getDose() {
+        return dose;
     }
 
-    public void setDblValue2(Double dblValue2) {
-        this.dblValue2 = dblValue2;
+    public void setDose(Double dose) {
+        this.dose = dose;
     }
 
-    public MeasurementUnit getMeasurementUnit2() {
-        return measurementUnit2;
+    public FrequencyUnit getFrequencyUnit() {
+        return frequencyUnit;
     }
 
-    public void setMeasurementUnit2(MeasurementUnit measurementUnit2) {
-        this.measurementUnit2 = measurementUnit2;
+    public void setFrequencyUnit(FrequencyUnit frequencyUnit) {
+        this.frequencyUnit = frequencyUnit;
     }
 
     public Sex getSex() {
@@ -262,11 +336,11 @@ public class ItemUsage implements Serializable {
         this.ageInMonthsTo = ageInMonthsTo;
     }
 
-    public int getOrderNo() {
+    public Double getOrderNo() {
         return orderNo;
     }
 
-    public void setOrderNo(int orderNo) {
+    public void setOrderNo(Double orderNo) {
         this.orderNo = orderNo;
     }
 
@@ -364,6 +438,86 @@ public class ItemUsage implements Serializable {
 
     public void setCategory(Category category) {
         this.category = category;
+    }
+
+    public DurationUnit getDurationUnit() {
+        return durationUnit;
+    }
+
+    public void setDurationUnit(DurationUnit durationUnit) {
+        this.durationUnit = durationUnit;
+    }
+
+    public Double getDuration() {
+        return duration;
+    }
+
+    public void setDuration(Double duration) {
+        this.duration = duration;
+    }
+
+    public MeasurementUnit getIssueUnit() {
+        return issueUnit;
+    }
+
+    public void setIssueUnit(MeasurementUnit issueUnit) {
+        this.issueUnit = issueUnit;
+    }
+
+    public Double getIssue() {
+        return issue;
+    }
+
+    public void setIssue(Double issue) {
+        this.issue = issue;
+    }
+
+    public FavouriteType getFavouriteType() {
+        return favouriteType;
+    }
+
+    public void setFavouriteType(FavouriteType favouriteType) {
+        this.favouriteType = favouriteType;
+    }
+
+    public Double getFromDays() {
+        return fromDays;
+    }
+
+    public void setFromDays(Double fromDays) {
+        this.fromDays = fromDays;
+    }
+
+    public Double getToDays() {
+        return toDays;
+    }
+
+    public void setToDays(Double toDays) {
+        this.toDays = toDays;
+    }
+
+    public Double getFromKg() {
+        return fromKg;
+    }
+
+    public void setFromKg(Double fromKg) {
+        this.fromKg = fromKg;
+    }
+
+    public Double getToKg() {
+        return toKg;
+    }
+
+    public void setToKg(Double toKg) {
+        this.toKg = toKg;
+    }
+
+    public Double getFavouriteTo() {
+        return favouriteTo;
+    }
+
+    public void setFavouriteTo(Double favouriteTo) {
+        this.favouriteTo = favouriteTo;
     }
 
 }
