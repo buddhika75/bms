@@ -6,11 +6,17 @@
 package com.divudi.bean.clinical;
 
 import com.divudi.bean.common.SessionController;
+import com.divudi.bean.pharmacy.DoseUnitController;
+import com.divudi.bean.pharmacy.VmpController;
 import com.divudi.data.clinical.ItemUsageType;
 import com.divudi.entity.Item;
 import com.divudi.entity.clinical.ItemUsage;
+import com.divudi.entity.pharmacy.DoseUnit;
+import com.divudi.entity.pharmacy.MeasurementUnit;
+import com.divudi.entity.pharmacy.Vmp;
 import com.divudi.facade.ItemUsageFacade;
 import com.divudi.facade.util.JsfUtil;
+import com.sun.jdi.connect.Connector;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -39,22 +45,42 @@ public class FavouriteController implements Serializable {
      */
     @Inject
     SessionController sessionController;
+    @Inject
+    DoseUnitController doseUnitController;
+    @Inject
+    VmpController vmpController;
     /**
      * Properties
      */
     Item item;
     ItemUsage current;
     List<ItemUsage> items;
+    private List<MeasurementUnit> availableDoseUnits;
+    private List<Item> availableItems;
 
     /**
      * Methods
      */
     public void fillFavouriteMedicines() {
-        fillFavouriteItems(ItemUsageType.FavoutireMedicine);
+        fillFavouriteItems(ItemUsageType.FavouriteMedicine);
     }
 
     public void fillFavouriteDisgnosis() {
         fillFavouriteItems(ItemUsageType.FavouriteDiagnosis);
+    }
+
+    public String toAddFavDig() {
+        item = null;
+        items = null;
+        current = null;
+        return "/clinical/clinical_favourite_diagnosis";
+    }
+
+    public String toAddFavItem() {
+        item = null;
+        items=null;
+        current = null;
+        return "/clinical/clinical_favourite_item";
     }
 
     /**
@@ -89,19 +115,34 @@ public class FavouriteController implements Serializable {
         }
         current = new ItemUsage();
         current.setForItem(item);
+        current.setItem(item);
+        current.setDoseUnit(item.getIssueUnit());
+        current.setType(ItemUsageType.FavouriteMedicine);
+
+        availableDoseUnits = new ArrayList<>();
+        availableItems = new ArrayList<>();
         switch (item.getMedicineType()) {
+            case Vmp:
+                availableDoseUnits.add(item.getBaseUnit());
+                availableDoseUnits.add(item.getIssueUnit());
+                availableItems.addAll(vmpController.ampsOfVmp(item));
+                break;
             case Amp:
+                availableDoseUnits.add(item.getVmp().getBaseUnit());
+                availableDoseUnits.add(item.getVmp().getIssueUnit());
+                availableItems.add(item);
+                break;
+            case Vtm:
+                availableDoseUnits = doseUnitController.getMeasurementUnits();
+                availableItems.addAll(vmpController.ampsAndVmpsContainingVtm(item));
+                break;
+            case Atm:
+                availableDoseUnits = doseUnitController.getMeasurementUnits();
+                availableItems.addAll(vmpController.ampsAndVmpsContainingVtm(item));
                 break;
             case Ampp:
                 break;
-            case Atm:
-
-                break;
-            case Vmp:
-                break;
             case Vmpp:
-                break;
-            case Vtm:
                 break;
             case Medicine:
                 JsfUtil.addErrorMessage("Selected needs a subtype");
@@ -118,6 +159,17 @@ public class FavouriteController implements Serializable {
         }
     }
 
+    public void prepareAddingFavouriteDiagnosis() {
+        if (item == null) {
+            JsfUtil.addErrorMessage("No Diagnosis Selected");
+            return;
+        }
+        current = new ItemUsage();
+        current.setForItem(item);
+        current.setType(ItemUsageType.FavouriteDiagnosis);
+    }
+
+    
     public String toViewFavouriteMedicines() {
         listMyFavouriteMedicines();
         return "/clinical/clinical_favourite_item";
@@ -126,9 +178,9 @@ public class FavouriteController implements Serializable {
     public void listMyFavouriteMedicines() {
 
     }
-    
-    public void removeFavourite(){
-        if(current==null){
+
+    public void removeFavourite() {
+        if (current == null) {
             JsfUtil.addErrorMessage("Nothing current");
             return;
         }
@@ -139,7 +191,7 @@ public class FavouriteController implements Serializable {
         fillFavouriteItems(tt);
         JsfUtil.addSuccessMessage("Removed");
     }
-
+    
     public void addToFavouriteMedicine() {
         if (item == null) {
             JsfUtil.addErrorMessage("Please select an item");
@@ -179,14 +231,14 @@ public class FavouriteController implements Serializable {
                 current.setToKg(null);
                 break;
             case months:
-                current.setFromDays(current.getFavouriteFrom()*30.4167);
-                current.setToDays(current.getFavouriteTo()*30.4167);
+                current.setFromDays(current.getFavouriteFrom() * 30.4167);
+                current.setToDays(current.getFavouriteTo() * 30.4167);
                 current.setFromKg(null);
                 current.setToKg(null);
                 break;
             case years:
-                current.setFromDays(current.getFavouriteFrom()*365);
-                current.setToDays(current.getFavouriteTo()*365);
+                current.setFromDays(current.getFavouriteFrom() * 365);
+                current.setToDays(current.getFavouriteTo() * 365);
                 current.setFromKg(null);
                 current.setToKg(null);
                 break;
@@ -195,14 +247,79 @@ public class FavouriteController implements Serializable {
                 return;
         }
 
-        current.setType(ItemUsageType.FavoutireMedicine);
+        current.setType(ItemUsageType.FavouriteMedicine);
         current.setForItem(item);
-        current.setItem(item);
         current.setForWebUser(sessionController.getLoggedUser());
-        current.setOrderNo(getItems().size()+1.0);
+        current.setOrderNo(getItems().size() + 1.0);
         favouriteItemFacade.create(current);
         current = null;
-        fillFavouriteItems(ItemUsageType.FavoutireMedicine);
+        fillFavouriteItems(ItemUsageType.FavouriteMedicine);
+        JsfUtil.addSuccessMessage("Saved");
+
+    }
+
+    public void addToFavouriteDiagnosis() {
+        if (item == null) {
+            JsfUtil.addErrorMessage("Please select a Diagnosis");
+            return;
+        }
+        if (current == null) {
+            JsfUtil.addErrorMessage("Favourite Item is not create by getter. Please contact vendor.");
+            return;
+        }
+        if (current.getFavouriteType() == null) {
+            JsfUtil.addErrorMessage("Favourite Type NOT current.");
+            return;
+        }
+        if (current.getFavouriteFrom() == null) {
+            JsfUtil.addErrorMessage("From NOT current.");
+            return;
+        }
+        if (current.getFavouriteTo() == null) {
+            JsfUtil.addErrorMessage("To NOT current.");
+            return;
+        }
+        if (current.getFavouriteFrom().equals(current.getFavouriteTo())) {
+            JsfUtil.addErrorMessage("From is equal not To. So not added.");
+            return;
+        }
+        switch (current.getFavouriteType()) {
+            case kg:
+                current.setFromDays(null);
+                current.setToDays(null);
+                current.setFromKg(current.getFavouriteFrom());
+                current.setToKg(current.getFavouriteTo());
+                break;
+            case days:
+                current.setFromDays(current.getFavouriteFrom());
+                current.setToDays(current.getFavouriteTo());
+                current.setFromKg(null);
+                current.setToKg(null);
+                break;
+            case months:
+                current.setFromDays(current.getFavouriteFrom() * 30.4167);
+                current.setToDays(current.getFavouriteTo() * 30.4167);
+                current.setFromKg(null);
+                current.setToKg(null);
+                break;
+            case years:
+                current.setFromDays(current.getFavouriteFrom() * 365);
+                current.setToDays(current.getFavouriteTo() * 365);
+                current.setFromKg(null);
+                current.setToKg(null);
+                break;
+            default:
+                JsfUtil.addErrorMessage("Favourite Type NOT current.");
+                return;
+        }
+
+        current.setType(ItemUsageType.FavouriteDiagnosis);
+        current.setForItem(item);
+        current.setForWebUser(sessionController.getLoggedUser());
+        current.setOrderNo(getItems().size() + 1.0);
+        favouriteItemFacade.create(current);
+        current = null;
+        fillFavouriteItems(ItemUsageType.FavouriteDiagnosis);
         JsfUtil.addSuccessMessage("Saved");
 
     }
@@ -236,7 +353,7 @@ public class FavouriteController implements Serializable {
     }
 
     public List<ItemUsage> getItems() {
-        if(items==null){
+        if (items == null) {
             items = new ArrayList<>();
         }
         return items;
@@ -256,6 +373,22 @@ public class FavouriteController implements Serializable {
 
     public void setCurrent(ItemUsage current) {
         this.current = current;
+    }
+
+    public List<MeasurementUnit> getAvailableDoseUnits() {
+        return availableDoseUnits;
+    }
+
+    public void setAvailableDoseUnits(List<MeasurementUnit> availableDoseUnits) {
+        this.availableDoseUnits = availableDoseUnits;
+    }
+
+    public List<Item> getAvailableItems() {
+        return availableItems;
+    }
+
+    public void setAvailableItems(List<Item> availableItems) {
+        this.availableItems = availableItems;
     }
 
 }

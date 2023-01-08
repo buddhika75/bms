@@ -21,25 +21,31 @@
 
                             <p:commandButton ajax="false" 
                                              value="Back"
-                                             action="/clinical/clinical_administration"
+                                             action="/clinical/favourite_index"
                                              style="float: right;"></p:commandButton>
 
                         </f:facet>
 
-                        <h:panelGrid columns="2" >
+                        <h:panelGrid columns="5" >
                             <p:outputLabel value="Select Medicine" ></p:outputLabel>
-
                             <p:autoComplete id="acItem" 
                                             value="#{favouriteController.item}" 
                                             forceSelection="true"
-                                            completeMethod="#{itemController.completeMedicine}" 
-                                            var="vt" itemLabel="#{vt.name}" itemValue="#{vt}" >
+                                            completeMethod="#{itemController.completeMedicinesPlusTherapeutics}" 
+                                            var="vt" itemLabel="#{vt.name}" itemValue="#{vt}"
+                                            placeholder="Select Medicine">
                                 <p:column headerText="Item" >
                                     <h:outputLabel value="#{vt.name}"></h:outputLabel>
                                 </p:column>
                                 <p:ajax event="itemSelect" process="acItem" update="dlgDetails" ></p:ajax>
                             </p:autoComplete>
-                            <p:watermark for="acItem" value="Select Medicine"/>
+                            <p:spacer height="1" width="10" ></p:spacer>
+                            <p:commandButton value="Fill"
+                                             id="btnFill"
+                                             process="btnFill"
+                                             update="tbl"
+                                             actionListener="#{favouriteController.fillFavouriteMedicines()}" >
+                            </p:commandButton>
 
                             <p:commandButton value="Add New"
                                              id="btnAdd"
@@ -48,12 +54,7 @@
                                              action="#{favouriteController.prepareAddingFavouriteItem()}" >
                             </p:commandButton>
 
-                            <p:commandButton value="Fill"
-                                             id="btnFill"
-                                             process="btnFill"
-                                             update="tbl"
-                                             actionListener="#{favouriteController.fillFavouriteMedicines()}" >
-                            </p:commandButton>
+
 
 
 
@@ -66,11 +67,16 @@
                                 <f:facet name="header" >
                                     <h:outputText value="From - To" ></h:outputText>
                                 </f:facet>
-                                <h:outputText value="#{fi.favouriteFrom}" ></h:outputText>
+                                <h:outputText value="#{fi.favouriteFrom}" >
+                                    <f:convertNumber pattern="#,###.#" ></f:convertNumber>
+                                </h:outputText>
                                 <h:outputText value=" " ></h:outputText>
-                                <h:outputText value="#{fi.favouriteType}" ></h:outputText>
+                                <h:outputText value="#{fi.favouriteType}" >
+                                </h:outputText>
                                 <h:outputText value=" - " ></h:outputText>
-                                <h:outputText value="#{fi.favouriteTo}" ></h:outputText>
+                                <h:outputText value="#{fi.favouriteTo}" >
+                                    <f:convertNumber pattern="#,###.#" ></f:convertNumber><!-- comment -->
+                                </h:outputText>
                                 <h:outputText value=" " ></h:outputText>
                                 <h:outputText value="#{fi.favouriteType}" ></h:outputText>
                             </p:column>
@@ -90,7 +96,7 @@
                                 <f:facet name="header" >
                                     <h:outputText value="Dose" ></h:outputText>
                                 </f:facet>
-                                <h:outputText value="#{fi.dose}" ></h:outputText>
+                                <h:outputText value="#{fi.dose}" ><f:convertNumber pattern="#,###.#" ></f:convertNumber></h:outputText>
                                 <h:outputText value=" " ></h:outputText>
                                 <h:outputText value="#{fi.doseUnit.name}" ></h:outputText>
                             </p:column>
@@ -104,9 +110,9 @@
                                 <f:facet name="header" >
                                     <h:outputText value="Duration" ></h:outputText>
                                 </f:facet>
-                                <h:outputText value="#{fi.duration}" ></h:outputText>
+                                <h:outputText value="#{fi.duration}" ><f:convertNumber pattern="#,###.#" ></f:convertNumber></h:outputText>
                                 <h:outputText value=" " ></h:outputText>
-                                <h:outputText value="#{fi.durationUnit}" ></h:outputText>
+                                <h:outputText value="#{fi.durationUnit.name}" ></h:outputText>
                             </p:column>
                             <p:column >
                                 <f:facet name="header" >
@@ -135,6 +141,16 @@
                                 <f:selectItems  value="#{enumController.favouriteTypes}"></f:selectItems>
                             </p:selectOneMenu>
 
+                            <h:outputText value="Item" ></h:outputText>
+                            <p:selectOneMenu  value="#{favouriteController.current.item}" 
+                                              required="true">
+                                <f:selectItem itemLabel="Select" ></f:selectItem>
+                                <f:selectItems  value="#{favouriteController.availableItems}"
+                                                var="i"
+                                                itemLabel="#{i.name}"
+                                                itemValue="#{i}"></f:selectItems>
+                            </p:selectOneMenu>
+
 
                             <h:outputText value="From" ></h:outputText>
                             <h:panelGroup >
@@ -151,17 +167,16 @@
                             <h:outputText value="Dosage Form" rendered="#{favouriteController.current.needDosageForm}" ></h:outputText>
                             <p:selectOneMenu     rendered="#{favouriteController.current.needDosageForm}"
                                                  value="#{favouriteController.current.category}" style="min-width: 223px">
-                                <f:selectItem itemLabel="Select Category" ></f:selectItem>
+                                <f:selectItem itemLabel="Select Dosage Form" ></f:selectItem>
                                 <f:selectItems  value="#{pharmaceuticalItemCategoryController.items}" var="myItem" itemValue="#{myItem}" itemLabel="#{myItem.name}" ></f:selectItems>
                             </p:selectOneMenu>
 
                             <h:outputText value="Dose" ></h:outputText>
                             <h:panelGroup >
                                 <p:inputText value="#{favouriteController.current.dose}" ></p:inputText>
-                                <p:selectOneMenu   disabled="#{favouriteController.current.doseUnitFixed}"   
-                                                   value="#{favouriteController.current.doseUnit}" style="min-width: 223px">
+                                <p:selectOneMenu   value="#{favouriteController.current.doseUnit}" style="min-width: 223px">
                                     <f:selectItem itemLabel="Select Dose Unit" ></f:selectItem>
-                                    <f:selectItems  value="#{doseUnitController.items}" var="myItem" itemValue="#{myItem}" itemLabel="#{myItem.name}" ></f:selectItems>
+                                    <f:selectItems  value="#{favouriteController.availableDoseUnits}" var="myItem" itemValue="#{myItem}" itemLabel="#{myItem.name}" ></f:selectItems>
                                 </p:selectOneMenu>
                             </h:panelGroup>
 

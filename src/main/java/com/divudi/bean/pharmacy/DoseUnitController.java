@@ -7,17 +7,21 @@
  * a Set of Related Tools
  */
 package com.divudi.bean.pharmacy;
+
 import com.divudi.bean.common.SessionController;
 import com.divudi.bean.common.UtilityController;
 import com.divudi.entity.pharmacy.DoseUnit;
+import com.divudi.entity.pharmacy.MeasurementUnit;
 import com.divudi.facade.DoseUnitFacade;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.enterprise.context.SessionScoped;
 import javax.faces.component.UIComponent;
-import javax.faces.context.FacesContext; import javax.faces.convert.Converter;
+import javax.faces.context.FacesContext;
+import javax.faces.convert.Converter;
 import javax.faces.convert.FacesConverter;
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -25,11 +29,11 @@ import javax.inject.Named;
 /**
  *
  * @author Dr. M. H. B. Ariyaratne, MBBS, PGIM Trainee for MSc(Biomedical
- Informatics)
+ * Informatics)
  */
 @Named
 @SessionScoped
-public  class DoseUnitController implements Serializable {
+public class DoseUnitController implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Inject
@@ -39,9 +43,9 @@ public  class DoseUnitController implements Serializable {
     List<DoseUnit> selectedItems;
     private DoseUnit current;
     private List<DoseUnit> items = null;
+    private List<MeasurementUnit> measurementUnits = null;
     String selectText = "";
 
-   
     public void prepareAdd() {
         current = new DoseUnit();
     }
@@ -97,7 +101,7 @@ public  class DoseUnitController implements Serializable {
     }
 
     public DoseUnit getCurrent() {
-        if(current==null){
+        if (current == null) {
             current = new DoseUnit();
         }
         return current;
@@ -129,9 +133,24 @@ public  class DoseUnitController implements Serializable {
     }
 
     public List<DoseUnit> getItems() {
-        items = getFacade().findAll("name", true);
+        if (items == null) {
+            items = getFacade().findAll("name", true);
+        }
         return items;
     }
+
+    public List<MeasurementUnit> getMeasurementUnits() {
+        if(measurementUnits==null){
+            measurementUnits = new ArrayList<>();
+            for(DoseUnit du: getItems()){
+                measurementUnits.add(du);
+            }
+        }
+        return measurementUnits;
+    }
+    
+    
+
 
     /**
      *
