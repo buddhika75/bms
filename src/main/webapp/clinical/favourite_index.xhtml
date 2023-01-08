@@ -14,9 +14,11 @@
                     <p:panel header="Clinicals Favourites" >
                         <h:panelGrid columns="1">
                             <p:commandButton styleClass="linkButton" ajax="false" 
-                                             value="Medicines" action="/clinical/clinical_favourite_item" onclick="onSubmitButton();" ></p:commandButton>
+                                             value="Medicines" 
+                                             action="#{favouriteController.toAddFavItem()}" onclick="onSubmitButton();" ></p:commandButton>
                             <p:commandButton styleClass="linkButton" ajax="false" 
-                                             value="Diagnosis" action="/clinical/clinical_favourite_item" onclick="onSubmitButton();" ></p:commandButton>
+                                             value="Diagnosis" 
+                                             action="#{favouriteController.toAddFavDig()}" onclick="onSubmitButton();" ></p:commandButton>
                             
 
                         </h:panelGrid>

@@ -16,6 +16,7 @@ import com.divudi.entity.pharmacy.MeasurementUnit;
 import com.divudi.entity.pharmacy.Vmp;
 import com.divudi.facade.ItemUsageFacade;
 import com.divudi.facade.util.JsfUtil;
+import com.sun.jdi.connect.Connector;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -61,11 +62,25 @@ public class FavouriteController implements Serializable {
      * Methods
      */
     public void fillFavouriteMedicines() {
-        fillFavouriteItems(ItemUsageType.FavoutireMedicine);
+        fillFavouriteItems(ItemUsageType.FavouriteMedicine);
     }
 
     public void fillFavouriteDisgnosis() {
         fillFavouriteItems(ItemUsageType.FavouriteDiagnosis);
+    }
+
+    public String toAddFavDig() {
+        item = null;
+        items = null;
+        current = null;
+        return "/clinical/clinical_favourite_diagnosis";
+    }
+
+    public String toAddFavItem() {
+        item = null;
+        items=null;
+        current = null;
+        return "/clinical/clinical_favourite_item";
     }
 
     /**
@@ -102,7 +117,8 @@ public class FavouriteController implements Serializable {
         current.setForItem(item);
         current.setItem(item);
         current.setDoseUnit(item.getIssueUnit());
-        
+        current.setType(ItemUsageType.FavouriteMedicine);
+
         availableDoseUnits = new ArrayList<>();
         availableItems = new ArrayList<>();
         switch (item.getMedicineType()) {
@@ -143,6 +159,17 @@ public class FavouriteController implements Serializable {
         }
     }
 
+    public void prepareAddingFavouriteDiagnosis() {
+        if (item == null) {
+            JsfUtil.addErrorMessage("No Diagnosis Selected");
+            return;
+        }
+        current = new ItemUsage();
+        current.setForItem(item);
+        current.setType(ItemUsageType.FavouriteDiagnosis);
+    }
+
+    
     public String toViewFavouriteMedicines() {
         listMyFavouriteMedicines();
         return "/clinical/clinical_favourite_item";
@@ -164,7 +191,7 @@ public class FavouriteController implements Serializable {
         fillFavouriteItems(tt);
         JsfUtil.addSuccessMessage("Removed");
     }
-
+    
     public void addToFavouriteMedicine() {
         if (item == null) {
             JsfUtil.addErrorMessage("Please select an item");
@@ -220,14 +247,79 @@ public class FavouriteController implements Serializable {
                 return;
         }
 
-        current.setType(ItemUsageType.FavoutireMedicine);
+        current.setType(ItemUsageType.FavouriteMedicine);
         current.setForItem(item);
-        current.setItem(item);
         current.setForWebUser(sessionController.getLoggedUser());
         current.setOrderNo(getItems().size() + 1.0);
         favouriteItemFacade.create(current);
         current = null;
-        fillFavouriteItems(ItemUsageType.FavoutireMedicine);
+        fillFavouriteItems(ItemUsageType.FavouriteMedicine);
+        JsfUtil.addSuccessMessage("Saved");
+
+    }
+
+    public void addToFavouriteDiagnosis() {
+        if (item == null) {
+            JsfUtil.addErrorMessage("Please select a Diagnosis");
+            return;
+        }
+        if (current == null) {
+            JsfUtil.addErrorMessage("Favourite Item is not create by getter. Please contact vendor.");
+            return;
+        }
+        if (current.getFavouriteType() == null) {
+            JsfUtil.addErrorMessage("Favourite Type NOT current.");
+            return;
+        }
+        if (current.getFavouriteFrom() == null) {
+            JsfUtil.addErrorMessage("From NOT current.");
+            return;
+        }
+        if (current.getFavouriteTo() == null) {
+            JsfUtil.addErrorMessage("To NOT current.");
+            return;
+        }
+        if (current.getFavouriteFrom().equals(current.getFavouriteTo())) {
+            JsfUtil.addErrorMessage("From is equal not To. So not added.");
+            return;
+        }
+        switch (current.getFavouriteType()) {
+            case kg:
+                current.setFromDays(null);
+                current.setToDays(null);
+                current.setFromKg(current.getFavouriteFrom());
+                current.setToKg(current.getFavouriteTo());
+                break;
+            case days:
+                current.setFromDays(current.getFavouriteFrom());
+                current.setToDays(current.getFavouriteTo());
+                current.setFromKg(null);
+                current.setToKg(null);
+                break;
+            case months:
+                current.setFromDays(current.getFavouriteFrom() * 30.4167);
+                current.setToDays(current.getFavouriteTo() * 30.4167);
+                current.setFromKg(null);
+                current.setToKg(null);
+                break;
+            case years:
+                current.setFromDays(current.getFavouriteFrom() * 365);
+                current.setToDays(current.getFavouriteTo() * 365);
+                current.setFromKg(null);
+                current.setToKg(null);
+                break;
+            default:
+                JsfUtil.addErrorMessage("Favourite Type NOT current.");
+                return;
+        }
+
+        current.setType(ItemUsageType.FavouriteDiagnosis);
+        current.setForItem(item);
+        current.setForWebUser(sessionController.getLoggedUser());
+        current.setOrderNo(getItems().size() + 1.0);
+        favouriteItemFacade.create(current);
+        current = null;
+        fillFavouriteItems(ItemUsageType.FavouriteDiagnosis);
         JsfUtil.addSuccessMessage("Saved");
 
     }

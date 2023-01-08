@@ -22,8 +22,10 @@ import com.divudi.entity.lab.ItemForItem;
 import com.divudi.entity.lab.Machine;
 import com.divudi.entity.pharmacy.Amp;
 import com.divudi.entity.pharmacy.Ampp;
+import com.divudi.entity.pharmacy.Atm;
 import com.divudi.entity.pharmacy.Vmp;
 import com.divudi.entity.pharmacy.Vmpp;
+import com.divudi.entity.pharmacy.Vtm;
 import com.divudi.facade.ItemFacade;
 import com.divudi.facade.ItemFeeFacade;
 import com.divudi.facade.util.JsfUtil;
@@ -629,6 +631,12 @@ public class ItemController implements Serializable {
     public List<Item> completeMedicine(String query) {
         DepartmentType[] dts = new DepartmentType[]{DepartmentType.Pharmacy, null};
         Class[] classes = new Class[]{Vmp.class, Amp.class, Vmp.class, Amp.class, Vmpp.class, Ampp.class};
+        return completeItem(query, classes, dts, 0);
+    }
+    
+    public List<Item> completeMedicinesPlusTherapeutics(String query) {
+        DepartmentType[] dts = new DepartmentType[]{DepartmentType.Pharmacy, null};
+        Class[] classes = new Class[]{Vmp.class, Vtm.class,Atm.class , Amp.class, Vmp.class, Amp.class, Vmpp.class, Ampp.class};
         return completeItem(query, classes, dts, 0);
     }
 

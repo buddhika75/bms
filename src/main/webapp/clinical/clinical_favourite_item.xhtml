@@ -21,7 +21,7 @@
 
                             <p:commandButton ajax="false" 
                                              value="Back"
-                                             action="/clinical/clinical_administration"
+                                             action="/clinical/favourite_index"
                                              style="float: right;"></p:commandButton>
 
                         </f:facet>
@@ -31,7 +31,7 @@
                             <p:autoComplete id="acItem" 
                                             value="#{favouriteController.item}" 
                                             forceSelection="true"
-                                            completeMethod="#{itemController.completeMedicine}" 
+                                            completeMethod="#{itemController.completeMedicinesPlusTherapeutics}" 
                                             var="vt" itemLabel="#{vt.name}" itemValue="#{vt}"
                                             placeholder="Select Medicine">
                                 <p:column headerText="Item" >
