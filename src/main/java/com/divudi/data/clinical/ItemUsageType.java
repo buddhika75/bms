@@ -14,6 +14,7 @@ public enum ItemUsageType {
     FavouriteDiagnosis,
     Allergies,
     EncounterItems,
+    EncounterDiagnosis,
     PatientItems,
     PatientAllergies,
 }
