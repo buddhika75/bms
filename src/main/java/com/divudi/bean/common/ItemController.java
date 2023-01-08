@@ -580,6 +580,43 @@ public class ItemController implements Serializable {
         }
         return lst;
     }
+    
+    
+    
+    public List<Item> completeItemByName(String query, Class[] itemClasses, DepartmentType[] departmentTypes, int count) {
+        String sql;
+        List<Item> lst;
+        HashMap tmpMap = new HashMap();
+        if (query == null) {
+            lst = new ArrayList<>();
+        } else {
+            sql = "select c "
+                    + " from Item c "
+                    + " where c.retired=false ";
+
+            if (departmentTypes != null) {
+                sql += " and c.departmentType in :deps ";
+                tmpMap.put("deps", Arrays.asList(departmentTypes));
+            }
+
+            if (itemClasses != null) {
+                sql += " and type(c) in :types ";
+                tmpMap.put("types", Arrays.asList(itemClasses));
+            }
+
+            sql += " and c.name like :q ";
+            tmpMap.put("q", "%" + query.toUpperCase() + "%");
+
+            sql += " order by c.name";
+
+            if (count != 0) {
+                lst = getFacade().findBySQL(sql, tmpMap, TemporalType.TIMESTAMP, count);
+            } else {
+                lst = getFacade().findBySQL(sql, tmpMap, TemporalType.TIMESTAMP);
+            }
+        }
+        return lst;
+    }
 
     public Item findItemByCode(String code) {
         String sql;
@@ -635,9 +672,8 @@ public class ItemController implements Serializable {
     }
     
     public List<Item> completeMedicinesPlusTherapeutics(String query) {
-        DepartmentType[] dts = new DepartmentType[]{DepartmentType.Pharmacy, null};
         Class[] classes = new Class[]{Vmp.class, Vtm.class,Atm.class , Amp.class, Vmp.class, Amp.class, Vmpp.class, Ampp.class};
-        return completeItem(query, classes, dts, 0);
+        return completeItemByName(query, classes, null, 0);
     }
 
     public List<Item> completeItem(String query, Class[] itemClasses, DepartmentType[] departmentTypes) {
