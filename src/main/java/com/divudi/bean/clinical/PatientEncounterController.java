@@ -773,7 +773,7 @@ public class PatientEncounterController implements Serializable {
         String sql;
         sql = "Select e "
                 + " from ItemUsage e "
-                + " where e.encounter=:p "
+                + " where e.patientEncounter=:p "
                 + " and e.type=:t "
                 + " order by e.id desc";
         return itemUsageFacade.findBySQL(sql, m);
@@ -786,7 +786,7 @@ public class PatientEncounterController implements Serializable {
         String sql;
         sql = "Select e "
                 + " from ItemUsage e "
-                + " where e.encounter=:p "
+                + " where e.patientEncounter=:p "
                 + " and e.type=:t "
                 + " order by e.id desc";
         return itemUsageFacade.findBySQL(sql, m);
