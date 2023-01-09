@@ -53,15 +53,136 @@
 
                                     <p:inputTextarea id="txtComments" 
                                                      queryDelay="0" placeholder="Write comments here."
-                                                     class="h-100" 
+                                                     class="w-100" 
+                                                     autoResize="true"
                                                      value="#{patientEncounterController.current.comments}" 
                                                      completeMethod="#{patientEncounterController.completeClinicalComments}" minQueryLength="1"
                                                      >
                                         <f:ajax event="keyup" execute="txtComments" ></f:ajax>
                                     </p:inputTextarea>
+
+                                    <p:panelGrid columns="2" class="w-100">
+                                        <p:commandLink value="Weight" action="#{patientEncounterController.createWtChart()}" ajax="false"  target="_blank"></p:commandLink>
+                                        <h:panelGroup >
+                                            <h:inputText  style="width: 60px;" value="#{patientEncounterController.current.weight}" ></h:inputText>
+                                            <p:outputLabel  value=" kg"  ></p:outputLabel>
+                                        </h:panelGroup>
+
+                                        <p:outputLabel value="Height" ></p:outputLabel>
+                                        <h:inputText  style="width: 60px;" value="#{patientEncounterController.current.height}" ></h:inputText>
+
+                                        <p:commandLink value="BP" action="#{patientEncounterController.createBpChart()}" ajax="false"  target="_blank"></p:commandLink>
+                                        <h:panelGroup >
+                                            <h:inputText style="width: 30px;" maxlength="3" value="#{patientEncounterController.current.sbp}" ></h:inputText>
+                                            <p:outputLabel value="/" ></p:outputLabel>
+                                            <h:inputText  style="width: 30px;" maxlength="3" value="#{patientEncounterController.current.dbp}" ></h:inputText>
+                                            <p:outputLabel  value="mmHg"  ></p:outputLabel>
+                                        </h:panelGroup>
+
+                                        <p:autoComplete id="acixItem" inputStyle="width:150px;" 
+                                                        completeMethod="#{investigationItemController.completeIxValues}"
+                                                        value="#{patientEncounterController.graphInvestigationItem}"
+                                                        var="ii" forceSelection="true"
+                                                        itemLabel="#{ii.name}" 
+                                                        itemValue="#{ii}">
+                                            <p:ajax process="@this" ></p:ajax>
+                                            <p:ajax event="itemSelect" process="@this" ></p:ajax>
+                                        </p:autoComplete>
+                                        <p:commandLink ajax="false" id="btnIxChart" process="@this acixItem" value="Chart" action="#{patientEncounterController.createInvestigationChart()}" target="_blank"></p:commandLink>
+                                    </p:panelGrid>
+
+                                </p:panel>
+
+
+
+
+
+                                <p:panel header="Diagnosis" rendered="false" styleClass="alignTop" style="width: 340px">
+                                    <h:panelGrid columns="1" styleClass="alignTop" >
+
+                                        <h:panelGrid columns="1" styleClass="alignTop" >
+                                            <p:autoComplete id="acDx" value="#{patientEncounterController.diagnosis}"
+                                                            completeMethod="#{diagnosisController.completeDiagnosis}"
+                                                            var="dx" forceSelection="true"
+                                                            converter="diagnosisConverter"
+                                                            itemLabel="#{dx.name}" styleClass="mediuminput"
+                                                            itemValue="#{dx}"
+                                                            >
+                                            </p:autoComplete>
+                                            <p:commandButton ajax="false" id="btnAddDx" value="Add Diagnosis" 
+                                                             action="#{patientEncounterController.addDx()}" >
+                                            </p:commandButton>
+                                            <p:inputTextarea 
+                                                id="txtDx" 
+                                                style="width: 300px;"
+                                                value="#{patientEncounterController.diagnosisComments}" ></p:inputTextarea>
+
+                                            <p:watermark value="Select Diagnosis." for="acDx" ></p:watermark>
+                                            <p:watermark value="Write Details about the Diagnosis here." for="txtDx" ></p:watermark>
+
+                                        </h:panelGrid>
+
+                                        <p:dataTable id="tblDx" value="#{patientEncounterController.current.diagnosis}" var="edx" style="width: 310px" >
+                                            <p:column width="10" >
+                                                <h:outputLabel value="#{edx.clinicalFindingItem.name}" ></h:outputLabel>
+                                            </p:column>
+                                            <p:column width="10" >
+                                                <h:outputLabel value="#{edx.lobValue}" ></h:outputLabel>
+                                            </p:column>
+                                            <p:column width="10" >
+                                                <p:commandButton ajax="false" value="X" action="#{patientEncounterController.removeCfv()}" > 
+                                                    <f:setPropertyActionListener value="#{edx}" target="#{patientEncounterController.removingCfv}" />
+                                                </p:commandButton>
+                                            </p:column>
+
+                                        </p:dataTable>
+
+
+
+                                    </h:panelGrid>
+                                </p:panel>
+                                <p:panel header="Medicines" rendered="false" class="w-100">
+                                    <p:autoComplete id="acItem" 
+                                                    value="#{favouriteController.item}" 
+                                                    forceSelection="true"
+                                                    completeMethod="#{itemController.completeMedicinesPlusTherapeutics}" 
+                                                    var="vt" itemLabel="#{vt.name}" itemValue="#{vt}"
+                                                    placeholder="Select Medicine">
+                                    </p:autoComplete>
+                                    <p:commandButton value="Add" ></p:commandButton>
+
+                                    <p:dataTable value="#{patientEncounterController.currentEncounterMedicines}"
+                                                 var="cm" rowKey="#{cm.id}">
+                                        <p:column >
+                                            <p:outputLabel value="#{cm.item.name}" ></p:outputLabel>
+                                        </p:column>
+                                        <p:column >
+                                            <p:inputText value="#{cm.dose}" ></p:inputText>
+                                            <p:selectOneMenu   value="#{cm.doseUnit}" style="min-width: 223px">
+                                                <f:selectItem itemLabel="Select Dose Unit" ></f:selectItem>
+                                                <f:selectItems  value="#{doseUnitController.items}" var="myItem" itemValue="#{myItem}" itemLabel="#{myItem.name}" ></f:selectItems>
+                                            </p:selectOneMenu>
+                                        </p:column>
+                                        <p:column >
+                                            <p:selectOneMenu    
+                                                value="#{cm.frequencyUnit}"
+                                                style="min-width: 223px">
+                                                <f:selectItem itemLabel="Select Frequency" ></f:selectItem>
+                                                <f:selectItems  value="#{frequencyUnitController.items}" var="myItem" itemValue="#{myItem}" itemLabel="#{myItem.name}" ></f:selectItems>
+                                            </p:selectOneMenu>
+                                        </p:column>
+                                        <p:column >
+                                            <p:inputText value="#{cm.duration}" ></p:inputText>
+                                            <p:selectOneMenu    
+                                                value="#{cm.durationUnit}"
+                                                style="min-width: 223px">
+                                                <f:selectItem itemLabel="Select Duration" ></f:selectItem>
+                                                <f:selectItems  value="#{durationUnitController.items}" var="myItem" itemValue="#{myItem}" itemLabel="#{myItem.name}" ></f:selectItems>
+                                            </p:selectOneMenu>
+                                        </p:column>
+                                    </p:dataTable>
                                 </p:panel>
                             </div>
-
                             <div class="col-md-4" >
                                 <p:panelGrid columns="2" id="panelPt" class="w-100" >
                                     <f:facet name="header" >
@@ -136,8 +257,47 @@
                                                      process="panelPt" update="panelPt" ></p:commandButton>
 
                                 </p:panelGrid>
-                            </div>
+                                <br/><!-- comment -->
+                                <p:dataTable value="#{patientEncounterController.currentChannelBills}" 
+                                             var="bill" rows="5"
+                                             class="w-100"
+                                             paginator="true"
+                                             paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                             >
+                                    <f:facet name="header" >
+                                        <p:outputLabel value="Channellings" ></p:outputLabel>
+                                    </f:facet>
+                                    <p:column headerText="Date" width="80" >
+                                        <h:outputLabel  value="#{bill.singleBillSession.serviceSession.sessionDate}" >
+                                            <f:convertDateTime pattern="yy/MM/dd" ></f:convertDateTime>
+                                        </h:outputLabel>
+                                    </p:column>
 
+                                    <p:column  headerText="Consultant" width="130" >
+                                        <h:outputLabel value="#{bill.staff.person.name}" ></h:outputLabel>
+                                    </p:column>
+
+                                    <p:column  headerText="Bill Fees" width="90"  >
+                                        <table >
+                                            <ui:repeat value="#{bill.billFees}" var="tbi" >
+                                                <tr>
+                                                    <td>
+                                                        <p:outputLabel value="#{tbi.fee.name}" ></p:outputLabel>
+                                                    </td>
+                                                    <td>
+                                                        <p:outputLabel value="#{tbi.feeValue}" ></p:outputLabel>
+                                                    </td>
+                                                </tr>
+                                            </ui:repeat>
+                                        </table>
+                                    </p:column>
+                                    <p:column headerText="Net Value" width="60">
+                                        <h:outputLabel value="#{bill.netTotal}" >
+                                            <f:convertNumber pattern="#,##0.00" ></f:convertNumber>
+                                        </h:outputLabel>
+                                    </p:column>
+                                </p:dataTable>
+                            </div>
                             <div class="col-md-4" >
 
                                 <p:dataTable value="#{patientEncounterController.currentPatientEncounters}" var="pe" rows="5"
@@ -168,275 +328,112 @@
                                         </p:commandButton>
                                     </p:column>
                                 </p:dataTable>
+                                <br/><!-- comment -->
+                                <p:dataTable  id="tblIxBills" 
+                                              value="#{patientEncounterController.currentPatientInvestigations}" var="pi"  rows="5"
+                                              class="w-100"
+                                              paginator="true"
+                                              paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                              >
 
-                            </div>
-
-                            <div class="col-md-4" >
-                                <p:panel header="Diagnosis" styleClass="alignTop" style="width: 340px">
-                                    <h:panelGrid columns="1" styleClass="alignTop" >
-
-                                        <h:panelGrid columns="1" styleClass="alignTop" >
-                                            <p:autoComplete id="acDx" value="#{patientEncounterController.diagnosis}"
-                                                            completeMethod="#{diagnosisController.completeDiagnosis}"
-                                                            var="dx" forceSelection="true"
-                                                            converter="diagnosisConverter"
-                                                            itemLabel="#{dx.name}" styleClass="mediuminput"
-                                                            itemValue="#{dx}"
-                                                            >
-                                            </p:autoComplete>
-                                            <p:commandButton ajax="false" id="btnAddDx" value="Add Diagnosis" 
-                                                             action="#{patientEncounterController.addDx()}" >
-                                            </p:commandButton>
-                                            <p:inputTextarea 
-                                                id="txtDx" 
-                                                style="width: 300px;"
-                                                value="#{patientEncounterController.diagnosisComments}" ></p:inputTextarea>
-
-                                            <p:watermark value="Select Diagnosis." for="acDx" ></p:watermark>
-                                            <p:watermark value="Write Details about the Diagnosis here." for="txtDx" ></p:watermark>
-
-                                        </h:panelGrid>
-
-                                        <p:dataTable id="tblDx" value="#{patientEncounterController.current.diagnosis}" var="edx" style="width: 310px" >
-                                            <p:column width="10" >
-                                                <h:outputLabel value="#{edx.clinicalFindingItem.name}" ></h:outputLabel>
-                                            </p:column>
-                                            <p:column width="10" >
-                                                <h:outputLabel value="#{edx.lobValue}" ></h:outputLabel>
-                                            </p:column>
-                                            <p:column width="10" >
-                                                <p:commandButton ajax="false" value="X" action="#{patientEncounterController.removeCfv()}" > 
-                                                    <f:setPropertyActionListener value="#{edx}" target="#{patientEncounterController.removingCfv}" />
-                                                </p:commandButton>
-                                            </p:column>
-
-                                        </p:dataTable>
-
-
-                                        <p:panelGrid columns="2" >
-                                            <p:commandLink value="Weight" action="#{patientEncounterController.createWtChart()}" ajax="false"  target="_blank"></p:commandLink>
-                                            <h:panelGroup >
-                                                <h:inputText  style="width: 60px;" value="#{patientEncounterController.current.weight}" ></h:inputText>
-                                                <p:outputLabel  value=" kg"  ></p:outputLabel>
-                                            </h:panelGroup>
-
-                                            <p:outputLabel value="Height" ></p:outputLabel>
-                                            <h:inputText  style="width: 60px;" value="#{patientEncounterController.current.height}" ></h:inputText>
-
-                                            <p:commandLink value="BP" action="#{patientEncounterController.createBpChart()}" ajax="false"  target="_blank"></p:commandLink>
-                                            <h:panelGroup >
-                                                <h:inputText style="width: 30px;" maxlength="3" value="#{patientEncounterController.current.sbp}" ></h:inputText>
-                                                <p:outputLabel value="/" ></p:outputLabel>
-                                                <h:inputText  style="width: 30px;" maxlength="3" value="#{patientEncounterController.current.dbp}" ></h:inputText>
-                                                <p:outputLabel  value="mmHg"  ></p:outputLabel>
-                                            </h:panelGroup>
-
-                                            <p:autoComplete id="acixItem" inputStyle="width:150px;" 
-                                                            completeMethod="#{investigationItemController.completeIxValues}"
-                                                            value="#{patientEncounterController.graphInvestigationItem}"
-                                                            var="ii" forceSelection="true"
-                                                            itemLabel="#{ii.name}" 
-                                                            itemValue="#{ii}">
-                                                <p:ajax process="@this" ></p:ajax>
-                                                <p:ajax event="itemSelect" process="@this" ></p:ajax>
-                                            </p:autoComplete>
-                                            <p:commandLink ajax="false" id="btnIxChart" process="@this acixItem" value="Chart" action="#{patientEncounterController.createInvestigationChart()}" target="_blank"></p:commandLink>
-
-                                        </p:panelGrid>
-
-
-                                    </h:panelGrid>
-
-                                </p:panel>
-                            </div>
-
-                            <div class="col-md-4" >
-
-
-                                <p:autoComplete id="acItem" 
-                                                value="#{favouriteController.item}" 
-                                                forceSelection="true"
-                                                completeMethod="#{itemController.completeMedicinesPlusTherapeutics}" 
-                                                var="vt" itemLabel="#{vt.name}" itemValue="#{vt}"
-                                                placeholder="Select Medicine">
-                                </p:autoComplete>
-
-                                <p:dataTable value="#{patientEncounterController.currentEncounterMedicines}"
-                                             var="cm" rowKey="#{cm.id}">
-                                    <p:column >
-                                        <p:outputLabel value="#{cm.item.name}" ></p:outputLabel>
-                                    </p:column>
-                                    <p:column >
-                                        <p:inputText value="#{cm.dose}" ></p:inputText>
-                                        <p:selectOneMenu   value="#{cm.doseUnit}" style="min-width: 223px">
-                                            <f:selectItem itemLabel="Select Dose Unit" ></f:selectItem>
-                                            <f:selectItems  value="#{doseUnitController.items}" var="myItem" itemValue="#{myItem}" itemLabel="#{myItem.name}" ></f:selectItems>
-                                        </p:selectOneMenu>
-                                    </p:column>
-                                    <p:column >
-                                        <p:selectOneMenu    
-                                            value="#{cm.frequencyUnit}"
-                                            style="min-width: 223px">
-                                            <f:selectItem itemLabel="Select Frequency" ></f:selectItem>
-                                            <f:selectItems  value="#{frequencyUnitController.items}" var="myItem" itemValue="#{myItem}" itemLabel="#{myItem.name}" ></f:selectItems>
-                                        </p:selectOneMenu>
-                                    </p:column>
-                                    <p:column >
-                                        <p:inputText value="#{cm.duration}" ></p:inputText>
-                                        <p:selectOneMenu    
-                                            value="#{cm.durationUnit}"
-                                            style="min-width: 223px">
-                                            <f:selectItem itemLabel="Select Duration" ></f:selectItem>
-                                            <f:selectItems  value="#{durationUnitController.items}" var="myItem" itemValue="#{myItem}" itemLabel="#{myItem.name}" ></f:selectItems>
-                                        </p:selectOneMenu>
-                                    </p:column>
-                                </p:dataTable>
-                            </div>
-
-
-
-                            <div class="col-md-4" >
-                                <p:panel header="Investigations" styleClass="alignTop" style="width: 350px">
                                     <f:facet name="header" >
                                         <p:outputLabel value="Investigations" ></p:outputLabel>
                                         <p:commandLink value="Refresh" id="ixr" action="#{patientEncounterController.fillPatientInvestigations()}"
                                                        process="@this" update="tblIxBills" style="float: right; padding-right: 10px;" ></p:commandLink>
                                     </f:facet>
-                                    <p:dataTable  id="tblIxBills" value="#{patientEncounterController.currentPatientInvestigations}" var="pi"  rows="5"
-                                                  paginator="true"
-                                                  paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-                                                  >
-
-                                        <p:column  headerText="Ix" styleClass="alignTop" width="50" >
-                                            <h:outputLabel  id="lblBillIx" value="#{pi.billItem.item.name}">
+                                    <p:column  headerText="Ix" styleClass="alignTop" width="50" >
+                                        <h:outputLabel  id="lblBillIx" value="#{pi.billItem.item.name}">
+                                        </h:outputLabel>
+                                        <p:tooltip for="lblBillIx"  >
+                                            <h:outputLabel value="Bill No : #{pi.billItem.bill.insId}" ></h:outputLabel>
+                                            <br/>
+                                            <h:outputLabel value="Billed From : #{pi.billItem.bill.institution.name}" ></h:outputLabel>
+                                            <br/>
+                                            <h:outputLabel value="Sampled : " />
+                                            <h:outputLabel rendered="#{pi.collected}" value="#{pi.sampledAt}" >
+                                                <f:convertDateTime pattern="dd/MMM/yyyy - hh:mm a"/>
                                             </h:outputLabel>
-                                            <p:tooltip for="lblBillIx"  >
-                                                <h:outputLabel value="Bill No : #{pi.billItem.bill.insId}" ></h:outputLabel>
-                                                <br/>
-                                                <h:outputLabel value="Billed From : #{pi.billItem.bill.institution.name}" ></h:outputLabel>
-                                                <br/>
-                                                <h:outputLabel value="Sampled : " />
-                                                <h:outputLabel rendered="#{pi.collected}" value="#{pi.sampledAt}" >
+                                            <br/>
+                                            <h:outputLabel value="Received : " />
+                                            <h:outputLabel rendered="#{pi.received}" value="#{pi.receivedAt}" >
+                                                <f:convertDateTime pattern="dd/MMM/yyyy - hh:mm a"/>
+                                            </h:outputLabel>
+                                            <br/>
+                                            <h:panelGroup rendered="#{pi.billItem.bill.cancelled}" >
+                                                <h:outputLabel style="color: red;" value="Cancelled : " />
+                                                <h:outputLabel style="color: red;" rendered="#{pi.billItem.bill.cancelled}" value="#{pi.billItem.bill.cancelledBill.createdAt}" >
                                                     <f:convertDateTime pattern="dd/MMM/yyyy - hh:mm a"/>
                                                 </h:outputLabel>
-                                                <br/>
-                                                <h:outputLabel value="Received : " />
-                                                <h:outputLabel rendered="#{pi.received}" value="#{pi.receivedAt}" >
+                                            </h:panelGroup>
+                                            <h:panelGroup rendered="#{pi.billItem.refunded}" >
+                                                <h:outputLabel style="color: red;" value="Refunded : " />
+                                                <h:outputLabel style="color: red;" rendered="#{pi.billItem.refunded}" value="#{pi.billItem.referanceBillItem.bill.createdAt}" >
                                                     <f:convertDateTime pattern="dd/MMM/yyyy - hh:mm a"/>
                                                 </h:outputLabel>
-                                                <br/>
-                                                <h:panelGroup rendered="#{pi.billItem.bill.cancelled}" >
-                                                    <h:outputLabel style="color: red;" value="Cancelled : " />
-                                                    <h:outputLabel style="color: red;" rendered="#{pi.billItem.bill.cancelled}" value="#{pi.billItem.bill.cancelledBill.createdAt}" >
-                                                        <f:convertDateTime pattern="dd/MMM/yyyy - hh:mm a"/>
-                                                    </h:outputLabel>
-                                                </h:panelGroup>
-                                                <h:panelGroup rendered="#{pi.billItem.refunded}" >
-                                                    <h:outputLabel style="color: red;" value="Refunded : " />
-                                                    <h:outputLabel style="color: red;" rendered="#{pi.billItem.refunded}" value="#{pi.billItem.referanceBillItem.bill.createdAt}" >
-                                                        <f:convertDateTime pattern="dd/MMM/yyyy - hh:mm a"/>
-                                                    </h:outputLabel>
-                                                </h:panelGroup>
-                                            </p:tooltip>
-                                        </p:column>
-                                        <p:column headerText="Data-Entered Reports"  styleClass="alignTop noBorderGrid" width="50" >
-                                            <h:dataTable value="#{pi.patientReports}" var="dpr" rendered="#{pi.patientReports.size() ne 0}"  styleClass="noBorderGrid" >
-                                                <h:column >
-                                                    <p:commandLink id="cmdOldReport" style="text-decoration:underline;" 
-                                                                   value="#{dpr.item.name}" target="_blank"
-                                                                   ajax="false" action="/lab/patient_report">
-                                                        <f:setPropertyActionListener value="#{dpr}" target="#{patientReportController.currentPatientReport}"></f:setPropertyActionListener>
-                                                    </p:commandLink>
-                                                </h:column>
-                                            </h:dataTable>
-                                        </p:column>
+                                            </h:panelGroup>
+                                        </p:tooltip>
+                                    </p:column>
+                                    <p:column headerText="Data-Entered Reports"  styleClass="alignTop noBorderGrid" width="50" >
+                                        <h:dataTable value="#{pi.patientReports}" var="dpr" rendered="#{pi.patientReports.size() ne 0}"  styleClass="noBorderGrid" >
+                                            <h:column >
+                                                <p:commandLink id="cmdOldReport" style="text-decoration:underline;" 
+                                                               value="#{dpr.item.name}" target="_blank"
+                                                               ajax="false" action="/lab/patient_report">
+                                                    <f:setPropertyActionListener value="#{dpr}" target="#{patientReportController.currentPatientReport}"></f:setPropertyActionListener>
+                                                </p:commandLink>
+                                            </h:column>
+                                        </h:dataTable>
+                                    </p:column>
 
-                                    </p:dataTable>
-                                </p:panel>
+                                </p:dataTable>
+                                <br/><!-- comment -->
+                                <p:dataTable id="tblPtBills"
+                                             class="w-100"
+                                             value="#{patientEncounterController.currentPatientBills}" 
+                                             var="bill" rows="5"
+                                             paginator="true"
+                                             paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                             >
+                                    <f:facet name="header" >
+                                        <p:outputLabel value="Bills" ></p:outputLabel>
+                                    </f:facet>
+
+                                    <p:column headerText="Date" width="50" >
+                                        <h:outputLabel id="lblBillDates" value="#{bill.createdAt}" >
+                                            <f:convertDateTime parent="dd-MM-yy" ></f:convertDateTime>
+                                        </h:outputLabel>
+                                    </p:column>
+                                    <p:column  headerText="Bill Type" id="colType" width="50" >
+                                        <h:outputLabel id="lblBillTypes" value="#{bill.billType}" ></h:outputLabel>
+
+                                    </p:column>
+
+                                    <p:column  headerText="Bill Type" id="colType1" width="250" >
+                                        <table >
+                                            <ui:repeat value="#{bill.billItems}" var="tbi" >
+                                                <tr>
+                                                    <td>
+                                                        <p:outputLabel value="#{tbi.item.name}" ></p:outputLabel>
+                                                    </td>
+                                                    <td style="width: 3em;">
+                                                        <p:outputLabel value="#{tbi.qty}" rendered="#{bill.billType eq 'PharmacySale'}" ></p:outputLabel>
+                                                    </td>
+                                                </tr>
+                                            </ui:repeat>
+                                        </table>
+                                    </p:column>
+                                    <p:column headerText="Net Value" width="80" >
+                                        <h:outputLabel value="#{bill.netTotal}" >
+                                            <f:convertNumber pattern="#,##0.00" ></f:convertNumber>
+                                        </h:outputLabel>
+                                    </p:column>
+                                </p:dataTable>
+
+
                             </div>
-                            <div class="col-md-4" >
-                                <p:panel header="Channellings" >
-                                    <p:dataTable value="#{patientEncounterController.currentChannelBills}" 
-                                                 var="bill" rows="5"
-                                                 paginator="true"
-                                                 paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-                                                 >
-                                        <p:column headerText="Date" width="80" >
-                                            <h:outputLabel  value="#{bill.singleBillSession.serviceSession.sessionDate}" >
-                                                <f:convertDateTime pattern="yy/MM/dd" ></f:convertDateTime>
-                                            </h:outputLabel>
-                                        </p:column>
-
-                                        <p:column  headerText="Consultant" width="130" >
-                                            <h:outputLabel value="#{bill.staff.person.name}" ></h:outputLabel>
-                                        </p:column>
-
-                                        <p:column  headerText="Bill Fees" width="90"  >
-                                            <table >
-                                                <ui:repeat value="#{bill.billFees}" var="tbi" >
-                                                    <tr>
-                                                        <td>
-                                                            <p:outputLabel value="#{tbi.fee.name}" ></p:outputLabel>
-                                                        </td>
-                                                        <td>
-                                                            <p:outputLabel value="#{tbi.feeValue}" ></p:outputLabel>
-                                                        </td>
-                                                    </tr>
-                                                </ui:repeat>
-                                            </table>
-                                        </p:column>
-                                        <p:column headerText="Net Value" width="60">
-                                            <h:outputLabel value="#{bill.netTotal}" >
-                                                <f:convertNumber pattern="#,##0.00" ></f:convertNumber>
-                                            </h:outputLabel>
-                                        </p:column>
-                                    </p:dataTable>
-                                </p:panel>
-                            </div>
-                            <div class="col-md-4" >
-                                <p:panel header="Billings" style="width: 350px">
-                                    <p:dataTable id="tblPtBills"
-                                                 value="#{patientEncounterController.currentPatientBills}" 
-                                                 var="bill" rows="5"
-                                                 paginator="true"
-                                                 paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-                                                 >
-
-                                        <p:column headerText="Date" width="50" >
-                                            <h:outputLabel id="lblBillDates" value="#{bill.createdAt}" >
-                                                <f:convertDateTime parent="dd-MM-yy" ></f:convertDateTime>
-                                            </h:outputLabel>
-                                        </p:column>
-                                        <p:column  headerText="Bill Type" id="colType" width="50" >
-                                            <h:outputLabel id="lblBillTypes" value="#{bill.billType}" ></h:outputLabel>
-
-                                        </p:column>
-
-                                        <p:column  headerText="Bill Type" id="colType1" width="250" >
-
-                                            <table >
-                                                <ui:repeat value="#{bill.billItems}" var="tbi" >
-                                                    <tr>
-                                                        <td>
-                                                            <p:outputLabel value="#{tbi.item.name}" ></p:outputLabel>
-                                                        </td>
-                                                        <td>
-                                                            <p:outputLabel value="#{tbi.qty}" rendered="#{bill.billType eq 'PharmacySale'}" ></p:outputLabel>
-                                                        </td>
-                                                    </tr>
-                                                </ui:repeat>
-                                            </table>
 
 
-                                        </p:column>
-                                        <p:column headerText="Net Value" width="50" >
-                                            <h:outputLabel value="#{bill.netTotal}" >
-                                                <f:convertNumber pattern="#,##0.00" ></f:convertNumber>
-                                            </h:outputLabel>
-                                        </p:column>
-                                    </p:dataTable>
-                                </p:panel>
-                            </div>
+
                         </div>
 
 
