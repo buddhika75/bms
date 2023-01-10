@@ -155,6 +155,7 @@ public class PatientEncounterController implements Serializable {
             JsfUtil.addErrorMessage("Select a medicine");
             return ;
         }
+        
     }
     
     

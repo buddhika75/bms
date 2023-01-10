@@ -42,7 +42,7 @@
 
                         <div class="row" >
                             <div class="col-md-4" >
-                                <p:panel class="h-100">
+                                <p:panel class="w-100">
                                     <f:facet name="header" >
                                         <h:outputText value="Prescreption" >
                                         </h:outputText>
@@ -93,66 +93,81 @@
 
                                 </p:panel>
 
-
-
-
-
-                                <p:panel header="Diagnosis" rendered="false" styleClass="alignTop" style="width: 340px">
-                                    <h:panelGrid columns="1" styleClass="alignTop" >
-
-                                        <h:panelGrid columns="1" styleClass="alignTop" >
-                                            <p:autoComplete id="acDx" value="#{patientEncounterController.diagnosis}"
-                                                            completeMethod="#{diagnosisController.completeDiagnosis}"
-                                                            var="dx" forceSelection="true"
-                                                            converter="diagnosisConverter"
-                                                            itemLabel="#{dx.name}" styleClass="mediuminput"
-                                                            itemValue="#{dx}"
-                                                            >
-                                            </p:autoComplete>
-                                            <p:commandButton ajax="false" id="btnAddDx" value="Add Diagnosis" 
-                                                             action="#{patientEncounterController.addDx()}" >
-                                            </p:commandButton>
-                                            <p:inputTextarea 
-                                                id="txtDx" 
-                                                style="width: 300px;"
-                                                value="#{patientEncounterController.diagnosisComments}" ></p:inputTextarea>
-
-                                            <p:watermark value="Select Diagnosis." for="acDx" ></p:watermark>
-                                            <p:watermark value="Write Details about the Diagnosis here." for="txtDx" ></p:watermark>
-
-                                        </h:panelGrid>
-
-                                        <p:dataTable id="tblDx" value="#{patientEncounterController.current.diagnosis}" var="edx" style="width: 310px" >
-                                            <p:column width="10" >
-                                                <h:outputLabel value="#{edx.clinicalFindingItem.name}" ></h:outputLabel>
-                                            </p:column>
-                                            <p:column width="10" >
-                                                <h:outputLabel value="#{edx.lobValue}" ></h:outputLabel>
-                                            </p:column>
-                                            <p:column width="10" >
-                                                <p:commandButton ajax="false" value="X" action="#{patientEncounterController.removeCfv()}" > 
-                                                    <f:setPropertyActionListener value="#{edx}" target="#{patientEncounterController.removingCfv}" />
-                                                </p:commandButton>
-                                            </p:column>
-
-                                        </p:dataTable>
-
-
-
-                                    </h:panelGrid>
-                                </p:panel>
-                                <p:panel header="Medicines" rendered="false" class="w-100">
-                                    <p:autoComplete id="acItem" 
-                                                    value="#{favouriteController.item}" 
-                                                    forceSelection="true"
-                                                    completeMethod="#{itemController.completeMedicinesPlusTherapeutics}" 
-                                                    var="vt" itemLabel="#{vt.name}" itemValue="#{vt}"
-                                                    placeholder="Select Medicine">
+                                <br/>
+                                <p:panelGrid columns="1" styleClass="alignTop" class="w-100">
+                                    <f:facet name="header" >
+                                        <p:outputLabel value="Diagnosis" ></p:outputLabel>
+                                    </f:facet>
+                                    <p:autoComplete id="acDx" value="#{patientEncounterController.diagnosis}"
+                                                    completeMethod="#{diagnosisController.completeDiagnosis}"
+                                                    var="dx" forceSelection="true"
+                                                    converter="diagnosisConverter"
+                                                    itemLabel="#{dx.name}" 
+                                                    itemValue="#{dx}"
+                                                    class="w-100"
+                                                    inputStyleClass="w-100"
+                                                    >
                                     </p:autoComplete>
-                                    <p:commandButton value="Add" ></p:commandButton>
+                                    <p:inputTextarea class="w-100" autoResize="true"
+                                                     id="txtDx" 
+                                                     value="#{patientEncounterController.diagnosisComments}" ></p:inputTextarea>
+                                    <h:panelGroup  class="w-100">
 
+                                        <p:commandButton ajax="false" id="btnAddOnlyDx" value="Dx" 
+                                                         action="#{patientEncounterController.addDx()}" >
+                                        </p:commandButton>
+                                        <p:commandButton ajax="false" id="btnAddDxAndRx" value="Dx &amp; Rx" 
+                                                         action="#{patientEncounterController.addDx()}" >
+                                        </p:commandButton>
+                                        <p:commandButton ajax="false" id="btnAddOnlyRx" value="Rx" 
+                                                         action="#{patientEncounterController.addDx()}" >
+                                        </p:commandButton>
+                                    </h:panelGroup>
+
+
+
+                                    <p:watermark value="Select Diagnosis." for="acDx" ></p:watermark>
+                                    <p:watermark value="Write Details about the Diagnosis here and click Dx button or Dx &amp; Rx button." for="txtDx" ></p:watermark>
+
+
+                                    <p:dataTable id="tblDx" value="#{patientEncounterController.current.diagnosis}"
+                                                 emptyMessage="No Diagnosis Added Yet"
+                                                 var="edx" class="w-100" >
+                                        <p:column width="10" >
+                                            <h:outputLabel value="#{edx.clinicalFindingItem.name}" ></h:outputLabel>
+                                        </p:column>
+                                        <p:column width="10" >
+                                            <h:outputLabel value="#{edx.lobValue}" ></h:outputLabel>
+                                        </p:column>
+                                        <p:column width="10" >
+                                            <p:commandButton ajax="false" value="X" action="#{patientEncounterController.removeCfv()}" > 
+                                                <f:setPropertyActionListener value="#{edx}" target="#{patientEncounterController.removingCfv}" />
+                                            </p:commandButton>
+                                        </p:column>
+
+                                    </p:dataTable>
+
+
+
+                                </p:panelGrid>
+
+                                <p:panelGrid columns="1"  class="w-100">
+                                    <f:facet name="header" >
+                                        <p:outputLabel value="Medicines" ></p:outputLabel>
+                                    </f:facet>
+                                    <h:panelGroup class="w-100" >
+                                        <p:autoComplete id="acItem" 
+                                                        value="#{favouriteController.item}" 
+                                                        forceSelection="true"
+                                                        completeMethod="#{itemController.completeMedicinesPlusTherapeutics}" 
+                                                        var="vt" itemLabel="#{vt.name}" itemValue="#{vt}"
+                                                        placeholder="Select Medicine">
+                                        </p:autoComplete>
+                                        <p:commandButton value="Add" ></p:commandButton>
+                                    </h:panelGroup>
                                     <p:dataTable value="#{patientEncounterController.currentEncounterMedicines}"
-                                                 var="cm" rowKey="#{cm.id}">
+                                                 var="cm" rowKey="#{cm.id}"
+                                                 emptyMessage="No medicines added yet.">
                                         <p:column >
                                             <p:outputLabel value="#{cm.item.name}" ></p:outputLabel>
                                         </p:column>
@@ -181,7 +196,7 @@
                                             </p:selectOneMenu>
                                         </p:column>
                                     </p:dataTable>
-                                </p:panel>
+                                </p:panelGrid>
                             </div>
                             <div class="col-md-4" >
                                 <p:panelGrid columns="2" id="panelPt" class="w-100" >
