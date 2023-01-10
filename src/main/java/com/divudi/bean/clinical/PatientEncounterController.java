@@ -148,6 +148,18 @@ public class PatientEncounterController implements Serializable {
 
     private InvestigationItem graphInvestigationItem;
 
+    private Item addingEncounterMedicine;
+    
+    public void addEncounterMedicine(){
+        if(addingEncounterMedicine==null){
+            JsfUtil.addErrorMessage("Select a medicine");
+            return ;
+        }
+    }
+    
+    
+    
+    
     public List<String> completeClinicalComments(String qry) {
         if (current == null || current.getComments() == null) {
             completeRx(qry);
@@ -1302,6 +1314,14 @@ public class PatientEncounterController implements Serializable {
 
     public List<ItemUsage> getCurrentEncounterDiagnosis() {
         return currentEncounterDiagnosis;
+    }
+
+    public Item getAddingEncounterMedicine() {
+        return addingEncounterMedicine;
+    }
+
+    public void setAddingEncounterMedicine(Item addingEncounterMedicine) {
+        this.addingEncounterMedicine = addingEncounterMedicine;
     }
 
 }
