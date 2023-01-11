@@ -48,8 +48,15 @@ public class Sms implements Serializable {
     private String receipientNumber;
     @Enumerated(EnumType.STRING)
     private MessageType smsType;
+    private boolean awaitingToBeSent;
     //Sending Properties
     private Boolean sentSuccessfully;
+    @Temporal(javax.persistence.TemporalType.TIMESTAMP)
+    private Date sentSuccessfullyAt;
+    private Boolean sentFailed;
+    @Temporal(javax.persistence.TemporalType.TIMESTAMP)
+    private Date sentFailedAt;
+    private String responseMessage;
     @Temporal(javax.persistence.TemporalType.DATE)
     private Date sentAt;
     //Created Properties
@@ -69,12 +76,9 @@ public class Sms implements Serializable {
     private Institution institution;
     @ManyToOne
     private Department department;
+    
+    
 
-
-    
-    
-    
-    
     public Bill getBill() {
         return bill;
     }
@@ -266,6 +270,46 @@ public class Sms implements Serializable {
 
     public void setReceipientNumber(String receipientNumber) {
         this.receipientNumber = receipientNumber;
+    }
+
+    public String getResponseMessage() {
+        return responseMessage;
+    }
+
+    public void setResponseMessage(String responseMessage) {
+        this.responseMessage = responseMessage;
+    }
+
+    public Date getSentSuccessfullyAt() {
+        return sentSuccessfullyAt;
+    }
+
+    public void setSentSuccessfullyAt(Date sentSuccessfullyAt) {
+        this.sentSuccessfullyAt = sentSuccessfullyAt;
+    }
+
+    public Boolean getSentFailed() {
+        return sentFailed;
+    }
+
+    public void setSentFailed(Boolean sentFailed) {
+        this.sentFailed = sentFailed;
+    }
+
+    public Date getSentFailedAt() {
+        return sentFailedAt;
+    }
+
+    public void setSentFailedAt(Date sentFailedAt) {
+        this.sentFailedAt = sentFailedAt;
+    }
+
+    public boolean isAwaitingToBeSent() {
+        return awaitingToBeSent;
+    }
+
+    public void setAwaitingToBeSent(boolean awaitingToBeSent) {
+        this.awaitingToBeSent = awaitingToBeSent;
     }
 
 }
