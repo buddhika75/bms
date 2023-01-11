@@ -229,13 +229,13 @@
                                     <h:panelGroup >
                                         <p:graphicImage  style="border: 1px solid red; width: 150px;" 
                                                          id="photos" cache="false"
-                                                         rendered="#{patientController.current.baImage ne null}"    
+                                                         rendered="#{patientController.current.baImage ne null and false}"    
                                                          value="#{patientController.getPhotoByByte(patientController.current.baImage)}"  >
                                         </p:graphicImage>
                                         <h:panelGrid columns="5" >
-                                            <p:commandLink target="_blank" ajax="false" action="capture" value="To Capture" ></p:commandLink>
+                                            <p:commandLink rendered="false" target="_blank" ajax="false" action="capture" value="To Capture" ></p:commandLink>
                                             <p:spacer height="1" width="5"></p:spacer>
-                                            <p:commandLink process="@this" update="photos" value="Refresh" ></p:commandLink>
+                                            <p:commandLink rendered="false" process="@this" update="photos" value="Refresh" ></p:commandLink>
                                             <p:spacer height="1" width="5"></p:spacer>
                                             <p:commandLink ajax="false" value="View" target="_blank" action="photo" ></p:commandLink>
                                         </h:panelGrid>
@@ -252,10 +252,11 @@
                                     <h:panelGroup  id="txtPatientComments" >
                                         <p:inputTextarea rows="7" cols="30" 
                                                          value="#{patientEncounterController.current.patient.comments}"
-                                                         rendered="#{sessionController.hasPrivilege('ClinicalPatientCommentsView')}"
+                                                         rendered="#{sessionController.hasPrivilege('ClinicalPatientCommentsView') and false}"
                                                          disabled="#{!sessionController.hasPrivilege('ClinicalPatientCommentsEdit')}">
                                             <p:ajax process="@this" ></p:ajax>
                                         </p:inputTextarea>
+                                        <p:commandLink ajax="false" value="View" target="_blank" action="personal_history" ></p:commandLink>
                                     </h:panelGroup>
 
                                     <h:outputLabel value="Medical Hx" ></h:outputLabel>
@@ -455,6 +456,19 @@
 
                     </p:panel>
 
+                </h:form>
+
+                <h:form enctype="multipart/form-data">
+                    <h:outputScript library="photocam" name="webcam.js" ></h:outputScript>
+                    <p:commandButton type="button" value="Capture" onclick="PF('pc').capture()"/>
+                    <p:photoCam 
+                        listener="#{photoCamBean.oncapturePatientPhoto}" 
+                        widgetVar="pc" 
+                        width="400"
+                        height="300"
+                        photoWidth="800"
+                        photoHeight="600"
+                        />
                 </h:form>
             </ui:define>
         </ui:composition>
