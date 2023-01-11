@@ -31,6 +31,7 @@ import com.divudi.entity.WebUserPrivilege;
 import com.divudi.entity.clinical.ClinicalFindingItem;
 import com.divudi.entity.clinical.ClinicalFindingValue;
 import com.divudi.entity.clinical.ItemUsage;
+import com.divudi.entity.clinical.Prescription;
 import com.divudi.entity.lab.Investigation;
 import com.divudi.entity.lab.InvestigationItem;
 import com.divudi.entity.lab.PatientInvestigation;
@@ -103,7 +104,8 @@ public class PatientEncounterController implements Serializable {
     BillController billController;
     @Inject
     WebUserController webUserController;
-
+    @Inject
+    FavouriteController favouriteController;
     /**
      * Properties
      */
@@ -149,18 +151,73 @@ public class PatientEncounterController implements Serializable {
     private InvestigationItem graphInvestigationItem;
 
     private Item addingEncounterMedicine;
-    
-    public void addEncounterMedicine(){
-        if(addingEncounterMedicine==null){
+
+    public void addEncounterMedicine() {
+        if (addingEncounterMedicine == null) {
             JsfUtil.addErrorMessage("Select a medicine");
-            return ;
+            return;
         }
-        
+        if (current == null) {
+            JsfUtil.addErrorMessage("Select an Encounter");
+            return;
+        }
+        Prescription p = new Prescription();
+        List<ItemUsage> availableFavouriteMedicines = null;
+        if (getCurrent().getWeight() != null && getCurrent().getWeight() > 0.1) {
+            availableFavouriteMedicines = favouriteController.listFavouriteItems(ItemUsageType.FavouriteMedicine, current.getWeight());
+        } else if (getCurrent().getPatient() != null && getCurrent().getPatient().getAgeInDays() != null) {
+            Long ageInDays = getCurrent().getPatient().getAgeInDays();
+            availableFavouriteMedicines = favouriteController.listFavouriteItems(ItemUsageType.FavouriteMedicine, current.getWeight());
+        } else {
+            p.setItem(addingEncounterMedicine);
+            p.setDepartment(sessionController.getDepartment());
+            p.setInstitution(sessionController.getInstitution());
+            p.setEncounter(getCurrent());
+            p.setOrderNo((double) getCurrent().getPrescriptions().size() + 1);
+            p.setPatient(getCurrent().getPatient());
+            p.setWebUser(sessionController.getLoggedUser());
+            p.setCreatedAt(new Date());
+            p.setCreater(sessionController.getLoggedUser());
+            getCurrent().getPrescriptions().add(p);
+            save(getCurrent());
+            return;
+        }
+        ItemUsage addingMedicine;
+
+        if (availableFavouriteMedicines != null) {
+            if (!availableFavouriteMedicines.isEmpty()) {
+                if (availableFavouriteMedicines.size() > 1) {
+                    //TODO: Need to select the best out of the available
+                    addingMedicine = availableFavouriteMedicines.get(0);
+                } else {
+                    addingMedicine = availableFavouriteMedicines.get(0);
+                    p.setItem(addingMedicine.getItem());
+                    p.setCategory(addingMedicine.getCategory());
+                    p.setDepartment(sessionController.getDepartment());
+                    p.setInstitution(sessionController.getInstitution());
+                    p.setDose(addingMedicine.getDose());
+                    p.setDoseUnit(addingMedicine.getDoseUnit());
+                    p.setDuration(addingMedicine.getDuration());
+                    p.setDurationUnit(addingMedicine.getDurationUnit());
+                    p.setEncounter(getCurrent());
+                    p.setFrequencyUnit(addingMedicine.getFrequencyUnit());
+                    p.setIssue(addingMedicine.getIssue());
+                    p.setIssueUnit(addingMedicine.getIssueUnit());
+                    p.setOrderNo((double) getCurrent().getPrescriptions().size() + 1);
+                    p.setPatient(getCurrent().getPatient());
+                    p.setWebUser(sessionController.getLoggedUser());
+
+                    p.setCreatedAt(new Date());
+                    p.setCreater(sessionController.getLoggedUser());
+
+                    getCurrent().getPrescriptions().add(p);
+                    save(getCurrent());
+                }
+
+            }
+        }
     }
-    
-    
-    
-    
+
     public List<String> completeClinicalComments(String qry) {
         if (current == null || current.getComments() == null) {
             completeRx(qry);
@@ -448,7 +505,7 @@ public class PatientEncounterController implements Serializable {
         setChartNameSeries(s);
         setChartDataSeries1(val);
         setValues1Name(graphInvestigationItem.getName());
-        setChartName(graphInvestigationItem.getName() +  " Chart");
+        setChartName(graphInvestigationItem.getName() + " Chart");
         setChartString(getSingleLineChartString());
         return "/chart";
     }
@@ -755,8 +812,6 @@ public class PatientEncounterController implements Serializable {
         return currentPatientAllergies;
     }
 
-    
-    
     public List<PatientEncounter> fillCurrentPatientEncounters(PatientEncounter pe) {
         Map m = new HashMap();
         m.put("p", pe.getPatient());
@@ -778,7 +833,7 @@ public class PatientEncounterController implements Serializable {
                 + " order by e.id desc";
         return itemUsageFacade.findBySQL(sql, m);
     }
-    
+
     public List<ItemUsage> fillCurrentEncounterMedicines() {
         Map m = new HashMap();
         m.put("pe", getCurrent());
@@ -791,7 +846,7 @@ public class PatientEncounterController implements Serializable {
                 + " order by e.id desc";
         return itemUsageFacade.findBySQL(sql, m);
     }
-    
+
     public List<ItemUsage> fillCurrentEncounterDiagnosis() {
         Map m = new HashMap();
         m.put("pe", getCurrent());
@@ -934,6 +989,14 @@ public class PatientEncounterController implements Serializable {
             UtilityController.addSuccessMessage("Saved Successfully");
         }
         UtilityController.addSuccessMessage("Saved");
+    }
+
+    public void save(PatientEncounter encounter) {
+        if (encounter.getId() != null) {
+            getFacade().edit(encounter);
+        } else {
+            getFacade().create(encounter);
+        }
     }
 
     public void updateComments() {

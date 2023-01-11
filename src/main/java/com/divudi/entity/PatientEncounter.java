@@ -8,6 +8,7 @@ import com.divudi.data.PaymentMethod;
 import com.divudi.data.SymanticType;
 import com.divudi.data.inward.PatientEncounterType;
 import com.divudi.entity.clinical.ClinicalFindingValue;
+import com.divudi.entity.clinical.Prescription;
 import com.divudi.entity.inward.AdmissionType;
 import com.divudi.entity.inward.EncounterComponent;
 import com.divudi.entity.inward.PatientRoom;
@@ -108,6 +109,8 @@ public class PatientEncounter implements Serializable {
     List<PatientEncounter> childEncounters;
     @OneToMany(mappedBy = "encounter", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     List<ClinicalFindingValue> clinicalFindingValues;
+    @OneToMany(mappedBy = "encounter", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Prescription> prescriptions;
     String name;
     @Temporal(javax.persistence.TemporalType.DATE)
     Date dateTime;
@@ -252,6 +255,7 @@ public class PatientEncounter implements Serializable {
     String comments;
     @Transient
     List<ClinicalFindingValue> diagnosis;
+    
     @ManyToOne
     Department department;
 
@@ -406,6 +410,8 @@ public class PatientEncounter implements Serializable {
     public void setClinicalFindingValues(List<ClinicalFindingValue> clinicalFindingValues) {
         this.clinicalFindingValues = clinicalFindingValues;
     }
+    
+    
 
     public PatientEncounterType getPatientEncounterType() {
         return patientEncounterType;
@@ -840,6 +846,17 @@ public class PatientEncounter implements Serializable {
 
     public void setHeight(Double height) {
         this.height = height;
+    }
+
+    public List<Prescription> getPrescriptions() {
+        if(prescriptions==null){
+            prescriptions = new ArrayList<>();
+        }
+        return prescriptions;
+    }
+
+    public void setPrescriptions(List<Prescription> prescriptions) {
+        this.prescriptions = prescriptions;
     }
 
     

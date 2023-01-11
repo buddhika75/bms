@@ -130,7 +130,8 @@
                                     <p:watermark value="Write Details about the Diagnosis here and click Dx button or Dx &amp; Rx button." for="txtDx" ></p:watermark>
 
 
-                                    <p:dataTable id="tblDx" value="#{patientEncounterController.current.diagnosis}"
+                                    <p:dataTable id="tblDx" 
+                                                 value="#{patientEncounterController.current.diagnosis}"
                                                  emptyMessage="No Diagnosis Added Yet"
                                                  var="edx" class="w-100" >
                                         <p:column width="10" >
@@ -157,13 +158,13 @@
                                     </f:facet>
                                     <h:panelGroup class="w-100" >
                                         <p:autoComplete id="acItem" 
-                                                        value="#{favouriteController.item}" 
+                                                        value="#{patientEncounterController.addingEncounterMedicine}" 
                                                         forceSelection="true"
-                                                        completeMethod="#{itemController.completeMedicinesPlusTherapeutics}" 
+                                                        completeMethod="#{itemController.completePrescribingMedicines}" 
                                                         var="vt" itemLabel="#{vt.name}" itemValue="#{vt}"
                                                         placeholder="Select Medicine">
                                         </p:autoComplete>
-                                        <p:commandButton value="Add" ></p:commandButton>
+                                        <p:commandButton value="Add" action="#{patientEncounterController.addEncounterMedicine()}" ></p:commandButton>
                                     </h:panelGroup>
                                     <p:dataTable value="#{patientEncounterController.currentEncounterMedicines}"
                                                  var="cm" rowKey="#{cm.id}"

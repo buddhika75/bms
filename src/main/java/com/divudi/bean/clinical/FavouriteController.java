@@ -11,12 +11,9 @@ import com.divudi.bean.pharmacy.VmpController;
 import com.divudi.data.clinical.ItemUsageType;
 import com.divudi.entity.Item;
 import com.divudi.entity.clinical.ItemUsage;
-import com.divudi.entity.pharmacy.DoseUnit;
 import com.divudi.entity.pharmacy.MeasurementUnit;
-import com.divudi.entity.pharmacy.Vmp;
 import com.divudi.facade.ItemUsageFacade;
 import com.divudi.facade.util.JsfUtil;
-import com.sun.jdi.connect.Connector;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -78,7 +75,7 @@ public class FavouriteController implements Serializable {
 
     public String toAddFavItem() {
         item = null;
-        items=null;
+        items = null;
         current = null;
         return "/clinical/clinical_favourite_item";
     }
@@ -88,6 +85,18 @@ public class FavouriteController implements Serializable {
      * @param type
      */
     public void fillFavouriteItems(ItemUsageType type) {
+        items = listFavouriteItems(type);
+    }
+
+    public List<ItemUsage> listFavouriteItems(ItemUsageType type) {
+        return listFavouriteItems(type, null);
+    }
+
+    public List<ItemUsage> listFavouriteItems(ItemUsageType type, Double weight) {
+        return listFavouriteItems(type, weight, null);
+    }
+    
+    public List<ItemUsage> listFavouriteItems(ItemUsageType type, Double weight, Long ageInDays) {
         String j;
         Map m = new HashMap();
         j = "select i "
@@ -100,12 +109,19 @@ public class FavouriteController implements Serializable {
             m.put("t", type);
             j += " and i.type=:t ";
         }
-
+        if (weight != null) {
+            j += " and ( i.fromKg < :wt and i.toKg > :wt ) ";
+            m.put("wt", weight);
+        }
+        if (ageInDays != null) {
+            j += " and ( i.fromDays < :ad and i.toDays > :ad ) ";
+            m.put("ad", (double)ageInDays);
+        }
         j += " order by i.orderNo";
 
         m.put("item", item);
         m.put("wu", sessionController.getLoggedUser());
-        items = favouriteItemFacade.findBySQL(j, m);
+        return favouriteItemFacade.findBySQL(j, m);
     }
 
     public void prepareAddingFavouriteItem() {
@@ -175,7 +191,6 @@ public class FavouriteController implements Serializable {
         current.setType(ItemUsageType.FavouriteDiagnosis);
     }
 
-    
     public String toViewFavouriteMedicines() {
         listMyFavouriteMedicines();
         return "/clinical/clinical_favourite_item";
@@ -197,7 +212,7 @@ public class FavouriteController implements Serializable {
         fillFavouriteItems(tt);
         JsfUtil.addSuccessMessage("Removed");
     }
-    
+
     public void addToFavouriteMedicine() {
         if (item == null) {
             JsfUtil.addErrorMessage("Please select an item");

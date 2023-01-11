@@ -580,9 +580,7 @@ public class ItemController implements Serializable {
         }
         return lst;
     }
-    
-    
-    
+
     public List<Item> completeItemByName(String query, Class[] itemClasses, DepartmentType[] departmentTypes, int count) {
         String sql;
         List<Item> lst;
@@ -620,7 +618,7 @@ public class ItemController implements Serializable {
 
     public Item findItemByCode(String code) {
         String sql;
-        Item lst=null;
+        Item lst = null;
         HashMap tmpMap = new HashMap();
         if (code == null) {
             return null;
@@ -633,8 +631,8 @@ public class ItemController implements Serializable {
             sql += " order by c.name";
             lst = getFacade().findFirstBySQL(sql, tmpMap, TemporalType.TIMESTAMP);
         }
-        if(lst==null){
-            
+        if (lst == null) {
+
         }
         return lst;
     }
@@ -670,9 +668,26 @@ public class ItemController implements Serializable {
         Class[] classes = new Class[]{Vmp.class, Amp.class, Vmp.class, Amp.class, Vmpp.class, Ampp.class};
         return completeItem(query, classes, dts, 0);
     }
-    
+
     public List<Item> completeMedicinesPlusTherapeutics(String query) {
-        Class[] classes = new Class[]{Vmp.class, Vtm.class,Atm.class , Amp.class, Vmp.class, Amp.class, Vmpp.class, Ampp.class};
+        Class[] classes = new Class[]{Vmp.class, Vtm.class, Atm.class, Amp.class, Vmp.class, Amp.class, Vmpp.class, Ampp.class};
+        return completeItemByName(query, classes, null, 0);
+    }
+
+    public List<Item> completePrescribingMedicines(String query) {
+        List<Item> pItems = new ArrayList<>();
+        Class[] classes = new Class[]{Vmp.class, Vtm.class, Atm.class, Amp.class, Vmp.class, Amp.class, Vmpp.class, Ampp.class};
+        Class[] vtmClasses = new Class[]{Vtm.class};
+        Class[] atmClasses = new Class[]{Atm.class};
+        Class[] vmpClasses = new Class[]{Vmp.class};
+        Class[] ampClasses = new Class[]{Amp.class};
+        List<Item> vtms = completeItemByName(query, vtmClasses, null, 0);
+        if (vtms != null && !vtms.isEmpty()) {
+            pItems = vtms;
+        }
+        if (pItems.size() > 30) {
+            return pItems;
+        }
         return completeItemByName(query, classes, null, 0);
     }
 
