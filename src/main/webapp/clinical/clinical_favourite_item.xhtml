@@ -64,6 +64,10 @@
 
 
                         <p:dataTable id="tbl" value="#{favouriteController.items}" var="fi" >
+                            <p:column sortBy="#{fi.favouriteType}" >
+                                <h:outputText value="#{fi.favouriteType}" >
+                                </h:outputText>
+                            </p:column>
                             <p:column  >
                                 <f:facet name="header" >
                                     <h:outputText value="From - To" ></h:outputText>
