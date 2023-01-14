@@ -153,21 +153,25 @@ public class PatientEncounterController implements Serializable {
     private Item addingEncounterMedicine;
 
     public void addEncounterMedicine() {
+        System.out.println("addEncounterMedicine");
         if (addingEncounterMedicine == null) {
             JsfUtil.addErrorMessage("Select a medicine");
             return;
         }
+        System.out.println("addingEncounterMedicine = " + addingEncounterMedicine);
         if (current == null) {
             JsfUtil.addErrorMessage("Select an Encounter");
             return;
         }
+        System.out.println("current = " + current);
         Prescription p = new Prescription();
+
         List<ItemUsage> availableFavouriteMedicines = null;
         if (getCurrent().getWeight() != null && getCurrent().getWeight() > 0.1) {
-            availableFavouriteMedicines = favouriteController.listFavouriteItems(ItemUsageType.FavouriteMedicine, current.getWeight());
+            availableFavouriteMedicines = favouriteController.listFavouriteItems(addingEncounterMedicine, ItemUsageType.FavouriteMedicine, current.getWeight());
         } else if (getCurrent().getPatient() != null && getCurrent().getPatient().getAgeInDays() != null) {
             Long ageInDays = getCurrent().getPatient().getAgeInDays();
-            availableFavouriteMedicines = favouriteController.listFavouriteItems(ItemUsageType.FavouriteMedicine, current.getWeight());
+            availableFavouriteMedicines = favouriteController.listFavouriteItems(addingEncounterMedicine, ItemUsageType.FavouriteMedicine, null, ageInDays);
         } else {
             p.setItem(addingEncounterMedicine);
             p.setDepartment(sessionController.getDepartment());
@@ -191,31 +195,33 @@ public class PatientEncounterController implements Serializable {
                     addingMedicine = availableFavouriteMedicines.get(0);
                 } else {
                     addingMedicine = availableFavouriteMedicines.get(0);
-                    p.setItem(addingMedicine.getItem());
-                    p.setCategory(addingMedicine.getCategory());
-                    p.setDepartment(sessionController.getDepartment());
-                    p.setInstitution(sessionController.getInstitution());
-                    p.setDose(addingMedicine.getDose());
-                    p.setDoseUnit(addingMedicine.getDoseUnit());
-                    p.setDuration(addingMedicine.getDuration());
-                    p.setDurationUnit(addingMedicine.getDurationUnit());
-                    p.setEncounter(getCurrent());
-                    p.setFrequencyUnit(addingMedicine.getFrequencyUnit());
-                    p.setIssue(addingMedicine.getIssue());
-                    p.setIssueUnit(addingMedicine.getIssueUnit());
-                    p.setOrderNo((double) getCurrent().getPrescriptions().size() + 1);
-                    p.setPatient(getCurrent().getPatient());
-                    p.setWebUser(sessionController.getLoggedUser());
 
-                    p.setCreatedAt(new Date());
-                    p.setCreater(sessionController.getLoggedUser());
-
-                    getCurrent().getPrescriptions().add(p);
-                    save(getCurrent());
                 }
+                p.setItem(addingMedicine.getItem());
+                p.setCategory(addingMedicine.getCategory());
+                p.setDepartment(sessionController.getDepartment());
+                p.setInstitution(sessionController.getInstitution());
+                p.setDose(addingMedicine.getDose());
+                p.setDoseUnit(addingMedicine.getDoseUnit());
+                p.setDuration(addingMedicine.getDuration());
+                p.setDurationUnit(addingMedicine.getDurationUnit());
+                p.setEncounter(getCurrent());
+                p.setFrequencyUnit(addingMedicine.getFrequencyUnit());
+                p.setIssue(addingMedicine.getIssue());
+                p.setIssueUnit(addingMedicine.getIssueUnit());
+                p.setOrderNo((double) getCurrent().getPrescriptions().size() + 1);
+                p.setPatient(getCurrent().getPatient());
+                p.setWebUser(sessionController.getLoggedUser());
 
             }
         }
+
+        p.setCreatedAt(new Date());
+        p.setCreater(sessionController.getLoggedUser());
+
+        getCurrent().getPrescriptions().add(p);
+        save(getCurrent());
+
     }
 
     public List<String> completeClinicalComments(String qry) {

@@ -59,11 +59,11 @@ public class FavouriteController implements Serializable {
      * Methods
      */
     public void fillFavouriteMedicines() {
-        fillFavouriteItems(ItemUsageType.FavouriteMedicine);
+        fillFavouriteItems(item, ItemUsageType.FavouriteMedicine);
     }
 
     public void fillFavouriteDisgnosis() {
-        fillFavouriteItems(ItemUsageType.FavouriteDiagnosis);
+        fillFavouriteItems(item, ItemUsageType.FavouriteDiagnosis);
     }
 
     public String toAddFavDig() {
@@ -80,23 +80,23 @@ public class FavouriteController implements Serializable {
         return "/clinical/clinical_favourite_item";
     }
 
-    /**
-     *
-     * @param type
-     */
-    public void fillFavouriteItems(ItemUsageType type) {
-        items = listFavouriteItems(type);
+    public void fillFavouriteItems(Item forItem, ItemUsageType type) {
+        items = listFavouriteItems(forItem, type);
     }
 
-    public List<ItemUsage> listFavouriteItems(ItemUsageType type) {
-        return listFavouriteItems(type, null);
+    public List<ItemUsage> listFavouriteItems(Item forItem, ItemUsageType type) {
+        return listFavouriteItems(forItem, type, null);
     }
 
-    public List<ItemUsage> listFavouriteItems(ItemUsageType type, Double weight) {
-        return listFavouriteItems(type, weight, null);
+    public List<ItemUsage> listFavouriteItems(Item forItem, ItemUsageType type, Double weight) {
+        return listFavouriteItems(forItem, type, weight, null);
     }
     
-    public List<ItemUsage> listFavouriteItems(ItemUsageType type, Double weight, Long ageInDays) {
+    public List<ItemUsage> listFavouriteItems( ItemUsageType type, Double weight, Long ageInDays) {
+        return listFavouriteItems(null, type, weight, ageInDays);
+    }
+    
+    public List<ItemUsage> listFavouriteItems(Item forItem, ItemUsageType type, Double weight, Long ageInDays) {
         String j;
         Map m = new HashMap();
         j = "select i "
@@ -108,6 +108,11 @@ public class FavouriteController implements Serializable {
         if (type != null) {
             m.put("t", type);
             j += " and i.type=:t ";
+        }
+        
+        if(forItem!=null){
+            m.put("fi", forItem);
+            j += " and i.forItem=:fi ";
         }
         if (weight != null) {
             j += " and ( i.fromKg < :wt and i.toKg > :wt ) ";
@@ -209,7 +214,7 @@ public class FavouriteController implements Serializable {
         favouriteItemFacade.edit(current);
         ItemUsageType tt = current.getType();
         current = null;
-        fillFavouriteItems(tt);
+        fillFavouriteItems(item, tt);
         JsfUtil.addSuccessMessage("Removed");
     }
 
@@ -274,7 +279,7 @@ public class FavouriteController implements Serializable {
         current.setOrderNo(getItems().size() + 1.0);
         favouriteItemFacade.create(current);
         current = null;
-        fillFavouriteItems(ItemUsageType.FavouriteMedicine);
+        fillFavouriteItems(item, ItemUsageType.FavouriteMedicine);
         JsfUtil.addSuccessMessage("Saved");
 
     }
@@ -340,7 +345,7 @@ public class FavouriteController implements Serializable {
         current.setOrderNo(getItems().size() + 1.0);
         favouriteItemFacade.create(current);
         current = null;
-        fillFavouriteItems(ItemUsageType.FavouriteDiagnosis);
+        fillFavouriteItems(item, ItemUsageType.FavouriteDiagnosis);
         JsfUtil.addSuccessMessage("Saved");
 
     }
