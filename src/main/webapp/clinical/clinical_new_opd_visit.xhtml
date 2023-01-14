@@ -10,35 +10,50 @@
         <ui:composition template="/resources/template/template.xhtml">
             <ui:define name="content">
 
-                <table >
+                <style >
+                    table, th, td {
+                        border: 1px solid gold;
+                    }
+                </style>
+                
+                <h:form >
+                    <table border="3" style="border: 1px solid red;">
+                        <tr>
+                            <td colspan="3" style="text-align: center;"  >
+                                <div class="row" >
+                                    <div class="col" >
+                                        <h:outputLabel value="Visit of #{patientEncounterController.current.patient.person.nameWithTitle} on " >
+                                        </h:outputLabel>
+                                        <h:outputLabel value="#{patientEncounterController.current.createdAt}" >
+                                            <f:convertDateTime pattern="dd MMMM yyyy" ></f:convertDateTime>
+                                        </h:outputLabel>
+                                        <h:outputLabel value= "&nbsp; by #{patientEncounterController.current.opdDoctor.person.nameWithTitle}." >
+                                        </h:outputLabel>
 
-                    <tr>
-                        <td style="vertical-align: top;">
-                            <div class="card m-2" >
-                                <div class="card card-header" >
-                                    <h4>Actions</h4>
-                                </div>
-                                <div class="card card-body" >
-                                    <h:form >
-                                        <p:commandButton ajax="false" value="Save" action="#{patientEncounterController.saveSelected()}" />
-                                        <p:commandButton ajax="false" value="Pharmacy" action="#{patientEncounterController.issueItems()}"  ></p:commandButton>
-                                        <p:commandButton ajax="false" value="Order" action="#{patientEncounterController.issueServices()}"  ></p:commandButton>
-                                        <p:commandButton ajax="false" value="Search" action="clinical_patient_for_receptionist"   ></p:commandButton>
-                                        <p:commandButton ajax="false" value="Queue" action="clinical_queue"   ></p:commandButton>
-                                        <p:commandButton ajax="false" value="Previous Visit" 
-                                                         disabled="#{patientEncounterController.startedEncounter eq patientEncounterController.current}"
-                                                         action="#{patientEncounterController.backToStartingEncounter()}"  ></p:commandButton>
-                                        <p:commandButton ajax="false" value="Letters" action="clinical_letter_index" 
-                                                         >
+                                        <h:commandButton class="btn btn-success p-x5 m-2 "  value="Save" action="#{patientEncounterController.saveSelected()}" />
+                                        <h:commandButton class="btn btn-primary p-1 m-2"    value="Pharmacy" action="#{patientEncounterController.issueItems()}"  ></h:commandButton>
+                                        <h:commandButton class="btn btn-primary p-1  m-2"    value="Order" action="#{patientEncounterController.issueServices()}"  ></h:commandButton>
+                                        <h:commandButton  class="btn btn-secondary p-1 m-2"    value="Letters" action="clinical_letter_index" 
+                                                          >
                                             <f:setPropertyActionListener target="#{letterController.patientEncounter}" 
                                                                          value="${patientEncounterController.current}" />
-                                        </p:commandButton>
+                                        </h:commandButton>
+                                        <h:commandButton  class="btn btn-secondary p-1 m-2"    value="Search" action="clinical_patient_for_receptionist"   ></h:commandButton>
+                                        <h:commandButton  class="btn btn-secondary p-1 m-2"    value="Queue" action="clinical_queue"   ></h:commandButton>
+                                        <h:commandButton  class="btn btn-warning p-x5 m-2"    value="Previous Visit" 
+                                                          disabled="#{patientEncounterController.startedEncounter eq patientEncounterController.current}"
+                                                          action="#{patientEncounterController.backToStartingEncounter()}"  ></h:commandButton>
 
-                                    </h:form>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="card m-2" >
-                                <h:form >
+
+                            </td>
+                        </tr>
+                        <tr >
+                            <td style="vertical-align: top;">
+
+
+                                <div class="card m-2" >
                                     <div class="card card-header" >
                                         <h4>Prescription</h4>
                                     </div>
@@ -57,43 +72,51 @@
                                         <p:panelGrid columns="2" class="w-100">
                                             <p:commandLink value="Weight" action="#{patientEncounterController.createWtChart()}" ajax="false"  target="_blank"></p:commandLink>
                                             <h:panelGroup >
-                                                <h:inputText  style="width: 60px;" value="#{patientEncounterController.current.weight}" ></h:inputText>
+                                                <p:inputText  style="width: 5em;" value="#{patientEncounterController.current.weight}" ></p:inputText>
                                                 <p:outputLabel  value=" kg"  ></p:outputLabel>
                                             </h:panelGroup>
 
                                             <p:outputLabel value="Height" ></p:outputLabel>
-                                            <h:inputText  style="width: 60px;" value="#{patientEncounterController.current.height}" ></h:inputText>
+                                            <p:inputText  style="width: 5em;" value="#{patientEncounterController.current.height}" ></p:inputText>
 
                                             <p:commandLink value="BP" action="#{patientEncounterController.createBpChart()}" ajax="false"  target="_blank"></p:commandLink>
                                             <h:panelGroup >
-                                                <h:inputText style="width: 30px;" maxlength="3" value="#{patientEncounterController.current.sbp}" ></h:inputText>
+                                                <p:inputText style="width: 5em;" maxlength="3" value="#{patientEncounterController.current.sbp}" ></p:inputText>
                                                 <p:outputLabel value="/" ></p:outputLabel>
-                                                <h:inputText  style="width: 30px;" maxlength="3" value="#{patientEncounterController.current.dbp}" ></h:inputText>
+                                                <p:inputText  style="width: 5em;" maxlength="3" value="#{patientEncounterController.current.dbp}" ></p:inputText>
                                                 <p:outputLabel  value="mmHg"  ></p:outputLabel>
                                             </h:panelGroup>
 
-                                            <p:autoComplete id="acixItem" inputStyle="width:150px;" 
-                                                            completeMethod="#{investigationItemController.completeIxValues}"
-                                                            value="#{patientEncounterController.graphInvestigationItem}"
-                                                            var="ii" forceSelection="true"
-                                                            itemLabel="#{ii.name}" 
-                                                            itemValue="#{ii}">
-                                                <p:ajax process="@this" ></p:ajax>
-                                                <p:ajax event="itemSelect" process="@this" ></p:ajax>
-                                            </p:autoComplete>
-                                            <p:commandLink ajax="false" id="btnIxChart" process="@this acixItem" value="Chart" action="#{patientEncounterController.createInvestigationChart()}" target="_blank"></p:commandLink>
+                                            <h:panelGroup >
+                                                <p:commandLink ajax="false" id="btnIxChart" process="@this acixItem" value="Chart" action="#{patientEncounterController.createInvestigationChart()}" target="_blank"></p:commandLink>
+                                                <p:autoComplete id="acixItem" inputStyle="width:150px;" 
+                                                                completeMethod="#{investigationItemController.completeIxValues}"
+                                                                value="#{patientEncounterController.graphInvestigationItem}"
+                                                                var="ii" forceSelection="true"
+                                                                itemLabel="#{ii.name}" 
+                                                                itemValue="#{ii}">
+                                                    <p:ajax process="@this" ></p:ajax>
+                                                    <p:ajax event="itemSelect" process="@this" ></p:ajax>
+                                                </p:autoComplete>
+                                            </h:panelGroup>
+
+
+
+                                            <p:commandButton ajax="false" value="Print" >
+                                                <p:printer target="txtComments" ></p:printer>
+                                            </p:commandButton>
                                         </p:panelGrid>
                                     </div>
-                                </h:form>
 
-                            </div>
 
-                            <div class="card m-2" >
-                                <div class="card card-header" >
-                                    <h4><p:outputLabel value="Diagnosis" ></p:outputLabel></h4>
                                 </div>
-                                <div class="card card-body" >
-                                    <h:form >
+
+                                <div class="card m-2" >
+                                    <div class="card card-header" >
+                                        <h4><p:outputLabel value="Diagnosis" ></p:outputLabel></h4>
+                                    </div>
+                                    <div class="card card-body" >
+
                                         <p:autoComplete id="acDx" value="#{patientEncounterController.diagnosis}"
                                                         completeMethod="#{diagnosisController.completeDiagnosis}"
                                                         var="dx" forceSelection="true"
@@ -143,84 +166,24 @@
                                             </p:column>
 
                                         </p:dataTable>
-                                    </h:form>
-                                </div>
-                            </div>
 
-                            <div class="card m-2" >
-                                <div class="card card-header" >
-                                    <h4><p:outputLabel value="Medicines" ></p:outputLabel></h4>
+                                    </div>
                                 </div>
-                                <div class="card card-body" >
-                                    <h:form >
-                                        <h:form >
-                                            <p:panelGrid columns="1" rendered="true" class="w-100">
-                                                <f:facet name="header" >
-                                                    <p:outputLabel value="Medicines" ></p:outputLabel>
-                                                </f:facet>
-                                                <h:panelGroup class="w-100" >
-                                                    <p:autoComplete id="acAddingMedicine" 
-                                                                    value="#{patientEncounterController.addingEncounterMedicine}" 
-                                                                    forceSelection="true"
-                                                                    completeMethod="#{itemController.completePrescribingMedicines}" 
-                                                                    var="vt" itemLabel="#{vt.name}" itemValue="#{vt}"
-                                                                    placeholder="Select Medicine">
-                                                    </p:autoComplete>
-                                                    <p:commandButton value="Add" ajax="false"
-                                                                     process="acAddingMedicine"
-                                                                     update="tblPres acAddingMedicine"
-                                                                     action="#{patientEncounterController.addEncounterMedicine()}" ></p:commandButton>
-                                                </h:panelGroup>
-                                                <p:dataTable rendered="true"
-                                                             class="w-75"
-                                                             id="tblPres" 
-                                                             value="#{patientEncounterController.current.prescriptions}"
-                                                             var="cm" rowKey="#{cm.id}"
-                                                             emptyMessage="No medicines added yet.">
-                                                    <p:column >
-                                                        <p:outputLabel value="#{cm.item.name}" ></p:outputLabel>
-                                                    </p:column>
-                                                    <p:column >
-                                                        <p:inputText value="#{cm.dose}" ></p:inputText>
-                                                        <p:selectOneMenu   value="#{cm.doseUnit}" style="min-width: 223px">
-                                                            <f:selectItem itemLabel="Select Dose Unit" ></f:selectItem>
-                                                            <f:selectItems  value="#{doseUnitController.items}" var="myItem" itemValue="#{myItem}" itemLabel="#{myItem.name}" ></f:selectItems>
-                                                        </p:selectOneMenu>
-                                                    </p:column>
-                                                    <p:column >
-                                                        <p:selectOneMenu    
-                                                            value="#{cm.frequencyUnit}"
-                                                            style="min-width: 223px">
-                                                            <f:selectItem itemLabel="Select Frequency" ></f:selectItem>
-                                                            <f:selectItems  value="#{frequencyUnitController.items}" var="myItem" itemValue="#{myItem}" itemLabel="#{myItem.name}" ></f:selectItems>
-                                                        </p:selectOneMenu>
-                                                    </p:column>
-                                                    <p:column >
-                                                        <p:inputText value="#{cm.duration}" ></p:inputText>
-                                                        <p:selectOneMenu    
-                                                            value="#{cm.durationUnit}"
-                                                            style="min-width: 223px">
-                                                            <f:selectItem itemLabel="Select Duration" ></f:selectItem>
-                                                            <f:selectItems  value="#{durationUnitController.items}" var="myItem" itemValue="#{myItem}" itemLabel="#{myItem.name}" ></f:selectItems>
-                                                        </p:selectOneMenu>
-                                                    </p:column>
-                                                </p:dataTable>
-                                            </p:panelGrid>
-                                        </h:form>
-                                    </h:form>
-                                </div>
-                            </div>
-                        </td>
-                        <td  style="vertical-align: top;">
-                            <div class="card m-2" >
-                                <div class="card card-header" >
-                                    <h4><p:outputLabel value="Patient Details" ></p:outputLabel></h4>
-                                </div>
-                                <div class="card card-body" >
-                                    <h:form rendered="true" >
+
+
+                            </td>
+                            <td  style="vertical-align: top;" >
+                                <div class="card m-2" >
+                                    <div class="card card-header" >
+                                        <h4><p:outputLabel value="Patient Details" ></p:outputLabel></h4>
+                                    </div>
+                                    <div class="card card-body" >
+
                                         <p:panelGrid columns="2" id="panelPt" class="w-100" >
                                             <h:outputLabel value="Name" ></h:outputLabel>
-                                            <p:inputText autocomplete="off" id="txtPersonName" value="#{patientEncounterController.current.patient.person.name}"
+                                            <p:inputText autocomplete="off" id="txtPersonName" 
+                                                         class="w-100"
+                                                         value="#{patientEncounterController.current.patient.person.name}"
                                                          readonly="#{!sessionController.hasPrivilege('ClinicalPatientNameChange')}">
                                                 <p:ajax process="@this" event="blur" ></p:ajax>
                                             </p:inputText>
@@ -230,9 +193,10 @@
                                                 <p:ajax process="@this" ></p:ajax>
                                             </p:calendar>
                                             <h:outputLabel value="Address" ></h:outputLabel>
-                                            <h:inputTextarea id="txtPatientAddress"  value="#{patientEncounterController.current.patient.person.address}" >
+                                            <p:inputTextarea id="txtPatientAddress"  value="#{patientEncounterController.current.patient.person.address}" 
+                                                             class="w-100" rows="4">
                                                 <p:ajax process="@this" ></p:ajax>
-                                            </h:inputTextarea>
+                                            </p:inputTextarea>
 
                                             <h:outputLabel value="Age" ></h:outputLabel>
                                             <h:outputLabel value="#{patientEncounterController.current.patient.age}" >
@@ -291,69 +255,21 @@
                                         </p:panelGrid>
 
 
-                                    </h:form>
-                                </div>
-                            </div>
 
-                            <div div="card m-2" >
-                                <div class="card-header" >
-                                    <h4>Channel Bills</h4>
-                                </div>
-                                <div class="card-body" >
-                                    <h:form >
-                                        <p:dataTable value="#{patientEncounterController.currentChannelBills}" 
-                                                     var="bill" rendered="false"
-                                                     class="w-100"
-                                                     paginator="true"
-                                                     paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-                                                     >
-                                            <f:facet name="header" >
-                                                <p:outputLabel value="Channellings" ></p:outputLabel>
-                                            </f:facet>
-                                            <p:column headerText="Date" width="80" >
-                                                <h:outputLabel  value="#{bill.singleBillSession.serviceSession.sessionDate}" >
-                                                    <f:convertDateTime pattern="yy/MM/dd" ></f:convertDateTime>
-                                                </h:outputLabel>
-                                            </p:column>
-
-                                            <p:column  headerText="Consultant" width="130" >
-                                                <h:outputLabel value="#{bill.staff.person.name}" ></h:outputLabel>
-                                            </p:column>
-
-                                            <p:column  headerText="Bill Fees" width="90"  >
-                                                <table >
-                                                    <ui:repeat value="#{bill.billFees}" var="tbi" >
-                                                        <tr>
-                                                            <td>
-                                                                <p:outputLabel value="#{tbi.fee.name}" ></p:outputLabel>
-                                                            </td>
-                                                            <td>
-                                                                <p:outputLabel value="#{tbi.feeValue}" ></p:outputLabel>
-                                                            </td>
-                                                        </tr>
-                                                    </ui:repeat>
-                                                </table>
-                                            </p:column>
-                                            <p:column headerText="Net Value" width="60">
-                                                <h:outputLabel value="#{bill.netTotal}" >
-                                                    <f:convertNumber pattern="#,##0.00" ></f:convertNumber>
-                                                </h:outputLabel>
-                                            </p:column>
-                                        </p:dataTable>
-                                    </h:form>
+                                    </div>
                                 </div>
 
-                            </div>
-                        </td>
-                        <td  style="vertical-align: top;">
 
-                            <div class="card m-2" >
-                                <div class="card-header" >
-                                    <h4>Past Visits</h4>
-                                </div>
+                            </td>
+                            <td  style="vertical-align: top;" rowspan="3">
 
-                                <div class="card-body" >
-                                    <h:form >
+                                <div class="card m-2" >
+                                    <div class="card-header" >
+                                        <h4>Past Visits</h4>
+                                    </div>
+
+                                    <div class="card-body" >
+
                                         <p:dataTable value="#{patientEncounterController.currentPatientEncounters}" var="pe" 
                                                      class="w-100" rendered="true"
                                                      paginator="true"
@@ -382,16 +298,16 @@
                                                 </p:commandButton>
                                             </p:column>
                                         </p:dataTable>
-                                    </h:form>
-                                </div>
-                            </div>
 
-                            <div class="card m-2" >
-                                <div class="card-header" >
-                                    <h4>Investigations</h4>
+                                    </div>
                                 </div>
-                                <div class="card-body" >
-                                    <h:form>
+
+                                <div class="card m-2" >
+                                    <div class="card-header" >
+                                        <h4>Investigations</h4>
+                                    </div>
+                                    <div class="card-body" >
+
                                         <p:dataTable  id="tblIxBills" 
                                                       value="#{patientEncounterController.currentPatientInvestigations}" var="pi"  rows="5"
                                                       class="w-100"
@@ -452,18 +368,69 @@
                                             </p:column>
 
                                         </p:dataTable>
-                                    </h:form>
+
+
+                                    </div>
 
                                 </div>
 
-                            </div>
 
-                            <div class="card m-2" >
-                                <div class="card-header" >
-                                    <h1>Bills</h1>
+                                <div div="card m-2" >
+                                    <div class="card-header" >
+                                        <h4>Channel Bills</h4>
+                                    </div>
+                                    <div class="card-body" >
+
+                                        <p:dataTable value="#{patientEncounterController.currentChannelBills}" 
+                                                     var="bill" rendered="false"
+                                                     class="w-100"
+                                                     paginator="true"
+                                                     paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                                     >
+                                            <f:facet name="header" >
+                                                <p:outputLabel value="Channellings" ></p:outputLabel>
+                                            </f:facet>
+                                            <p:column headerText="Date" width="80" >
+                                                <h:outputLabel  value="#{bill.singleBillSession.serviceSession.sessionDate}" >
+                                                    <f:convertDateTime pattern="yy/MM/dd" ></f:convertDateTime>
+                                                </h:outputLabel>
+                                            </p:column>
+
+                                            <p:column  headerText="Consultant" width="130" >
+                                                <h:outputLabel value="#{bill.staff.person.name}" ></h:outputLabel>
+                                            </p:column>
+
+                                            <p:column  headerText="Bill Fees" width="90"  >
+                                                <table >
+                                                    <ui:repeat value="#{bill.billFees}" var="tbi" >
+                                                        <tr>
+                                                            <td>
+                                                                <p:outputLabel value="#{tbi.fee.name}" ></p:outputLabel>
+                                                            </td>
+                                                            <td>
+                                                                <p:outputLabel value="#{tbi.feeValue}" ></p:outputLabel>
+                                                            </td>
+                                                        </tr>
+                                                    </ui:repeat>
+                                                </table>
+                                            </p:column>
+                                            <p:column headerText="Net Value" width="60">
+                                                <h:outputLabel value="#{bill.netTotal}" >
+                                                    <f:convertNumber pattern="#,##0.00" ></f:convertNumber>
+                                                </h:outputLabel>
+                                            </p:column>
+                                        </p:dataTable>
+
+                                    </div>
+
                                 </div>
-                                <div class="card-body" >
-                                    <h:form>
+
+                                <div class="card m-2" >
+                                    <div class="card-header" >
+                                        <h1>Bills</h1>
+                                    </div>
+                                    <div class="card-body" >
+
                                         <p:dataTable id="tblPtBills"
                                                      class="w-100"
                                                      rendered="true"
@@ -506,46 +473,100 @@
                                                 </h:outputLabel>
                                             </p:column>
                                         </p:dataTable>
-                                    </h:form>
+
+                                    </div>
                                 </div>
-                            </div>
 
-                        </td>
-                    </tr>
+                            </td>
+                        </tr>
 
-                    <tr>
-                        <td colspan="3">
+                        <tr>
+                            <td colspan="2">
+                                <div class="card m-2" >
+                                    <div class="card card-header" >
+                                        <h4><p:outputLabel value="Medicines" ></p:outputLabel></h4>
+                                    </div>
+                                    <div class="card card-body" >
+
+                                        <p:panelGrid columns="1" rendered="true" class="w-100">
+                                            <f:facet name="header" >
+                                                <p:outputLabel value="Medicines" ></p:outputLabel>
+                                            </f:facet>
+                                            <h:panelGroup class="w-100" >
+                                                <p:autoComplete id="acAddingMedicine" 
+                                                                value="#{patientEncounterController.addingEncounterMedicine}" 
+                                                                forceSelection="true"
+                                                                completeMethod="#{itemController.completePrescribingMedicines}" 
+                                                                var="vt" itemLabel="#{vt.name}" itemValue="#{vt}"
+                                                                placeholder="Select Medicine">
+                                                </p:autoComplete>
+                                                <p:commandButton value="Add" ajax="false"
+                                                                 process="acAddingMedicine"
+                                                                 update="tblPres acAddingMedicine"
+                                                                 action="#{patientEncounterController.addEncounterMedicine()}" ></p:commandButton>
+                                            </h:panelGroup>
+                                            <p:dataTable rendered="true"
+                                                         class="w-75"
+                                                         id="tblPres" 
+                                                         value="#{patientEncounterController.current.prescriptions}"
+                                                         var="cm" rowKey="#{cm.id}"
+                                                         emptyMessage="No medicines added yet.">
+                                                <p:column >
+                                                    <p:outputLabel value="#{cm.item.name}" ></p:outputLabel>
+                                                </p:column>
+                                                <p:column >
+                                                    <p:inputText value="#{cm.dose}" ></p:inputText>
+                                                    <p:selectOneMenu   value="#{cm.doseUnit}" style="min-width: 223px">
+                                                        <f:selectItem itemLabel="Select Dose Unit" ></f:selectItem>
+                                                        <f:selectItems  value="#{doseUnitController.items}" var="myItem" itemValue="#{myItem}" itemLabel="#{myItem.name}" ></f:selectItems>
+                                                    </p:selectOneMenu>
+                                                </p:column>
+                                                <p:column >
+                                                    <p:selectOneMenu    
+                                                        value="#{cm.frequencyUnit}"
+                                                        style="min-width: 223px">
+                                                        <f:selectItem itemLabel="Select Frequency" ></f:selectItem>
+                                                        <f:selectItems  value="#{frequencyUnitController.items}" var="myItem" itemValue="#{myItem}" itemLabel="#{myItem.name}" ></f:selectItems>
+                                                    </p:selectOneMenu>
+                                                </p:column>
+                                                <p:column >
+                                                    <p:inputText value="#{cm.duration}" ></p:inputText>
+                                                    <p:selectOneMenu    
+                                                        value="#{cm.durationUnit}"
+                                                        style="min-width: 223px">
+                                                        <f:selectItem itemLabel="Select Duration" ></f:selectItem>
+                                                        <f:selectItems  value="#{durationUnitController.items}" var="myItem" itemValue="#{myItem}" itemLabel="#{myItem.name}" ></f:selectItems>
+                                                    </p:selectOneMenu>
+                                                </p:column>
+                                            </p:dataTable>
+                                        </p:panelGrid>
 
 
-                            <div class="row" style="background-color: greenyellow;" >
-                                <div class="col-md-12" >
-                                    <h:form enctype="multipart/form-data" rendered="true" >
-                                        <h:outputScript library="photocam" name="webcam.js" ></h:outputScript>
-                                        <p:commandButton type="button" value="Capture" onclick="PF('pc').capture()"/>
-                                        <p:photoCam 
-                                            listener="#{photoCamBean.oncapturePatientPhoto}" 
-                                            widgetVar="pc" 
-                                            width="400"
-                                            height="300"
-                                            photoWidth="800"
-                                            photoHeight="600"
-                                            />
-                                    </h:form>
+                                    </div>
                                 </div>
-                            </div>
+                            </td>
+                        </tr>
 
+                        
+                    </table>
+                </h:form>
 
-                        </td>
-                    </tr>
-                </table>
-
-
-
-
-
-
-
-
+                <div class="row" style="background-color: greenyellow;" >
+                    <div class="col-md-12" >
+                        <h:form enctype="multipart/form-data" rendered="true" >
+                            <h:outputScript library="photocam" name="webcam.js" ></h:outputScript>
+                            <p:commandButton type="button" value="Capture" onclick="PF('pc').capture()"/>
+                            <p:photoCam 
+                                listener="#{photoCamBean.oncapturePatientPhoto}" 
+                                widgetVar="pc" 
+                                width="400"
+                                height="300"
+                                photoWidth="800"
+                                photoHeight="600"
+                                />
+                        </h:form>
+                    </div>
+                </div>
 
 
 
