@@ -378,6 +378,12 @@ public class FavouriteController implements Serializable {
     /**
      * Getters And Setters
      */
+    
+    
+    
+    /**
+     * @return 
+     */
     public Item getItem() {
         return item;
     }

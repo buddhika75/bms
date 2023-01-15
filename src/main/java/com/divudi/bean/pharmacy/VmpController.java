@@ -221,21 +221,25 @@ public class VmpController implements Serializable {
     }
     
     public List<PharmaceuticalItem> ampsAndVmpsContainingVtm(Item item) {
-        List<PharmaceuticalItem> amps = new ArrayList<>();
+        System.out.println("ampsAndVmpsContainingVtm");
+        List<PharmaceuticalItem> vmpsAndAmps = new ArrayList<>();
         if(!(item instanceof Vtm)){
-            return amps;
+            System.out.println("item not a vtm");
+            return vmpsAndAmps;
         }
         
         Vtm vtm = (Vtm) item;
+        System.out.println("vtm = " + vtm);
         List<Vmp> vmps = vmpsContainingVtm(vtm);
-        
+        System.out.println("vmps = " + vmps);
         if (vmps == null || vmps.isEmpty()) {
-            return amps;
+            return vmpsAndAmps;
         }
+        vmpsAndAmps.addAll(vmps);
         for (Vmp v : vmps) {
-            amps.addAll(ampsOfVmp(v));
+            vmpsAndAmps.addAll(ampsOfVmp(v));
         }
-        return amps;
+        return vmpsAndAmps;
     }
 
     private void saveVmp() {
