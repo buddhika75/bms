@@ -548,6 +548,11 @@ public class PatientEncounterController implements Serializable {
 
             p.setCreatedAt(new Date());
             p.setCreater(sessionController.getLoggedUser());
+            try {
+
+            } catch (Exception e) {
+
+            }
             System.out.println("getCurrent().getPrescriptions() = " + getCurrent().getPrescriptions());
             getCurrent().getPrescriptions().add(p);
             System.out.println("p = " + p);
