@@ -693,6 +693,7 @@ public class ItemController implements Serializable {
         List<Item> atms = completeItemByName(query, atmClasses, null, 0);
         pItems.addAll(atms);
         if (pItems.size() > 30) {
+//            Collections.sort(pItems, (o1, o2) -> (o1.getName().compareTo(o2.getName())));
             Collections.sort(pItems);
             return pItems;
         }
