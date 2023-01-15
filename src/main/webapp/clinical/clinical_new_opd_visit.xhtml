@@ -481,6 +481,9 @@
                                                      emptyMessage="No medicines added yet.">
                                             <p:column >
                                                 <p:outputLabel value="#{cm.item.name}" ></p:outputLabel>
+                                                <p:commandLink id="clRemove" value="(X)" process="clRemove tblPres" update="tblPres" action="#{patientEncounterController.removePrescreption()}" >
+                                                    <f:setPropertyActionListener value="#{cm}" target="#{patientEncounterController.removingPrescreption}" ></f:setPropertyActionListener>
+                                                </p:commandLink>
                                             </p:column>
                                             <p:column >
                                                 <p:inputText value="#{cm.dose}" style="width: 4em;" ></p:inputText>

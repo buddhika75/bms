@@ -105,7 +105,7 @@ public class PatientEncounterController implements Serializable {
     @Inject
     WebUserController webUserController;
     @Inject
-    FavouriteController favouriteController;
+    private FavouriteController favouriteController;
     /**
      * Properties
      */
@@ -129,6 +129,7 @@ public class PatientEncounterController implements Serializable {
     Investigation investigation;
 
     ClinicalFindingValue removingCfv;
+    private Prescription removingPrescreption;
 
     PatientEncounter encounterToDisplay;
     PatientEncounter startedEncounter;
@@ -431,6 +432,31 @@ public class PatientEncounterController implements Serializable {
     }
 
     public void addDx() {
+        if (diagnosis == null) {
+            UtilityController.addErrorMessage("Please select a diagnosis");
+            return;
+        }
+        if (current == null) {
+            UtilityController.addErrorMessage("Please select a visit");
+            return;
+        }
+        ClinicalFindingValue dx = new ClinicalFindingValue();
+        dx.setItemValue(diagnosis);
+        dx.setClinicalFindingItem(diagnosis);
+        dx.setEncounter(current);
+        dx.setPerson(current.getPatient().getPerson());
+        dx.setStringValue(diagnosis.getName());
+        dx.setLobValue(diagnosisComments);
+        current.getClinicalFindingValues().add(dx);
+        getFacade().edit(current);
+        diagnosis = null;
+//        diagnosis = new ClinicalFindingItem();
+        diagnosisComments = "";
+        UtilityController.addSuccessMessage("Diagnosis added");
+        setCurrent(getFacade().find(current.getId()));
+    }
+    
+    public void addDxAndRx() {
         if (diagnosis == null) {
             UtilityController.addErrorMessage("Please select a diagnosis");
             return;
@@ -957,6 +983,20 @@ public class PatientEncounterController implements Serializable {
         saveSelected();
         UtilityController.addSuccessMessage("Removed");
     }
+    
+    public void removePrescreption() {
+        if (current == null) {
+            UtilityController.addErrorMessage("No Patient Encounter");
+            return;
+        }
+        if (removingPrescreption == null) {
+            UtilityController.addErrorMessage("No Finding selected to remove");
+            return;
+        }
+        current.getPrescriptions().remove(removingPrescreption);
+        saveSelected();
+        UtilityController.addSuccessMessage("Removed");
+    }
 
     public ClinicalFindingItem getDiagnosis() {
         return diagnosis;
@@ -1403,6 +1443,24 @@ public class PatientEncounterController implements Serializable {
         this.addingEncounterMedicine = addingEncounterMedicine;
     }
 
+    public FavouriteController getFavouriteController() {
+        return favouriteController;
+    }
+
+    public void setFavouriteController(FavouriteController favouriteController) {
+        this.favouriteController = favouriteController;
+    }
+
+    public Prescription getRemovingPrescreption() {
+        return removingPrescreption;
+    }
+
+    public void setRemovingPrescreption(Prescription removingPrescreption) {
+        this.removingPrescreption = removingPrescreption;
+    }
+
+    
+    
 }
 
 enum ClinicalField {
