@@ -672,9 +672,21 @@ public class ItemController implements Serializable {
     }
 
     public List<Item> completeMedicinesPlusTherapeutics(String query) {
-        DepartmentType[] dts = new DepartmentType[]{DepartmentType.Pharmacy, null};
-        Class[] classes = new Class[]{Vmp.class, Vtm.class, Atm.class, Amp.class, Vmp.class, Amp.class};
-        return completeItemByName(query, classes, dts, 0);
+        String sql;
+        List<Item> lst;
+        HashMap tmpMap = new HashMap();
+        if (query == null) {
+            lst = new ArrayList<>();
+        } else {
+            sql = "select c "
+                    + " from PharmaceuticalItem c "
+                    + " where c.retired=false ";
+            sql += " and c.name like :q ";
+            tmpMap.put("q", "%" + query.toUpperCase() + "%");
+            sql += " order by c.name";
+            lst = getFacade().findBySQL(sql, tmpMap, TemporalType.TIMESTAMP);
+        }
+        return lst;
     }
 
     public List<Item> completePrescribingMedicines(String query) {
