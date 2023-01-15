@@ -672,8 +672,9 @@ public class ItemController implements Serializable {
     }
 
     public List<Item> completeMedicinesPlusTherapeutics(String query) {
-        Class[] classes = new Class[]{Vmp.class, Vtm.class, Atm.class, Amp.class, Vmp.class, Amp.class, Vmpp.class, Ampp.class};
-        return completeItemByName(query, classes, null, 0);
+        DepartmentType[] dts = new DepartmentType[]{DepartmentType.Pharmacy, null};
+        Class[] classes = new Class[]{Vmp.class, Vtm.class, Atm.class, Amp.class, Vmp.class, Amp.class};
+        return completeItemByName(query, classes, dts, 0);
     }
 
     public List<Item> completePrescribingMedicines(String query) {

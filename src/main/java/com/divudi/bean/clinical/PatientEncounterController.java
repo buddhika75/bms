@@ -511,12 +511,12 @@ public class PatientEncounterController implements Serializable {
             }
 
             System.out.println("availableFavouriteMedicines = " + availableFavouriteMedicines);
-            if (availableFavouriteMedicines != null) {
+            if (availableFavouriteMedicines == null) {
                 continue;
             }
 
             System.out.println("availableFavouriteMedicines.isEmpty() = " + availableFavouriteMedicines.isEmpty());
-            if (!availableFavouriteMedicines.isEmpty()) {
+            if (availableFavouriteMedicines.isEmpty()) {
                 continue;
             }
 
