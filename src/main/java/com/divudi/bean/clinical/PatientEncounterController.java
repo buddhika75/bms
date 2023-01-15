@@ -168,11 +168,15 @@ public class PatientEncounterController implements Serializable {
 
         List<ItemUsage> availableFavouriteMedicines = null;
         if (getCurrent().getWeight() != null && getCurrent().getWeight() > 0.1) {
+            System.out.println("by weight");
             availableFavouriteMedicines = favouriteController.listFavouriteItems(addingEncounterMedicine, ItemUsageType.FavouriteMedicine, current.getWeight());
         } else if (getCurrent().getPatient() != null && getCurrent().getPatient().getAgeInDays() != null) {
+            System.out.println("by age");
             Long ageInDays = getCurrent().getPatient().getAgeInDays();
+            System.out.println("ageInDays = " + ageInDays);
             availableFavouriteMedicines = favouriteController.listFavouriteItems(addingEncounterMedicine, ItemUsageType.FavouriteMedicine, null, ageInDays);
         } else {
+            System.out.println("No weight or age");
             p.setItem(addingEncounterMedicine);
             p.setDepartment(sessionController.getDepartment());
             p.setInstitution(sessionController.getInstitution());
@@ -187,9 +191,11 @@ public class PatientEncounterController implements Serializable {
             return;
         }
         ItemUsage addingMedicine;
-
+        System.out.println("availableFavouriteMedicines = " + availableFavouriteMedicines);
         if (availableFavouriteMedicines != null) {
+            System.out.println("availableFavouriteMedicines.isEmpty() = " + availableFavouriteMedicines.isEmpty());
             if (!availableFavouriteMedicines.isEmpty()) {
+                System.out.println("availableFavouriteMedicines.size() = " + availableFavouriteMedicines.size());
                 if (availableFavouriteMedicines.size() > 1) {
                     //TODO: Need to select the best out of the available
                     addingMedicine = availableFavouriteMedicines.get(0);
@@ -197,6 +203,7 @@ public class PatientEncounterController implements Serializable {
                     addingMedicine = availableFavouriteMedicines.get(0);
 
                 }
+                System.out.println("addingMedicine = " + addingMedicine);
                 p.setItem(addingMedicine.getItem());
                 p.setCategory(addingMedicine.getCategory());
                 p.setDepartment(sessionController.getDepartment());
@@ -218,10 +225,12 @@ public class PatientEncounterController implements Serializable {
 
         p.setCreatedAt(new Date());
         p.setCreater(sessionController.getLoggedUser());
-
+        System.out.println("getCurrent().getPrescriptions() = " + getCurrent().getPrescriptions());
         getCurrent().getPrescriptions().add(p);
+        System.out.println("p = " + p);
+        System.out.println("getCurrent().getPrescriptions() = " + getCurrent().getPrescriptions());
         save(getCurrent());
-
+        addingEncounterMedicine = null;
     }
 
     public List<String> completeClinicalComments(String qry) {

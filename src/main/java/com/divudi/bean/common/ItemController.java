@@ -693,18 +693,20 @@ public class ItemController implements Serializable {
         List<Item> atms = completeItemByName(query, atmClasses, null, 0);
         pItems.addAll(atms);
         if (pItems.size() > 30) {
-//            Collections.sort(pItems, (o1, o2) -> (o1.getName().compareTo(o2.getName())));
-            Collections.sort(pItems);
+            Collections.sort(pItems, (o1, o2) -> (o1.getName().compareTo(o2.getName())));
+//            Collections.sort(pItems);
             return pItems;
         }
         List<Item> vmps = completeItemByName(query, vmpClasses, null, 0);
         pItems.addAll(vmps);
         if (pItems.size() > 30) {
+            Collections.sort(pItems, (o1, o2) -> (o1.getName().compareTo(o2.getName())));
             return pItems;
         }
         List<Item> amps = completeItemByName(query, ampClasses, null, 0);
         pItems.addAll(amps);
         if (pItems.size() > 30) {
+            Collections.sort(pItems, (o1, o2) -> (o1.getName().compareTo(o2.getName())));
             return pItems;
         }
         return completeItemByName(query, classes, null, 0);

@@ -460,60 +460,51 @@
                                     </div>
                                     <div class="card card-body" >
 
-                                        <p:panelGrid columns="1" rendered="true" class="w-100">
-                                            <f:facet name="header" >
-                                                <p:outputLabel value="Medicines" ></p:outputLabel>
-                                            </f:facet>
-                                            <h:panelGroup class="w-100" >
-                                                <p:autoComplete id="acAddingMedicine" 
-                                                                value="#{patientEncounterController.addingEncounterMedicine}" 
-                                                                forceSelection="true"
-                                                                completeMethod="#{itemController.completePrescribingMedicines}" 
-                                                                var="vt" itemLabel="#{vt.name}" itemValue="#{vt}"
-                                                                placeholder="Select Medicine">
-                                                </p:autoComplete>
-                                                <p:commandButton value="Add" ajax="false"
-                                                                 process="acAddingMedicine"
-                                                                 update="tblPres acAddingMedicine"
-                                                                 action="#{patientEncounterController.addEncounterMedicine()}" ></p:commandButton>
-                                            </h:panelGroup>
-                                            <p:dataTable rendered="true"
-                                                         class="w-75"
-                                                         id="tblPres" 
-                                                         value="#{patientEncounterController.current.prescriptions}"
-                                                         var="cm" rowKey="#{cm.id}"
-                                                         emptyMessage="No medicines added yet.">
-                                                <p:column >
-                                                    <p:outputLabel value="#{cm.item.name}" ></p:outputLabel>
-                                                </p:column>
-                                                <p:column >
-                                                    <p:inputText value="#{cm.dose}" ></p:inputText>
-                                                    <p:selectOneMenu   value="#{cm.doseUnit}" style="min-width: 223px">
-                                                        <f:selectItem itemLabel="Select Dose Unit" ></f:selectItem>
-                                                        <f:selectItems  value="#{doseUnitController.items}" var="myItem" itemValue="#{myItem}" itemLabel="#{myItem.name}" ></f:selectItems>
-                                                    </p:selectOneMenu>
-                                                </p:column>
-                                                <p:column >
-                                                    <p:selectOneMenu    
-                                                        value="#{cm.frequencyUnit}"
-                                                        style="min-width: 223px">
-                                                        <f:selectItem itemLabel="Select Frequency" ></f:selectItem>
-                                                        <f:selectItems  value="#{frequencyUnitController.items}" var="myItem" itemValue="#{myItem}" itemLabel="#{myItem.name}" ></f:selectItems>
-                                                    </p:selectOneMenu>
-                                                </p:column>
-                                                <p:column >
-                                                    <p:inputText value="#{cm.duration}" ></p:inputText>
-                                                    <p:selectOneMenu    
-                                                        value="#{cm.durationUnit}"
-                                                        style="min-width: 223px">
-                                                        <f:selectItem itemLabel="Select Duration" ></f:selectItem>
-                                                        <f:selectItems  value="#{durationUnitController.items}" var="myItem" itemValue="#{myItem}" itemLabel="#{myItem.name}" ></f:selectItems>
-                                                    </p:selectOneMenu>
-                                                </p:column>
-                                            </p:dataTable>
-                                        </p:panelGrid>
-
-
+                                        <h:panelGroup class="w-100" >
+                                            <p:autoComplete id="acAddingMedicine" 
+                                                            value="#{patientEncounterController.addingEncounterMedicine}" 
+                                                            forceSelection="true"
+                                                            completeMethod="#{itemController.completePrescribingMedicines}" 
+                                                            var="vt" itemLabel="#{vt.name}" itemValue="#{vt}"
+                                                            placeholder="Select Medicine">
+                                            </p:autoComplete>
+                                            <p:commandButton value="Add" ajax="false"
+                                                             process="acAddingMedicine"
+                                                             update="tblPres acAddingMedicine"
+                                                             action="#{patientEncounterController.addEncounterMedicine()}" ></p:commandButton>
+                                        </h:panelGroup>
+                                        <p:dataTable rendered="true"
+                                                     class="w-100"
+                                                     id="tblPres" 
+                                                     value="#{patientEncounterController.current.prescriptions}"
+                                                     var="cm" rowKey="#{cm.id}"
+                                                     emptyMessage="No medicines added yet.">
+                                            <p:column >
+                                                <p:outputLabel value="#{cm.item.name}" ></p:outputLabel>
+                                            </p:column>
+                                            <p:column >
+                                                <p:inputText value="#{cm.dose}" style="width: 4em;" ></p:inputText>
+                                                <p:selectOneMenu   value="#{cm.doseUnit}" >
+                                                    <f:selectItem itemLabel="Dose Unit" ></f:selectItem>
+                                                    <f:selectItems  value="#{doseUnitController.items}" var="myItem" itemValue="#{myItem}" itemLabel="#{myItem.name}" ></f:selectItems>
+                                                </p:selectOneMenu>
+                                            </p:column>
+                                            <p:column >
+                                                <p:selectOneMenu    
+                                                    value="#{cm.frequencyUnit}">
+                                                    <f:selectItem itemLabel="Frequency" ></f:selectItem>
+                                                    <f:selectItems  value="#{frequencyUnitController.items}" var="myItem" itemValue="#{myItem}" itemLabel="#{myItem.name}" ></f:selectItems>
+                                                </p:selectOneMenu>
+                                            </p:column>
+                                            <p:column >
+                                                <p:inputText value="#{cm.duration}" style="width: 4em;" ></p:inputText>
+                                                <p:selectOneMenu    
+                                                    value="#{cm.durationUnit}">
+                                                    <f:selectItem itemLabel="Duration" ></f:selectItem>
+                                                    <f:selectItems  value="#{durationUnitController.items}" var="myItem" itemValue="#{myItem}" itemLabel="#{myItem.name}" ></f:selectItems>
+                                                </p:selectOneMenu>
+                                            </p:column>
+                                        </p:dataTable>
                                     </div>
                                 </div>
                             </td>

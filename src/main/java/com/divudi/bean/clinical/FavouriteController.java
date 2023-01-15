@@ -89,6 +89,7 @@ public class FavouriteController implements Serializable {
     }
 
     public List<ItemUsage> listFavouriteItems(Item forItem, ItemUsageType type, Double weight) {
+        System.out.println("listFavouriteItems");
         return listFavouriteItems(forItem, type, weight, null);
     }
     
@@ -97,12 +98,12 @@ public class FavouriteController implements Serializable {
     }
     
     public List<ItemUsage> listFavouriteItems(Item forItem, ItemUsageType type, Double weight, Long ageInDays) {
+        System.out.println("listFavouriteItems");
         String j;
         Map m = new HashMap();
         j = "select i "
                 + " from ItemUsage i "
                 + " where i.retired=false "
-                + " and i.forItem=:item "
                 + " and i.forWebUser=:wu ";
 
         if (type != null) {
@@ -124,9 +125,16 @@ public class FavouriteController implements Serializable {
         }
         j += " order by i.orderNo";
 
-        m.put("item", item);
         m.put("wu", sessionController.getLoggedUser());
-        return favouriteItemFacade.findBySQL(j, m);
+        System.out.println("m = " + m);
+        System.out.println("j = " + j);
+        List<ItemUsage> its = favouriteItemFacade.findBySQL(j, m);
+        if(its==null){
+            System.out.println("its is empty");
+            its = new ArrayList<>();
+        }
+        System.out.println("its = " + its.size());
+        return its;
     }
 
     public void prepareAddingFavouriteItem() {
