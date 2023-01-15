@@ -33,6 +33,8 @@ import java.io.Serializable;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -685,6 +687,22 @@ public class ItemController implements Serializable {
         if (vtms != null && !vtms.isEmpty()) {
             pItems = vtms;
         }
+        if (pItems.size() > 30) {
+            return pItems;
+        }
+        List<Item> atms = completeItemByName(query, atmClasses, null, 0);
+        pItems.addAll(atms);
+        if (pItems.size() > 30) {
+            Collections.sort(pItems);
+            return pItems;
+        }
+        List<Item> vmps = completeItemByName(query, vmpClasses, null, 0);
+        pItems.addAll(vmps);
+        if (pItems.size() > 30) {
+            return pItems;
+        }
+        List<Item> amps = completeItemByName(query, ampClasses, null, 0);
+        pItems.addAll(amps);
         if (pItems.size() > 30) {
             return pItems;
         }

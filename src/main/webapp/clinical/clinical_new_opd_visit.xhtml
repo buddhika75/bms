@@ -10,18 +10,14 @@
         <ui:composition template="/resources/template/template.xhtml">
             <ui:define name="content">
 
-                <style >
-                    table, th, td {
-                        border: 1px solid gold;
-                    }
-                </style>
-                
                 <h:form >
                     <table border="3" style="border: 1px solid red;">
                         <tr>
                             <td colspan="3" style="text-align: center;"  >
                                 <div class="row" >
                                     <div class="col" >
+                                        <h:commandButton class="btn btn-success p-x5 m-2 "  value="Save" action="#{patientEncounterController.saveSelected()}" />
+
                                         <h:outputLabel value="Visit of #{patientEncounterController.current.patient.person.nameWithTitle} on " >
                                         </h:outputLabel>
                                         <h:outputLabel value="#{patientEncounterController.current.createdAt}" >
@@ -30,7 +26,6 @@
                                         <h:outputLabel value= "&nbsp; by #{patientEncounterController.current.opdDoctor.person.nameWithTitle}." >
                                         </h:outputLabel>
 
-                                        <h:commandButton class="btn btn-success p-x5 m-2 "  value="Save" action="#{patientEncounterController.saveSelected()}" />
                                         <h:commandButton class="btn btn-primary p-1 m-2"    value="Pharmacy" action="#{patientEncounterController.issueItems()}"  ></h:commandButton>
                                         <h:commandButton class="btn btn-primary p-1  m-2"    value="Order" action="#{patientEncounterController.issueServices()}"  ></h:commandButton>
                                         <h:commandButton  class="btn btn-secondary p-1 m-2"    value="Letters" action="clinical_letter_index" 
@@ -50,7 +45,7 @@
                             </td>
                         </tr>
                         <tr >
-                            <td style="vertical-align: top;">
+                            <td style="vertical-align: top; height: 10em;">
 
 
                                 <div class="card m-2" >
@@ -72,19 +67,22 @@
                                         <p:panelGrid columns="2" class="w-100">
                                             <p:commandLink value="Weight" action="#{patientEncounterController.createWtChart()}" ajax="false"  target="_blank"></p:commandLink>
                                             <h:panelGroup >
-                                                <p:inputText  style="width: 5em;" value="#{patientEncounterController.current.weight}" ></p:inputText>
-                                                <p:outputLabel  value=" kg"  ></p:outputLabel>
+                                                <p:inputText  style="width: 4em;" value="#{patientEncounterController.current.weight}" ></p:inputText>
+                                                <p:outputLabel  value="&nbsp;kg"  ></p:outputLabel>
                                             </h:panelGroup>
 
                                             <p:outputLabel value="Height" ></p:outputLabel>
-                                            <p:inputText  style="width: 5em;" value="#{patientEncounterController.current.height}" ></p:inputText>
+                                            <h:panelGroup >
+                                                <p:inputText  style="width: 5em;" value="#{patientEncounterController.current.height}" ></p:inputText>
+                                                <p:outputLabel  value="&nbsp;cm"  ></p:outputLabel>
+                                            </h:panelGroup>
 
                                             <p:commandLink value="BP" action="#{patientEncounterController.createBpChart()}" ajax="false"  target="_blank"></p:commandLink>
                                             <h:panelGroup >
-                                                <p:inputText style="width: 5em;" maxlength="3" value="#{patientEncounterController.current.sbp}" ></p:inputText>
+                                                <p:inputText style="width: 3em;" maxlength="3" value="#{patientEncounterController.current.sbp}" ></p:inputText>
                                                 <p:outputLabel value="/" ></p:outputLabel>
-                                                <p:inputText  style="width: 5em;" maxlength="3" value="#{patientEncounterController.current.dbp}" ></p:inputText>
-                                                <p:outputLabel  value="mmHg"  ></p:outputLabel>
+                                                <p:inputText  style="width: 3em;" maxlength="3" value="#{patientEncounterController.current.dbp}" ></p:inputText>
+                                                <p:outputLabel  value="&nbsp;mmHg"  ></p:outputLabel>
                                             </h:panelGroup>
 
                                             <h:panelGroup >
@@ -267,17 +265,15 @@
                                     <div class="card-header" >
                                         <h4>Past Visits</h4>
                                     </div>
-
                                     <div class="card-body" >
-
                                         <p:dataTable value="#{patientEncounterController.currentPatientEncounters}" var="pe" 
                                                      class="w-100" rendered="true"
                                                      paginator="true"
                                                      paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
                                                      >
-                                            <f:facet name="header" >
-                                                <p:outputLabel value="Past Visits" ></p:outputLabel>
-                                            </f:facet>
+                                            <!--                                            <f:facet name="header" >
+                                                                                            <p:outputLabel value="Past Visits" ></p:outputLabel>
+                                                                                        </f:facet>-->
 
                                             <p:column headerText="Visit Date" >
                                                 <h:outputLabel value="#{pe.createdAt}" >
@@ -298,16 +294,17 @@
                                                 </p:commandButton>
                                             </p:column>
                                         </p:dataTable>
-
                                     </div>
                                 </div>
-
                                 <div class="card m-2" >
                                     <div class="card-header" >
-                                        <h4>Investigations</h4>
+                                        <h4>
+                                            <h:commandLink value="Investigations" id="ixr" action="#{patientEncounterController.fillPatientInvestigations()}">
+                                                <f:ajax execute="ixr" render="tblIxBills" ></f:ajax>
+                                            </h:commandLink>
+                                        </h4>
                                     </div>
                                     <div class="card-body" >
-
                                         <p:dataTable  id="tblIxBills" 
                                                       value="#{patientEncounterController.currentPatientInvestigations}" var="pi"  rows="5"
                                                       class="w-100"
@@ -315,12 +312,6 @@
                                                       paginator="true"
                                                       paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
                                                       >
-
-                                            <f:facet name="header" >
-                                                <p:outputLabel value="Investigations" ></p:outputLabel>
-                                                <p:commandLink value="Refresh" id="ixr" action="#{patientEncounterController.fillPatientInvestigations()}"
-                                                               process="@this" update="tblIxBills" style="float: right; padding-right: 10px;" ></p:commandLink>
-                                            </f:facet>
                                             <p:column  headerText="Ix" styleClass="alignTop"  >
                                                 <h:outputLabel  id="lblBillIx" value="#{pi.billItem.item.name}">
                                                 </h:outputLabel>
@@ -368,28 +359,19 @@
                                             </p:column>
 
                                         </p:dataTable>
-
-
                                     </div>
-
                                 </div>
-
-
-                                <div div="card m-2" >
+                                <div class="card m-2" >
                                     <div class="card-header" >
                                         <h4>Channel Bills</h4>
                                     </div>
                                     <div class="card-body" >
-
                                         <p:dataTable value="#{patientEncounterController.currentChannelBills}" 
-                                                     var="bill" rendered="false"
+                                                     var="bill" rendered="true"
                                                      class="w-100"
                                                      paginator="true"
                                                      paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
                                                      >
-                                            <f:facet name="header" >
-                                                <p:outputLabel value="Channellings" ></p:outputLabel>
-                                            </f:facet>
                                             <p:column headerText="Date" width="80" >
                                                 <h:outputLabel  value="#{bill.singleBillSession.serviceSession.sessionDate}" >
                                                     <f:convertDateTime pattern="yy/MM/dd" ></f:convertDateTime>
@@ -420,17 +402,13 @@
                                                 </h:outputLabel>
                                             </p:column>
                                         </p:dataTable>
-
                                     </div>
-
                                 </div>
-
                                 <div class="card m-2" >
                                     <div class="card-header" >
                                         <h1>Bills</h1>
                                     </div>
                                     <div class="card-body" >
-
                                         <p:dataTable id="tblPtBills"
                                                      class="w-100"
                                                      rendered="true"
@@ -439,10 +417,6 @@
                                                      paginator="true"
                                                      paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
                                                      >
-                                            <f:facet name="header" >
-                                                <p:outputLabel value="Bills" ></p:outputLabel>
-                                            </f:facet>
-
                                             <p:column headerText="Date" width="50" >
                                                 <h:outputLabel id="lblBillDates" value="#{bill.createdAt}" >
                                                     <f:convertDateTime parent="dd-MM-yy" ></f:convertDateTime>
@@ -473,15 +447,13 @@
                                                 </h:outputLabel>
                                             </p:column>
                                         </p:dataTable>
-
                                     </div>
                                 </div>
-
                             </td>
                         </tr>
 
                         <tr>
-                            <td colspan="2">
+                            <td colspan="2" style="vertical-align: top;">
                                 <div class="card m-2" >
                                     <div class="card card-header" >
                                         <h4><p:outputLabel value="Medicines" ></p:outputLabel></h4>
@@ -547,7 +519,7 @@
                             </td>
                         </tr>
 
-                        
+
                     </table>
                 </h:form>
 
