@@ -201,8 +201,8 @@
 
                                             </h:outputLabel>
 
-                                            <h:outputLabel value="Picture" ></h:outputLabel>
-                                            <h:panelGroup >
+                                            <h:outputLabel value="Picture" rendered="#{sessionController.hasPrivilege('ClinicalPatientPhoto')}" ></h:outputLabel>
+                                            <h:panelGroup rendered="#{sessionController.hasPrivilege('ClinicalPatientPhoto')}">
                                                 <p:graphicImage  style="border: 1px solid red; width: 150px;" 
                                                                  id="photos" cache="false"
                                                                  rendered="#{patientController.current.baImage ne null and false}"    
@@ -230,7 +230,7 @@
                                                      header="Personal Hx"  id="txtPatientComments" >
                                                 <p:inputTextarea rows="7" class="w-100"
                                                                  value="#{patientEncounterController.current.patient.comments}"
-                                                                 rendered="#{sessionController.hasPrivilege('ClinicalPatientCommentsView') or true}"
+                                                                 rendered="#{sessionController.hasPrivilege('ClinicalPatientCommentsView')}"
                                                                  disabled="#{!sessionController.hasPrivilege('ClinicalPatientCommentsEdit')}">
                                                     <p:ajax process="@this" ></p:ajax>
                                                 </p:inputTextarea>
