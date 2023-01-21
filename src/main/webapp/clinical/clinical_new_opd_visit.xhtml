@@ -17,15 +17,6 @@
                                 <div class="row" >
                                     <div class="col" >
                                         <h:commandButton class="btn btn-success p-x5 m-2 "  value="Save" action="#{patientEncounterController.saveSelected()}" />
-
-                                        <h:outputLabel value="Visit of #{patientEncounterController.current.patient.person.nameWithTitle} on " >
-                                        </h:outputLabel>
-                                        <h:outputLabel value="#{patientEncounterController.current.createdAt}" >
-                                            <f:convertDateTime pattern="dd MMMM yyyy" ></f:convertDateTime>
-                                        </h:outputLabel>
-                                        <h:outputLabel value= "&nbsp; by #{patientEncounterController.current.opdDoctor.person.nameWithTitle}." >
-                                        </h:outputLabel>
-
                                         <h:commandButton class="btn btn-primary p-1 m-2"    value="Pharmacy" action="#{patientEncounterController.issueItems()}"  ></h:commandButton>
                                         <h:commandButton class="btn btn-primary p-1  m-2"    value="Order" action="#{patientEncounterController.issueServices()}"  ></h:commandButton>
                                         <h:commandButton  class="btn btn-secondary p-1 m-2"    value="Letters" action="clinical_letter_index" 
@@ -38,6 +29,15 @@
                                         <h:commandButton  class="btn btn-warning p-x5 m-2"    value="Previous Visit" 
                                                           disabled="#{patientEncounterController.startedEncounter eq patientEncounterController.current}"
                                                           action="#{patientEncounterController.backToStartingEncounter()}"  ></h:commandButton>
+                                        <h:outputLabel value="Visit of #{patientEncounterController.current.patient.person.nameWithTitle} on " >
+                                        </h:outputLabel>
+                                        <h:outputLabel value="#{patientEncounterController.current.createdAt}" >
+                                            <f:convertDateTime pattern="dd MMMM yyyy" ></f:convertDateTime>
+                                        </h:outputLabel>
+                                        <h:outputLabel value= "&nbsp; by #{patientEncounterController.current.opdDoctor.person.nameWithTitle}." >
+                                        </h:outputLabel>
+
+
 
                                     </div>
                                 </div>
@@ -349,8 +349,9 @@
                                             <p:column headerText="Data-Entered Reports"   >
                                                 <p:dataTable value="#{pi.patientReports}" 
                                                              var="dpr"
-                                                             rendered="#{pi.patientReports.size() ne 0 and false}"   
+                                                             rendered="#{pi.patientReports.size() ne 0}"   
                                                              rows="7"
+                                                             paginatorAlwaysVisible="false"
                                                              paginator="true"
                                                              paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
                                                              >
