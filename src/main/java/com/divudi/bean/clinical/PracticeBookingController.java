@@ -205,7 +205,7 @@ public class PracticeBookingController implements Serializable {
                     + " and upper(d.person.name) like :q "
                     + " order by d.person.name ";
             m.put("q", "%" + qry.toUpperCase() + "%");
-            docs = getDoctorFacade().findBySQL(sql,m);
+            docs = getDoctorFacade().findBySQL(sql, m);
         } else {
             sql = "select d from Doctor d where d.retired=false "
                     + " and d.speciality=:sp"
@@ -394,8 +394,9 @@ public class PracticeBookingController implements Serializable {
             UtilityController.addErrorMessage("Please select session");
             return;
         }
-
-        addToSession(addToBilledItem(addToBill()));
+        Bill b = addToBill();
+        BillItem bi = addToBilledItem(b);
+        addToSession(bi);
         listBillSessions();
         UtilityController.addSuccessMessage("Added to the queue");
     }
@@ -404,10 +405,16 @@ public class PracticeBookingController implements Serializable {
         BillItem bi = new BillItem();
         bi.setCreatedAt(new Date());
         bi.setCreater(getSessionController().getLoggedUser());
-        bi.setBill(b);
         bi.setNetValue(b.getTotal());
         bi.setSessionDate(getSelectedServiceSession().getSessionDate());
-        getBillItemFacade().create(bi);
+        if (bi.getId() == null) {
+            getBillItemFacade().create(bi);
+        } else {
+            getBillItemFacade().edit(bi);
+        }
+        bi.setBill(b);
+//        getBillItemFacade().edit(bi);
+        billFacade.edit(b);
         return bi;
     }
 
@@ -416,8 +423,6 @@ public class PracticeBookingController implements Serializable {
         Bill b = bi.getBill();
         BillSession bs = new BillSession();
 
-        bs.setBill(b);
-        bs.setBillItem(bi);
         bs.setCreatedAt(Calendar.getInstance().getTime());
         bs.setCreater(getSessionController().getLoggedUser());
         bs.setServiceSession(getSelectedServiceSession());
@@ -429,6 +434,12 @@ public class PracticeBookingController implements Serializable {
         bs.setStaff(getSelectedServiceSession().getStaff());
 
         getBillSessionFacade().create(bs);
+
+        bs.setBill(b);
+        bs.setBillItem(bi);
+//        billFacade.edit(b);
+
+        getBillSessionFacade().edit(bs);
 
     }
 

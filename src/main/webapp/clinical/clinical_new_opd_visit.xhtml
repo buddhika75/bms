@@ -6,105 +6,151 @@
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:f="http://java.sun.com/jsf/core"
       >
-
     <h:body>
-
-
-
         <ui:composition template="/resources/template/template.xhtml">
-
             <ui:define name="content">
 
-                <h:form>
+                <h:form >
+                    <table border="3" style="border: 1px solid red;">
+                        <tr>
+                            <td colspan="3" style="text-align: center;"  >
+                                <div class="row" >
+                                    <div class="col" >
+                                        <h:commandButton class="btn btn-success p-x5 m-2 "  value="Save" action="#{patientEncounterController.saveSelected()}" />
 
-                    <p:panel >
-                        <f:facet name="header" >
-                            <div>
-                                <h:outputLabel value="Visit of #{patientEncounterController.current.patient.person.nameWithTitle} on " >
-                                </h:outputLabel>
-                                <h:outputLabel value="#{patientEncounterController.current.createdAt}" >
-                                    <f:convertDateTime pattern="dd MMMM yyyy" ></f:convertDateTime>
-                                </h:outputLabel>
-                                <h:outputLabel value= " by #{patientEncounterController.current.opdDoctor.person.nameWithTitle}" >
-                                </h:outputLabel>
-                                <p:spacer width="10" ></p:spacer>
-                                <h:panelGrid columns="7">
-                                    <p:commandButton ajax="false" value="Save Visit" action="#{patientEncounterController.saveSelected()}"  onclick="onSubmitButton();" ></p:commandButton>
-                                    <p:commandButton ajax="false" value="Pharmacy Issue" action="#{patientEncounterController.issueItems()}"  onclick="onSubmitButton();"></p:commandButton>
-                                    <p:commandButton ajax="false" value="Services/Investigation" action="#{patientEncounterController.issueServices()}"  onclick="onSubmitButton();"></p:commandButton>
-                                    <p:commandButton ajax="false" value="Back to search" action="clinical_patient_for_receptionist"  style="float: right;" onclick="onSubmitButton();" ></p:commandButton>
-                                    <p:commandButton ajax="false" value="Back to queue" action="clinical_queue" style="float: right;" onclick="onSubmitButton();" ></p:commandButton>
+                                        <h:outputLabel value="Visit of #{patientEncounterController.current.patient.person.nameWithTitle} on " >
+                                        </h:outputLabel>
+                                        <h:outputLabel value="#{patientEncounterController.current.createdAt}" >
+                                            <f:convertDateTime pattern="dd MMMM yyyy" ></f:convertDateTime>
+                                        </h:outputLabel>
+                                        <h:outputLabel value= "&nbsp; by #{patientEncounterController.current.opdDoctor.person.nameWithTitle}." >
+                                        </h:outputLabel>
 
+                                        <h:commandButton class="btn btn-primary p-1 m-2"    value="Pharmacy" action="#{patientEncounterController.issueItems()}"  ></h:commandButton>
+                                        <h:commandButton class="btn btn-primary p-1  m-2"    value="Order" action="#{patientEncounterController.issueServices()}"  ></h:commandButton>
+                                        <h:commandButton  class="btn btn-secondary p-1 m-2"    value="Letters" action="clinical_letter_index" 
+                                                          >
+                                            <f:setPropertyActionListener target="#{letterController.patientEncounter}" 
+                                                                         value="${patientEncounterController.current}" />
+                                        </h:commandButton>
+                                        <h:commandButton  class="btn btn-secondary p-1 m-2"    value="Search" action="clinical_patient_for_receptionist"   ></h:commandButton>
+                                        <h:commandButton  class="btn btn-secondary p-1 m-2"    value="Queue" action="clinical_queue"   ></h:commandButton>
+                                        <h:commandButton  class="btn btn-warning p-x5 m-2"    value="Previous Visit" 
+                                                          disabled="#{patientEncounterController.startedEncounter eq patientEncounterController.current}"
+                                                          action="#{patientEncounterController.backToStartingEncounter()}"  ></h:commandButton>
 
+                                    </div>
+                                </div>
 
-                                    <p:commandButton ajax="false" value="Back to Previous Visit" 
-                                                     disabled="#{patientEncounterController.startedEncounter eq patientEncounterController.current}"
-                                                     action="#{patientEncounterController.backToStartingEncounter()}" style="float: right;" ></p:commandButton>
-
-                                    <p:commandButton ajax="false" value="Letters" action="clinical_letter_index" 
-                                                     style="float: right;" >
-                                        <f:setPropertyActionListener target="#{letterController.patientEncounter}" 
-                                                                     value="${patientEncounterController.current}" />
-                                    </p:commandButton>
-
-
-                                </h:panelGrid>
-
-                            </div>
-                        </f:facet>
-
+                            </td>
+                        </tr>
+                        <tr >
+                            <td style="vertical-align: top; height: 10em;">
 
 
-                        <h:panelGrid columns="2" styleClass="alignTop" >
+                                <div class="card m-2" >
+                                    <div class="card card-header" >
+                                        <h4>Prescription</h4>
+                                    </div>
+                                    <div class="card card-body" >
 
-                            <h:panelGroup>
-                                <p:panel styleClass="alignTop" style="width: 340px" >
-                                    <f:facet name="header" >
-                                        <h:outputText value="Prescreption" >
+                                        <p:inputTextarea id="txtComments" 
+                                                         queryDelay="0" placeholder="Write comments here."
+                                                         class="w-100" 
+                                                         autoResize="true"
+                                                         value="#{patientEncounterController.current.comments}" 
+                                                         completeMethod="#{patientEncounterController.completeClinicalComments}" minQueryLength="1"
+                                                         >
+                                            <f:ajax event="keyup" execute="txtComments" ></f:ajax>
+                                        </p:inputTextarea>
 
-                                        </h:outputText>
-                                        <p:spacer width="30" height="1" ></p:spacer>
-                                        <p:commandButton ajax="false" value="Print" >
-                                            <p:printer target="txtComments" ></p:printer>
-                                        </p:commandButton>
-                                    </f:facet>
+                                        <p:panelGrid columns="2" class="w-100">
+                                            <p:commandLink value="Weight" action="#{patientEncounterController.createWtChart()}" ajax="false"  target="_blank"></p:commandLink>
+                                            <h:panelGroup >
+                                                <p:inputText  style="width: 4em;" value="#{patientEncounterController.current.weight}" ></p:inputText>
+                                                <p:outputLabel  value="&nbsp;kg"  ></p:outputLabel>
+                                            </h:panelGroup>
 
-                                    <p:inputTextarea id="txtComments" 
-                                                     queryDelay="0" placeholder="Write comments here."
-                                                     style="width: 300px;height: 300px;" 
-                                                     value="#{patientEncounterController.current.comments}" 
-                                                     completeMethod="#{patientEncounterController.completeClinicalComments}" minQueryLength="1"
-                                                     >
-                                        <f:ajax event="keyup" execute="txtComments" ></f:ajax>
-                                    </p:inputTextarea>
-                                </p:panel>
+                                            <p:outputLabel value="Height" ></p:outputLabel>
+                                            <h:panelGroup >
+                                                <p:inputText  style="width: 5em;" value="#{patientEncounterController.current.height}" ></p:inputText>
+                                                <p:outputLabel  value="&nbsp;cm"  ></p:outputLabel>
+                                            </h:panelGroup>
 
-                                <p:panel header="Diagnosis" styleClass="alignTop" style="width: 340px">
-                                    <h:panelGrid columns="1" styleClass="alignTop" >
+                                            <p:commandLink value="BP" action="#{patientEncounterController.createBpChart()}" ajax="false"  target="_blank"></p:commandLink>
+                                            <h:panelGroup >
+                                                <p:inputText style="width: 3em;" maxlength="3" value="#{patientEncounterController.current.sbp}" ></p:inputText>
+                                                <p:outputLabel value="/" ></p:outputLabel>
+                                                <p:inputText  style="width: 3em;" maxlength="3" value="#{patientEncounterController.current.dbp}" ></p:inputText>
+                                                <p:outputLabel  value="&nbsp;mmHg"  ></p:outputLabel>
+                                            </h:panelGroup>
 
-                                        <h:panelGrid columns="1" styleClass="alignTop" >
-                                            <p:autoComplete id="acDx" value="#{patientEncounterController.diagnosis}"
-                                                            completeMethod="#{diagnosisController.completeDiagnosis}"
-                                                            var="dx" forceSelection="true"
-                                                            converter="diagnosisConverter"
-                                                            itemLabel="#{dx.name}" styleClass="mediuminput"
-                                                            itemValue="#{dx}"
-                                                            >
-                                            </p:autoComplete>
-                                            <p:commandButton ajax="false" id="btnAddDx" value="Add Diagnosis" 
+                                            <h:panelGroup >
+                                                <p:commandLink ajax="false" id="btnIxChart" process="@this acixItem" value="Chart" action="#{patientEncounterController.createInvestigationChart()}" target="_blank"></p:commandLink>
+                                                <p:autoComplete id="acixItem" inputStyle="width:150px;" 
+                                                                completeMethod="#{investigationItemController.completeIxValues}"
+                                                                value="#{patientEncounterController.graphInvestigationItem}"
+                                                                var="ii" forceSelection="true"
+                                                                itemLabel="#{ii.name}" 
+                                                                itemValue="#{ii}">
+                                                    <p:ajax process="@this" ></p:ajax>
+                                                    <p:ajax event="itemSelect" process="@this" ></p:ajax>
+                                                </p:autoComplete>
+                                            </h:panelGroup>
+
+
+
+                                            <p:commandButton ajax="false" value="Print" >
+                                                <p:printer target="txtComments" ></p:printer>
+                                            </p:commandButton>
+                                        </p:panelGrid>
+                                    </div>
+
+
+                                </div>
+
+                                <div class="card m-2" >
+                                    <div class="card card-header" >
+                                        <h4><p:outputLabel value="Diagnosis" ></p:outputLabel></h4>
+                                    </div>
+                                    <div class="card card-body" >
+
+                                        <p:autoComplete id="acDx" value="#{patientEncounterController.diagnosis}"
+                                                        completeMethod="#{diagnosisController.completeDiagnosis}"
+                                                        var="dx" forceSelection="true"
+                                                        converter="diagnosisConverter"
+                                                        itemLabel="#{dx.name}" 
+                                                        itemValue="#{dx}"
+                                                        class="w-100"
+                                                        inputStyleClass="w-100"
+                                                        >
+                                        </p:autoComplete>
+                                        <p:inputTextarea class="w-100" autoResize="true"
+                                                         id="txtDx" 
+                                                         value="#{patientEncounterController.diagnosisComments}" ></p:inputTextarea>
+                                        <h:panelGroup  class="w-100">
+
+                                            <p:commandButton ajax="false" id="btnAddOnlyDx" value="Dx" 
                                                              action="#{patientEncounterController.addDx()}" >
                                             </p:commandButton>
-                                            <p:inputTextarea 
-                                                id="txtDx" 
-                                                style="width: 300px;"
-                                                value="#{patientEncounterController.diagnosisComments}" ></p:inputTextarea>
+                                            <p:commandButton ajax="false" id="btnAddDxAndRx" value="Dx &amp; Rx" 
+                                                             action="#{patientEncounterController.addDxAndRx()}" >
+                                            </p:commandButton>
+                                            <p:commandButton ajax="false" id="btnAddOnlyRx" value="Rx" 
+                                                             action="#{patientEncounterController.addDx()}" >
+                                            </p:commandButton>
+                                        </h:panelGroup>
 
-                                            <p:watermark value="Select Diagnosis." for="acDx" ></p:watermark>
-                                            <p:watermark value="Write Details about the Diagnosis here." for="txtDx" ></p:watermark>
 
-                                        </h:panelGrid>
 
-                                        <p:dataTable id="tblDx" value="#{patientEncounterController.current.diagnosis}" var="edx" style="width: 310px" >
+                                        <p:watermark value="Select Diagnosis." for="acDx" ></p:watermark>
+                                        <p:watermark value="Write Details about the Diagnosis here and click Dx button or Dx &amp; Rx button." for="txtDx" ></p:watermark>
+
+
+                                        <p:dataTable id="tblDx" 
+                                                     value="#{patientEncounterController.current.diagnosis}"
+                                                     emptyMessage="No Diagnosis Added Yet"
+                                                     var="edx" class="w-100" >
                                             <p:column width="10" >
                                                 <h:outputLabel value="#{edx.clinicalFindingItem.name}" ></h:outputLabel>
                                             </p:column>
@@ -119,54 +165,23 @@
 
                                         </p:dataTable>
 
-
-                                        <p:panelGrid columns="2" >
-                                            <p:commandLink value="Weight" action="#{patientEncounterController.createWtChart()}" ajax="false"  target="_blank"></p:commandLink>
-                                            <h:panelGroup >
-                                                <h:inputText  style="width: 60px;" value="#{patientEncounterController.current.weight}" ></h:inputText>
-                                                <p:outputLabel  value=" kg"  ></p:outputLabel>
-                                            </h:panelGroup>
-
-                                            <p:outputLabel value="Height" ></p:outputLabel>
-                                            <h:inputText  style="width: 60px;" value="#{patientEncounterController.current.height}" ></h:inputText>
-
-                                            <p:commandLink value="BP" action="#{patientEncounterController.createBpChart()}" ajax="false"  target="_blank"></p:commandLink>
-                                            <h:panelGroup >
-                                                <h:inputText style="width: 30px;" maxlength="3" value="#{patientEncounterController.current.sbp}" ></h:inputText>
-                                                <p:outputLabel value="/" ></p:outputLabel>
-                                                <h:inputText  style="width: 30px;" maxlength="3" value="#{patientEncounterController.current.dbp}" ></h:inputText>
-                                                <p:outputLabel  value="mmHg"  ></p:outputLabel>
-                                            </h:panelGroup>
-
-                                            <p:autoComplete id="acixItem" inputStyle="width:150px;" 
-                                                            completeMethod="#{investigationItemController.completeIxValues}"
-                                                            value="#{patientEncounterController.graphInvestigationItem}"
-                                                            var="ii" forceSelection="true"
-                                                            itemLabel="#{ii.name}" 
-                                                            itemValue="#{ii}">
-                                                <p:ajax process="@this" ></p:ajax>
-                                                <p:ajax event="itemSelect" process="@this" ></p:ajax>
-                                            </p:autoComplete>
-                                            <p:commandLink ajax="false" id="btnIxChart" process="@this acixItem" value="Chart" action="#{patientEncounterController.createInvestigationChart()}" target="_blank"></p:commandLink>
-                                        
-                                        </p:panelGrid>
+                                    </div>
+                                </div>
 
 
-                                    </h:panelGrid>
+                            </td>
+                            <td  style="vertical-align: top;" >
+                                <div class="card m-2" >
+                                    <div class="card card-header" >
+                                        <h4><p:outputLabel value="Patient Details" ></p:outputLabel></h4>
+                                    </div>
+                                    <div class="card card-body" >
 
-                                </p:panel>
-
-                            </h:panelGroup>
-                            <h:panelGroup>
-
-                                <h:panelGrid columns="3" >
-
-                                    <p:panel header="Patient Details" >
-
-                                        <h:panelGrid columns="2" id="panelPt" >
-
+                                        <p:panelGrid columns="2" id="panelPt" class="w-100" >
                                             <h:outputLabel value="Name" ></h:outputLabel>
-                                            <p:inputText autocomplete="off" id="txtPersonName" value="#{patientEncounterController.current.patient.person.name}"
+                                            <p:inputText autocomplete="off" id="txtPersonName" 
+                                                         class="w-100"
+                                                         value="#{patientEncounterController.current.patient.person.name}"
                                                          readonly="#{!sessionController.hasPrivilege('ClinicalPatientNameChange')}">
                                                 <p:ajax process="@this" event="blur" ></p:ajax>
                                             </p:inputText>
@@ -176,9 +191,10 @@
                                                 <p:ajax process="@this" ></p:ajax>
                                             </p:calendar>
                                             <h:outputLabel value="Address" ></h:outputLabel>
-                                            <h:inputTextarea id="txtPatientAddress"  value="#{patientEncounterController.current.patient.person.address}" >
+                                            <p:inputTextarea id="txtPatientAddress"  value="#{patientEncounterController.current.patient.person.address}" 
+                                                             class="w-100" rows="4">
                                                 <p:ajax process="@this" ></p:ajax>
-                                            </h:inputTextarea>
+                                            </p:inputTextarea>
 
                                             <h:outputLabel value="Age" ></h:outputLabel>
                                             <h:outputLabel value="#{patientEncounterController.current.patient.age}" >
@@ -189,13 +205,13 @@
                                             <h:panelGroup >
                                                 <p:graphicImage  style="border: 1px solid red; width: 150px;" 
                                                                  id="photos" cache="false"
-                                                                 rendered="#{patientController.current.baImage ne null}"    
+                                                                 rendered="#{patientController.current.baImage ne null and false}"    
                                                                  value="#{patientController.getPhotoByByte(patientController.current.baImage)}"  >
                                                 </p:graphicImage>
                                                 <h:panelGrid columns="5" >
-                                                    <p:commandLink target="_blank" ajax="false" action="capture" value="To Capture" ></p:commandLink>
+                                                    <p:commandLink rendered="false" target="_blank" ajax="false" action="capture" value="To Capture" ></p:commandLink>
                                                     <p:spacer height="1" width="5"></p:spacer>
-                                                    <p:commandLink process="@this" update="photos" value="Refresh" ></p:commandLink>
+                                                    <p:commandLink rendered="false" process="@this" update="photos" value="Refresh" ></p:commandLink>
                                                     <p:spacer height="1" width="5"></p:spacer>
                                                     <p:commandLink ajax="false" value="View" target="_blank" action="photo" ></p:commandLink>
                                                 </h:panelGrid>
@@ -209,14 +225,16 @@
 
                                             </h:outputLabel>
                                             <h:outputLabel value="Personal Hx" ></h:outputLabel>
-                                            <h:panelGroup  id="txtPatientComments" >
-                                                <p:inputTextarea rows="7" cols="30" 
+                                            <p:panel toggleable="true"
+                                                     collapsed="true"
+                                                     header="Personal Hx"  id="txtPatientComments" >
+                                                <p:inputTextarea rows="7" class="w-100"
                                                                  value="#{patientEncounterController.current.patient.comments}"
-                                                                 rendered="#{sessionController.hasPrivilege('ClinicalPatientCommentsView')}"
+                                                                 rendered="#{sessionController.hasPrivilege('ClinicalPatientCommentsView') or true}"
                                                                  disabled="#{!sessionController.hasPrivilege('ClinicalPatientCommentsEdit')}">
                                                     <p:ajax process="@this" ></p:ajax>
                                                 </p:inputTextarea>
-                                            </h:panelGroup>
+                                            </p:panel>
 
                                             <h:outputLabel value="Medical Hx" ></h:outputLabel>
                                             <h:panelGroup  id="txtMedicalHx" >
@@ -232,22 +250,69 @@
                                             <p:commandButton ajax="false" value="Update Patient" action="#{patientEncounterController.updatePerson()}"
                                                              process="panelPt" update="panelPt" ></p:commandButton>
 
-                                        </h:panelGrid>
+                                        </p:panelGrid>
 
-                                    </p:panel>
 
-                                    <p:panel header="Investigations" styleClass="alignTop" style="width: 350px">
-                                        <f:facet name="header" >
-                                            <p:outputLabel value="Investigations" ></p:outputLabel>
-                                            <p:commandLink value="Refresh" id="ixr" action="#{patientEncounterController.fillPatientInvestigations()}"
-                                                           process="@this" update="tblIxBills" style="float: right; padding-right: 10px;" ></p:commandLink>
-                                        </f:facet>
-                                        <p:dataTable  id="tblIxBills" value="#{patientEncounterController.currentPatientInvestigations}" var="pi"  rows="5"
+
+                                    </div>
+                                </div>
+
+
+                            </td>
+                            <td  style="vertical-align: top;" rowspan="3">
+
+                                <div class="card m-2" >
+                                    <div class="card-header" >
+                                        <h4>Past Visits</h4>
+                                    </div>
+                                    <div class="card-body" >
+                                        <p:dataTable value="#{patientEncounterController.currentPatientEncounters}" var="pe" 
+                                                     class="w-100" rendered="true"
+                                                     paginator="true"
+                                                     paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                                     >
+                                            <!--                                            <f:facet name="header" >
+                                                                                            <p:outputLabel value="Past Visits" ></p:outputLabel>
+                                                                                        </f:facet>-->
+
+                                            <p:column headerText="Visit Date" >
+                                                <h:outputLabel value="#{pe.createdAt}" >
+                                                    <f:convertDateTime pattern="dd MMMM yyyy" ></f:convertDateTime>
+                                                </h:outputLabel>
+                                            </p:column>
+                                            <p:column headerText="Dx" >
+                                                <ui:repeat value="#{pe.diagnosis}" var="dxs" >
+                                                    <h:outputLabel value="#{dxs.stringValue}" ></h:outputLabel>
+                                                    <h:outputLabel value="&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;" rendered="#{dxs.lobValue ne null}"></h:outputLabel>
+                                                    <h:outputLabel value="#{dxs.lobValue}" ></h:outputLabel>
+                                                    <br/>
+                                                </ui:repeat>
+                                            </p:column>
+                                            <p:column headerText="View" >
+                                                <p:commandButton ajax="false" value="View" action="#{patientEncounterController.prepareToDisplayPastVisit()}"  >
+                                                    <f:setPropertyActionListener target="#{patientEncounterController.encounterToDisplay}" value="#{pe}" ></f:setPropertyActionListener>
+                                                </p:commandButton>
+                                            </p:column>
+                                        </p:dataTable>
+                                    </div>
+                                </div>
+                                <div class="card m-2" >
+                                    <div class="card-header" >
+                                        <h4>
+                                            <h:commandLink value="Investigations" id="ixr" action="#{patientEncounterController.fillPatientInvestigations()}">
+                                                <f:ajax execute="ixr" render="tblIxBills" ></f:ajax>
+                                            </h:commandLink>
+                                        </h4>
+                                    </div>
+                                    <div class="card-body" >
+                                        <p:dataTable  id="tblIxBills" 
+                                                      value="#{patientEncounterController.currentPatientInvestigations}" var="pi"  rows="5"
+                                                      class="w-100"
+                                                      rendered="true"
                                                       paginator="true"
                                                       paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
                                                       >
-
-                                            <p:column  headerText="Ix" styleClass="alignTop" width="50" >
+                                            <p:column  headerText="Ix" styleClass="alignTop"  >
                                                 <h:outputLabel  id="lblBillIx" value="#{pi.billItem.item.name}">
                                                 </h:outputLabel>
                                                 <p:tooltip for="lblBillIx"  >
@@ -279,28 +344,31 @@
                                                     </h:panelGroup>
                                                 </p:tooltip>
                                             </p:column>
-
-
-
-
-                                            <p:column headerText="Data-Entered Reports"  styleClass="alignTop noBorderGrid" width="50" >
-                                                <h:dataTable value="#{pi.patientReports}" var="dpr" rendered="#{pi.patientReports.size() ne 0}"  styleClass="noBorderGrid" >
-                                                    <h:column >
+                                            <p:column headerText="Data-Entered Reports"   >
+                                                <p:dataTable value="#{pi.patientReports}" 
+                                                             var="dpr"
+                                                             rendered="#{pi.patientReports.size() ne 0 and false}"   >
+                                                    <p:column >
                                                         <p:commandLink id="cmdOldReport" style="text-decoration:underline;" 
                                                                        value="#{dpr.item.name}" target="_blank"
                                                                        ajax="false" action="/lab/patient_report">
                                                             <f:setPropertyActionListener value="#{dpr}" target="#{patientReportController.currentPatientReport}"></f:setPropertyActionListener>
                                                         </p:commandLink>
-                                                    </h:column>
-                                                </h:dataTable>
+                                                    </p:column>
+                                                </p:dataTable>
                                             </p:column>
 
                                         </p:dataTable>
-                                    </p:panel>
-
-                                    <p:panel header="Channellings" >
+                                    </div>
+                                </div>
+                                <div class="card m-2" >
+                                    <div class="card-header" >
+                                        <h4>Channel Bills</h4>
+                                    </div>
+                                    <div class="card-body" >
                                         <p:dataTable value="#{patientEncounterController.currentChannelBills}" 
-                                                     var="bill" rows="5"
+                                                     var="bill" rendered="true"
+                                                     class="w-100"
                                                      paginator="true"
                                                      paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
                                                      >
@@ -309,7 +377,7 @@
                                                     <f:convertDateTime pattern="yy/MM/dd" ></f:convertDateTime>
                                                 </h:outputLabel>
                                             </p:column>
-                                           
+
                                             <p:column  headerText="Consultant" width="130" >
                                                 <h:outputLabel value="#{bill.staff.person.name}" ></h:outputLabel>
                                             </p:column>
@@ -334,49 +402,21 @@
                                                 </h:outputLabel>
                                             </p:column>
                                         </p:dataTable>
-
-
-
-
-
-
-                                    </p:panel>
-
-                                    <p:panel header="Past Visits" styleClass="alignTop" >
-                                        <p:dataTable value="#{patientEncounterController.currentPatientEncounters}" var="pe" rows="5"
-                                                     paginator="true"
-                                                     paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-                                                     >
-
-                                            <p:column headerText="Visit Date" >
-                                                <h:outputLabel value="#{pe.createdAt}" >
-                                                    <f:convertDateTime pattern="dd MMMM yyyy" ></f:convertDateTime>
-                                                </h:outputLabel>
-                                            </p:column>
-                                            <p:column headerText="Dx" >
-                                                <ui:repeat value="#{pe.diagnosis}" var="dxs" >
-                                                    <h:outputLabel value="#{dxs.stringValue}" ></h:outputLabel>
-                                                    <h:outputLabel value="&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;" rendered="#{dxs.lobValue ne null}"></h:outputLabel>
-                                                    <h:outputLabel value="#{dxs.lobValue}" ></h:outputLabel>
-                                                    <br/>
-                                                </ui:repeat>
-                                            </p:column>
-                                            <p:column headerText="View" >
-                                                <p:commandButton ajax="false" value="View" action="#{patientEncounterController.prepareToDisplayPastVisit()}" onclick="onSubmitButton();" >
-                                                    <f:setPropertyActionListener target="#{patientEncounterController.encounterToDisplay}" value="#{pe}" ></f:setPropertyActionListener>
-                                                </p:commandButton>
-                                            </p:column>
-                                        </p:dataTable>
-                                    </p:panel>
-
-                                    <p:panel header="Billings" style="width: 350px">
+                                    </div>
+                                </div>
+                                <div class="card m-2" >
+                                    <div class="card-header" >
+                                        <h1>Bills</h1>
+                                    </div>
+                                    <div class="card-body" >
                                         <p:dataTable id="tblPtBills"
+                                                     class="w-100"
+                                                     rendered="true"
                                                      value="#{patientEncounterController.currentPatientBills}" 
                                                      var="bill" rows="5"
                                                      paginator="true"
                                                      paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
                                                      >
-                                          
                                             <p:column headerText="Date" width="50" >
                                                 <h:outputLabel id="lblBillDates" value="#{bill.createdAt}" >
                                                     <f:convertDateTime parent="dd-MM-yy" ></f:convertDateTime>
@@ -388,43 +428,114 @@
                                             </p:column>
 
                                             <p:column  headerText="Bill Type" id="colType1" width="250" >
-
                                                 <table >
                                                     <ui:repeat value="#{bill.billItems}" var="tbi" >
                                                         <tr>
                                                             <td>
                                                                 <p:outputLabel value="#{tbi.item.name}" ></p:outputLabel>
                                                             </td>
-                                                            <td>
+                                                            <td style="width: 3em;">
                                                                 <p:outputLabel value="#{tbi.qty}" rendered="#{bill.billType eq 'PharmacySale'}" ></p:outputLabel>
                                                             </td>
                                                         </tr>
                                                     </ui:repeat>
                                                 </table>
-
-
                                             </p:column>
-                                            <p:column headerText="Net Value" width="50" >
+                                            <p:column headerText="Net Value" width="80" >
                                                 <h:outputLabel value="#{bill.netTotal}" >
                                                     <f:convertNumber pattern="#,##0.00" ></f:convertNumber>
                                                 </h:outputLabel>
                                             </p:column>
                                         </p:dataTable>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td colspan="2" style="vertical-align: top;">
+                                <div class="card m-2" >
+                                    <div class="card card-header" >
+                                        <h4><p:outputLabel value="Medicines" ></p:outputLabel></h4>
+                                    </div>
+                                    <div class="card card-body" >
+
+                                        <h:panelGroup class="w-100" >
+                                            <p:autoComplete id="acAddingMedicine" 
+                                                            value="#{patientEncounterController.addingEncounterMedicine}" 
+                                                            forceSelection="true"
+                                                            completeMethod="#{itemController.completePrescribingMedicines}" 
+                                                            var="vt" itemLabel="#{vt.name}" itemValue="#{vt}"
+                                                            placeholder="Select Medicine">
+                                            </p:autoComplete>
+                                            <p:commandButton value="Add" ajax="false"
+                                                             process="acAddingMedicine"
+                                                             update="tblPres acAddingMedicine"
+                                                             action="#{patientEncounterController.addEncounterMedicine()}" ></p:commandButton>
+                                        </h:panelGroup>
+                                        <p:dataTable rendered="true"
+                                                     class="w-100"
+                                                     id="tblPres" 
+                                                     value="#{patientEncounterController.current.prescriptions}"
+                                                     var="cm" rowKey="#{cm.id}"
+                                                     emptyMessage="No medicines added yet.">
+                                            <p:column >
+                                                <p:outputLabel value="#{cm.item.name}" ></p:outputLabel>
+                                                <p:commandLink id="clRemove" value="(X)" process="clRemove tblPres" update="tblPres" action="#{patientEncounterController.removePrescreption()}" >
+                                                    <f:setPropertyActionListener value="#{cm}" target="#{patientEncounterController.removingPrescreption}" ></f:setPropertyActionListener>
+                                                </p:commandLink>
+                                            </p:column>
+                                            <p:column >
+                                                <p:inputText value="#{cm.dose}" style="width: 4em;" ></p:inputText>
+                                                <p:selectOneMenu   value="#{cm.doseUnit}" >
+                                                    <f:selectItem itemLabel="Dose Unit" ></f:selectItem>
+                                                    <f:selectItems  value="#{doseUnitController.items}" var="myItem" itemValue="#{myItem}" itemLabel="#{myItem.name}" ></f:selectItems>
+                                                </p:selectOneMenu>
+                                            </p:column>
+                                            <p:column >
+                                                <p:selectOneMenu    
+                                                    value="#{cm.frequencyUnit}">
+                                                    <f:selectItem itemLabel="Frequency" ></f:selectItem>
+                                                    <f:selectItems  value="#{frequencyUnitController.items}" var="myItem" itemValue="#{myItem}" itemLabel="#{myItem.name}" ></f:selectItems>
+                                                </p:selectOneMenu>
+                                            </p:column>
+                                            <p:column >
+                                                <p:inputText value="#{cm.duration}" style="width: 4em;" ></p:inputText>
+                                                <p:selectOneMenu    
+                                                    value="#{cm.durationUnit}">
+                                                    <f:selectItem itemLabel="Duration" ></f:selectItem>
+                                                    <f:selectItems  value="#{durationUnitController.items}" var="myItem" itemValue="#{myItem}" itemLabel="#{myItem.name}" ></f:selectItems>
+                                                </p:selectOneMenu>
+                                            </p:column>
+                                        </p:dataTable>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
 
 
-
-
-
-
-                                    </p:panel>
-
-                                </h:panelGrid>
-
-                            </h:panelGroup>
-                        </h:panelGrid>
-                    </p:panel>
-
+                    </table>
                 </h:form>
+
+                <div class="row" style="background-color: greenyellow;" >
+                    <div class="col-md-12" >
+                        <h:form enctype="multipart/form-data" rendered="true" >
+                            <h:outputScript library="photocam" name="webcam.js" ></h:outputScript>
+                            <p:commandButton type="button" value="Capture" onclick="PF('pc').capture()"/>
+                            <p:photoCam 
+                                listener="#{photoCamBean.oncapturePatientPhoto}" 
+                                widgetVar="pc" 
+                                width="400"
+                                height="300"
+                                photoWidth="800"
+                                photoHeight="600"
+                                />
+                        </h:form>
+                    </div>
+                </div>
+
+
+
 
 
             </ui:define>

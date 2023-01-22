@@ -8,7 +8,8 @@
                 xmlns:ch="http://java.sun.com/jsf/composite/channel"
                 xmlns:pa="http://java.sun.com/jsf/composite/paymentMethod"
                 xmlns:au="http://java.sun.com/jsf/composite/autocomplete"
-                xmlns:pat="http://java.sun.com/jsf/composite/patient">
+                xmlns:pat="http://java.sun.com/jsf/composite/patient"
+                xmlns:ez="http://xmlns.jcp.org/jsf/composite/ezcomp">
 
     <ui:define name="content">
 
@@ -62,7 +63,8 @@
 
                         });
                     </h:outputScript>
-                    <p:dataTable id="tblCon"  var="mys" rowKey="#{mys.id}" value="#{bookingController.consultants}"
+                    <p:dataTable id="tblCon"  var="mys" rowKey="#{mys.id}" 
+                                 value="#{bookingController.consultants}"
                                  selection="#{bookingController.staff}" scrollable="true" scrollHeight="280"
                                  style="height: 300px; width: 200px; padding: 2px; margin: auto;" 
                                  selectionMode="single" >
@@ -73,7 +75,7 @@
                         </p:column>
                         <p:ajax  event="rowSelect" 
                                  process="@this" 
-                                 update=":#{p:component('tblSessionsOfSelectedConsultant')}"  
+                                 update=":#{p:component('gpSessionsOfSelectedConsultant')}"  
                                  listener="#{bookingController.generateSessions}"/>
                     </p:dataTable>
 
@@ -81,8 +83,13 @@
 
                 </h:panelGroup>
 
-                <h:panelGroup >
-                    <p:inputText autocomplete="off" id="txtSearch3" value="#{bookingController.selectTextSession}" style="width: 176px;margin-left: 2px;" placeholder="Session" >
+
+
+                <h:panelGroup id="gpSessionsOfSelectedConsultant">
+
+                    <p:inputText autocomplete="off" id="txtSearch3" 
+                                 value="#{bookingController.selectTextSession}" 
+                                 style="width: 176px;margin-left: 2px;" placeholder="Session" >
                         <f:ajax  event="keyup" execute="@this" render=":#{p:component('tblSessionsOfSelectedConsultant')}" listener="#{bookingController.listnerSessionRowSelect}"/> 
                     </p:inputText>
                     <h:outputScript>
@@ -95,7 +102,9 @@
 
                         });
                     </h:outputScript>
-                    <p:dataTable value="#{bookingController.serviceSessions}" rowKey="#{ses.transRowNumber}"
+
+                    <p:dataTable value="#{bookingController.serviceSessions}"
+                                 rowKey="#{ses.transRowNumber}"
                                  id="tblSessionsOfSelectedConsultant" var="ses"
                                  selectionMode="single" 
                                  selection="#{bookingController.selectedServiceSession}"
@@ -107,34 +116,35 @@
                                 update=":#{p:component('tblBookingsOfSelectedSession')} :#{p:component('lblSessionTotal')}"
                                 listener="#{bookingController.fillBillSessions}" />
 
-                        <p:column headerText="Session" style="text-wrap: none;"  rendered="#{sessionController.institutionPreference.applicationInstitution ne 'Ruhuna'}">
+                        <p:column headerText="Session" style="text-wrap: none;" >
                             <h:outputText id="lblSesName" value="#{ses.name}" escape="false"></h:outputText>
                             <p:tooltip for="lblSesName" value="#{ses.name}" ></p:tooltip>
                         </p:column>
-                        <p:column headerText="Max" style="width: 20px!important; text-align: center;" rendered="#{sessionController.institutionPreference.applicationInstitution ne 'Ruhuna'}">
+                        <p:column headerText="Max" style="width: 20px!important; text-align: center;" >
                             <h:outputText value="#{ses.maxNo}" rendered="#{ses.maxNo ne 0}">
                                 <f:convertNumber pattern="00" ></f:convertNumber>
                             </h:outputText>
                         </p:column>
 
-                        <p:column headerText="Booked" style="width: 20px!important; text-align: center;" rendered="#{sessionController.institutionPreference.applicationInstitution ne 'Ruhuna'}">
+                        <p:column headerText="Booked" style="width: 20px!important; text-align: center;" 
+                                  >
                             <h:outputText value="#{ses.displayCount}">
                                 <f:convertNumber pattern="00" ></f:convertNumber>
                             </h:outputText>
                         </p:column>
 
-                        <p:column headerText="Date" style="width: 50px!important; text-align: center;" rendered="#{sessionController.institutionPreference.applicationInstitution ne 'Ruhuna'}">
+                        <p:column headerText="Date" style="width: 50px!important; text-align: center;">
                             <h:outputText value="#{ses.sessionDate}">
                                 <f:convertDateTime pattern="dd MMM"/>
                             </h:outputText>
                         </p:column>
 
-                        <p:column headerText="Time" style="width: 40px!important; text-align: center;" rendered="#{sessionController.institutionPreference.applicationInstitution ne 'Ruhuna'}">
+                        <p:column headerText="Time" style="width: 40px!important; text-align: center;">
                             <h:outputText value="#{ses.startingTime}">
                                 <f:convertDateTime pattern="hh:mm"/>
                             </h:outputText>
                         </p:column>
-                        <p:column headerText="Fee" style="width: 40px!important; text-align: center;" rendered="#{sessionController.institutionPreference.applicationInstitution ne 'Ruhuna'}">
+                        <p:column headerText="Fee" style="width: 40px!important; text-align: center;">
                             <h:outputText value="#{ses.totalFee}">
                                 <f:convertNumber pattern="#,##0" ></f:convertNumber>
                             </h:outputText>                                                            
@@ -362,10 +372,10 @@
                             </h:panelGrid>
                         </p:tab>
                         <p:tab  id="tabSearchPt" title="Search Pateint">
-                            
-                            
 
-                            
+
+
+
                             <p:autoComplete widgetVar="aPt" id="acPt" forceSelection="true" 
                                             value="#{channelBillController.searchPatient}" 
                                             completeMethod="#{patientController.completePatientByNameOrCodeOrTitle}" 
@@ -406,12 +416,10 @@
                             <h:panelGroup  id="panSearch" >
                                 <pat:searchPatientDetail patient="#{channelBillController.searchPatient}"  />
                             </h:panelGroup>
-                            
+
                         </p:tab>
                     </p:tabView>
                     <h:panelGrid columns="3" style="min-width: 100%;">
-
-
                         <p:commandButton   id="btnAdd" 
                                            value="Add" process="tabViewPatientDetails :#{p:component('tabNewPt')} :#{p:component('tabSearchPt')} btnAdd :#{p:component('pgNewBookingDetail')}" 
                                            update="gpThisBookingDetails" style="float: right;" 
@@ -442,453 +450,10 @@
                         </p:commandButton>
 
 
-                        <h:panelGroup id="panelAddedBillPrint" styleClass="noBorder" rendered="#{channelBillController.settleSucessFully}" >
-
-
-                            <div>
-                                <h:panelGroup rendered="#{sessionController.institutionPreference.channelBillPaperType eq 'Paper24_2x9_3'}">
-                                    <ch:channelRecipt_24_2x9_3 bill="#{channelBillController.printingBill}" dup="false"/>
-                                </h:panelGroup>
-                            </div>
+                        <h:panelGroup id="panelAddedBillPrint" styleClass="noBorder"
+                                      rendered="#{channelBillController.settleSucessFully}" >
                             <div >
-
-                                <h:panelGroup rendered="#{sessionController.institutionPreference.channelBillPaperType eq 'FiveFivePaper'}">
-                                    <h:panelGroup rendered="#{!sessionController.institutionPreference.pharmacyBillPrabodha}" > 
-                                        <ch:channelRecipt bill="#{channelBillController.printingBill}" dup="false"/>
-                                    </h:panelGroup>
-                                </h:panelGroup>
-                            </div>
-                            <div >
-                                <h:panelGroup rendered="#{sessionController.institutionPreference.channelBillPaperType eq 'PosPaper'}">
-                                    <h:panelGroup rendered="#{sessionController.institutionPreference.pharmacyBillPrabodha}" > 
-                                        <ch:channelReciptPosDouble bill="#{channelBillController.printingBill}" dup="false"/>
-                                    </h:panelGroup>
-
-                                    <h:panelGroup rendered="#{!sessionController.institutionPreference.pharmacyBillPrabodha}" > 
-                                        <h:panelGroup>
-                                            <h:outputStylesheet library="css" name="channellingpos.css" ></h:outputStylesheet>
-
-                                            <h:panelGroup id="panelAddedBillPrint2">
-
-
-                                                <div class="posbill" style="text-align: left!important; page-break-after: always;">
-                                                    <div style="position: absolute; padding-left: 165px;">
-                                                        <p:graphicImage style="width: 2.7cm!important;height: 2.7cm!important;" rendered="#{sessionController.institutionPreference.logoName ne null}" library="image" name="prabdhodha-logo-plain.jpg" ></p:graphicImage>
-                                                    </div>
-                                                    <div style="text-align: center;">
-                                                        <h:outputLabel value="#{channelBillController.printingBill.department.printingName}" style="text-align: center;"></h:outputLabel>
-                                                    </div>
-                                                    <div style="text-align: center;">
-                                                        <h:outputLabel value="#{channelBillController.printingBill.department.address} " style="text-align: center;"></h:outputLabel>
-                                                        <div style="text-align: center;">
-                                                            <h:outputLabel value="Tel:-#{channelBillController.printingBill.department.telephone1}" style="text-align: center;"></h:outputLabel>
-                                                        </div>
-
-                                                    </div>
-                                                    <p:spacer height="15"/>
-                                                    <div style="font-weight: bold; text-align: center;">
-                                                        <h:outputLabel value="Channell Bill"   style="text-align: center;"/>    
-                                                        <h:outputLabel value="**Cancelled**"  rendered="#{channelBillController.printingBill.cancelled eq true}" style="text-align: center;"/> 
-                                                        <br></br>
-                                                        <h:outputLabel value="(Customer Copy)"   style="text-align: center;"/> 
-                                                    </div>
-                                                    <div style="text-align: center;">
-                                                        <h:outputLabel value="--------------------------" style="text-align: center;"></h:outputLabel>
-                                                    </div>
-                                                    <p:spacer height="30"/>
-
-                                                    <table >
-
-                                                        <tr>
-                                                            <td>
-                                                                <b>
-                                                                    <h:outputLabel value="Number" ></h:outputLabel>
-                                                                </b>
-                                                            </td>
-                                                            <td>
-                                                                <p:spacer width="10" ></p:spacer>
-                                                            </td>
-                                                            <td>
-                                                                <h:outputLabel value=":" ></h:outputLabel>
-                                                            </td>
-                                                            <td>
-                                                                <b>
-                                                                    <ui:repeat value="#{channelBillController.printingBill.billItems}" var="cbi" >
-                                                                        <h:outputLabel value="#{cbi.billSession.serialNo}" style="font-size:30px !important;  font-weight: bold; margin: 5px;padding: 5px;border: 1px solid black; color: red;" ></h:outputLabel>
-                                                                    </ui:repeat>
-                                                                </b>
-                                                            </td>
-
-                                                        </tr>
-
-
-                                                        <tr>
-                                                            <td>
-                                                                <h:outputLabel value="Name" ></h:outputLabel>
-                                                            </td>
-                                                            <td>
-                                                                <p:spacer width="10" ></p:spacer>
-                                                            </td>
-                                                            <td>
-                                                                <h:outputLabel value=":" ></h:outputLabel>
-                                                            </td>
-                                                            <td>
-                                                                <h:outputLabel value="#{channelBillController.printingBill.patient.person.nameWithTitle}" ></h:outputLabel>
-                                                            </td>
-
-                                                        </tr>
-
-                                                        <tr>
-                                                            <td>
-                                                                <h:outputLabel value="Phone" ></h:outputLabel>
-                                                            </td>
-                                                            <td>
-                                                                <p:spacer width="10" ></p:spacer>
-                                                            </td>
-                                                            <td>
-                                                                <h:outputLabel value=":" ></h:outputLabel>
-                                                            </td>
-                                                            <td>
-                                                                <h:outputLabel value="#{channelBillController.printingBill.patient.person.phone}" ></h:outputLabel>
-                                                            </td>
-                                                        </tr>
-
-
-
-                                                        <tr>
-                                                            <td>
-                                                                <b>
-                                                                    <h:outputLabel value="Consultant" ></h:outputLabel>
-                                                                </b>
-                                                            </td>
-                                                            <td>
-                                                                <p:spacer width="10" ></p:spacer>
-                                                            </td>
-                                                            <td>
-                                                                <h:outputLabel value=":" ></h:outputLabel>
-                                                            </td>
-                                                            <td>
-                                                                <b>
-                                                                    <ui:repeat value="#{channelBillController.printingBill.billItems}" var="cbi" >
-                                                                        <h:outputLabel value="#{cbi.billSession.staff.person.nameWithTitle}" ></h:outputLabel>
-                                                                    </ui:repeat>
-                                                                </b>
-                                                            </td>
-
-                                                        </tr>
-
-                                                        <tr>
-                                                            <td>
-                                                                <b>
-                                                                    <h:outputLabel value="App. Date" ></h:outputLabel>
-                                                                </b>
-                                                            </td>
-                                                            <td>
-                                                                <p:spacer width="10" ></p:spacer>
-                                                            </td>
-                                                            <td>
-                                                                <h:outputLabel value=":" ></h:outputLabel>
-                                                            </td>
-                                                            <td>
-                                                                <b>
-                                                                    <h:outputLabel value="#{channelBillController.printingBill.singleBillSession.sessionDate}" >
-                                                                        <f:convertDateTime pattern="dd MMMM yyyy" ></f:convertDateTime>
-                                                                    </h:outputLabel>
-                                                                </b>
-                                                            </td>
-
-                                                        </tr>
-
-                                                        <tr>
-                                                            <td>
-                                                                <b>
-                                                                    <h:outputLabel value="App. Time" ></h:outputLabel>
-                                                                </b>
-                                                            </td>
-                                                            <td>
-                                                                <p:spacer width="10" ></p:spacer>
-                                                            </td>
-                                                            <td>
-                                                                <h:outputLabel value=":" ></h:outputLabel>
-                                                            </td>
-                                                            <td>
-                                                                <b>
-                                                                    <h:outputLabel value="#{channelBillController.printingBill.singleBillSession.serviceSession.startingTime}" >
-                                                                        <f:convertDateTime pattern="hh:mm a" ></f:convertDateTime>
-                                                                    </h:outputLabel>
-                                                                </b>
-                                                            </td>
-
-                                                        </tr>
-
-                                                        <tr>
-                                                            <td>
-                                                                <b>
-                                                                    <h:outputLabel value="Room No." ></h:outputLabel>
-                                                                </b>
-                                                            </td>
-                                                            <td>
-                                                                <p:spacer width="10" ></p:spacer>
-                                                            </td>
-                                                            <td>
-                                                                <h:outputLabel value=":" ></h:outputLabel>
-                                                            </td>
-                                                            <td>
-
-                                                                <h:outputLabel value="#{channelBillController.printingBill.singleBillSession.serviceSession.roomNo}" style="font-weight: bold;">
-                                                                </h:outputLabel>
-
-                                                            </td>
-
-                                                        </tr>
-
-
-
-                                                        <ui:repeat value="#{channelBillController.printingBill.billFees}" var="cbif" >
-                                                            <tr>
-                                                                <td>
-                                                                    <h:outputLabel value="#{cbif.fee.name}" rendered="#{cbif.feeGrossValue ne 0.0}"></h:outputLabel>
-                                                                </td>
-                                                                <td>
-                                                                    <p:spacer width="10" rendered="#{cbif.feeGrossValue ne 0.0}"></p:spacer>
-                                                                </td>
-                                                                <td>
-                                                                    <h:outputLabel value=":" rendered="#{cbif.feeGrossValue ne 0.0}"></h:outputLabel>
-                                                                </td>
-                                                                <td>
-                                                                    <h:outputLabel value="#{cbif.feeGrossValue}" rendered="#{cbif.feeGrossValue ne 0.0}">
-                                                                        <f:convertNumber pattern="#,##0.00" ></f:convertNumber>
-                                                                    </h:outputLabel>
-                                                                </td>
-                                                            </tr>
-                                                        </ui:repeat>
-
-
-
-                                                        <h:panelGroup rendered="#{channelBillController.printingBill.discount gt 1}" >
-
-                                                            <tr>
-                                                                <td>
-                                                                    <b>
-                                                                        <h:outputLabel value="Gross Total ***" ></h:outputLabel>
-                                                                    </b>
-                                                                </td>
-                                                                <td>
-                                                                    <p:spacer width="10" ></p:spacer>
-                                                                </td>
-                                                                <td>
-                                                                    <h:outputLabel value=":" ></h:outputLabel>
-                                                                </td>
-                                                                <td>
-                                                                    <b>
-                                                                        <h:outputLabel value="#{channelBillController.printingBill.total}" >
-                                                                            <f:convertNumber pattern="#,##0.00" ></f:convertNumber>
-                                                                        </h:outputLabel>
-                                                                    </b>
-                                                                </td>
-
-                                                            </tr>
-                                                            <tr>
-                                                                <td>
-                                                                    <b>
-                                                                        <h:outputLabel value="Discount" ></h:outputLabel>
-                                                                    </b>
-                                                                </td>
-                                                                <td>
-                                                                    <p:spacer width="10" ></p:spacer>
-                                                                </td>
-                                                                <td>
-                                                                    <h:outputLabel value=":" ></h:outputLabel>
-                                                                </td>
-                                                                <td>
-                                                                    <b>
-                                                                        <h:outputLabel value="#{channelBillController.printingBill.discount}" >
-                                                                            <f:convertNumber pattern="#,##0.00" ></f:convertNumber>
-                                                                        </h:outputLabel>
-                                                                    </b>
-                                                                </td>
-
-                                                            </tr>
-                                                            <tr>
-                                                                <td>
-                                                                    <b>
-                                                                        <h:outputLabel value="Net Total" ></h:outputLabel>
-                                                                    </b>
-                                                                </td>
-                                                                <td>
-                                                                    <p:spacer width="10" ></p:spacer>
-                                                                </td>
-                                                                <td>
-                                                                    <h:outputLabel value=":" ></h:outputLabel>
-                                                                </td>
-                                                                <td>
-                                                                    <b>
-                                                                        <h:outputLabel value="#{channelBillController.printingBill.netTotal}" >
-                                                                            <f:convertNumber pattern="#,##0.00" ></f:convertNumber>
-                                                                        </h:outputLabel>
-                                                                    </b>
-                                                                </td>
-
-                                                            </tr>
-                                                        </h:panelGroup>
-
-                                                        <h:panelGroup rendered="#{channelBillController.printingBill.discount lt 1}" >
-                                                            <tr>
-                                                                <td>
-                                                                    <b>
-                                                                        <h:outputLabel value="Total***" ></h:outputLabel>
-                                                                    </b>
-                                                                </td>
-                                                                <td>
-                                                                    <p:spacer width="10" ></p:spacer>
-                                                                </td>
-                                                                <td>
-                                                                    <h:outputLabel value=":" ></h:outputLabel>
-                                                                </td>
-                                                                <td>
-                                                                    <b>
-                                                                        <h:outputLabel value="#{channelBillController.printingBill.total}" >
-                                                                            <f:convertNumber pattern="#,##0.00" ></f:convertNumber>
-                                                                        </h:outputLabel>
-                                                                    </b>
-                                                                </td>
-
-                                                            </tr>
-
-                                                        </h:panelGroup>
-
-
-
-
-
-
-
-                                                        <tr>
-                                                            <td>
-                                                                <h:outputLabel value="Session Name" ></h:outputLabel>
-                                                            </td>
-                                                            <td>
-                                                                <p:spacer width="10" ></p:spacer>
-                                                            </td>
-                                                            <td>
-                                                                <h:outputLabel value=":" ></h:outputLabel>
-                                                            </td>
-                                                            <td>
-                                                                <h:outputLabel value="#{channelBillController.printingBill.singleBillItem.item.name}"></h:outputLabel>
-                                                            </td>
-                                                        </tr>
-
-
-
-                                                        <tr>
-                                                            <td>
-                                                                <h:outputLabel value="Bill At" ></h:outputLabel>
-                                                            </td>
-                                                            <td>
-                                                                <p:spacer width="10" ></p:spacer>
-                                                            </td>
-                                                            <td>
-                                                                <h:outputLabel value=":" ></h:outputLabel>
-                                                            </td>
-                                                            <td>
-                                                                <h:outputLabel value="#{channelBillController.printingBill.createdAt}">
-                                                                    <f:convertDateTime pattern="dd MM yy hh:mm a" ></f:convertDateTime>
-                                                                </h:outputLabel>
-                                                            </td>
-                                                        </tr>
-
-                                                        <tr>
-                                                            <td>
-                                                                <h:outputLabel value="Cashier Sign." ></h:outputLabel>
-                                                            </td>
-                                                            <td>
-                                                                <p:spacer width="10" ></p:spacer>
-                                                            </td>
-                                                            <td>
-                                                                <h:outputLabel value=":" ></h:outputLabel>
-                                                            </td>
-                                                            <td>
-                                                                <h:outputLabel value="...............................">
-                                                                </h:outputLabel>
-                                                            </td>
-                                                        </tr>
-
-                                                        <tr>
-                                                            <td>
-                                                                <h:outputLabel value="Cashier Name" ></h:outputLabel>
-                                                            </td>
-                                                            <td>
-                                                                <p:spacer width="10" ></p:spacer>
-                                                            </td>
-                                                            <td>
-                                                                <h:outputLabel value=":" ></h:outputLabel>
-                                                            </td>
-                                                            <td>
-                                                                <h:outputLabel value="#{channelBillController.printingBill.creater.webUserPerson.name}" rendered="#{channelBillController.printingBill.paidBill eq null}" ></h:outputLabel>
-                                                                <h:outputLabel value="#{channelBillController.printingBill.paidBill.creater.code}" rendered="#{channelBillController.printingBill.paidBill ne null}" ></h:outputLabel>
-                                                            </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td colspan="4" >
-                                                                <p:graphicImage cache="false" value="#{billController.getCreateBarcodeCode128(channelBillController.printingBill.patient.phn)}" 
-                                                                                style="max-width: 7.5cm; padding: 10px; margin: 10px;" ></p:graphicImage>
-                                                            </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td>
-                                                                <p:spacer width="10" ></p:spacer>
-                                                            </td>                            
-                                                        </tr>
-                                                        <tr>
-                                                            <td>
-                                                                <p:spacer width="10" ></p:spacer>
-                                                            </td>                            
-                                                        </tr>
-                                                        <tr>
-                                                            <td>
-                                                                <p:spacer width="10" ></p:spacer>
-                                                            </td>                            
-                                                        </tr>
-                                                        <tr>
-                                                            <td>
-                                                                <p:spacer width="10" ></p:spacer>
-                                                            </td>                            
-                                                        </tr>
-                                                        <tr>
-                                                            <td>
-                                                                <p:spacer width="10" ></p:spacer>
-                                                            </td>                            
-                                                        </tr>
-                                                        <tr>
-                                                            <td>
-                                                                <p:spacer width="10" ></p:spacer>
-                                                            </td>                            
-                                                        </tr>
-                                                        <tr>
-                                                            <td>
-                                                                <p:spacer width="10" ></p:spacer>
-                                                            </td>                            
-                                                        </tr>
-                                                        <tr>
-                                                            <td>
-                                                                <p:spacer width="10" ></p:spacer>
-                                                            </td>                            
-                                                        </tr>
-                                                    </table>
-
-                                                </div>
-
-
-                                            </h:panelGroup>
-
-
-
-
-
-                                        </h:panelGroup>
-                                    </h:panelGroup>
-
-                                </h:panelGroup>
+                                <ez:bmsChannelBill bill="#{channelBillController.printingBill}"/>
                             </div>
 
                         </h:panelGroup>
@@ -1103,475 +668,14 @@
 
                             <h:panelGroup id="panelAddedBillPrintRe" styleClass="noBorder" >
 
-                                <div>
-                                    <h:panelGroup rendered="#{sessionController.institutionPreference.channelBillPaperType eq 'Paper24_2x9_3'}">
-                                        1
-                                        <ch:channelRecipt_24_2x9_3 bill="#{channelBillController.billSession.billItem.bill}" dup="true"/>                                        
-                                    </h:panelGroup>
-                                </div>
-
                                 <div >
-                                    <h:panelGroup rendered="#{sessionController.institutionPreference.channelBillPaperType eq 'FiveFivePaper'}">
-                                        <h:panelGroup rendered="#{!sessionController.institutionPreference.pharmacyBillPrabodha}" > 
-                                           2
-                                            <ch:channelRecipt bill="#{channelBillController.billSession.billItem.bill}" dup="true"/>
-<!--                                            <ch:channelRecipt bill="#{channelBillController.billSession.billItem.bill}" dup="true"/>-->
-                                        </h:panelGroup>
-                                    </h:panelGroup>
+                                    <ez:bmsChannelBill bill="#{channelBillController.billSession.billItem.bill}" dup="true"/>
                                 </div>
-                                <div >
-                                    <h:panelGroup rendered="#{sessionController.institutionPreference.channelBillPaperType eq 'PosPaper'}">
-                                        <h:panelGroup rendered="#{sessionController.institutionPreference.pharmacyBillPrabodha}" > 
-                                            3
-                                            <ch:channelReciptPosDouble bill="#{channelBillController.billSession.billItem.bill}" dup="true"/>
-                                        </h:panelGroup>
 
-                                        <h:panelGroup rendered="#{!sessionController.institutionPreference.pharmacyBillPrabodha}" > 
-                                            <!--<ch:channelReciptPos bill="#{channelBillController.billSession.billItem.bill}" dup="true"/>-->
-                                            
-                                            <h:panelGroup>
-                                                4
-                                                <h:outputStylesheet library="css" name="channellingpos.css" ></h:outputStylesheet>
-
-                                                <h:panelGroup id="panelAddedBillPrint3">
-
-
-                                                    <div class="posbill" style="text-align: left!important; page-break-after: always;">
-                                                        <div style="position: absolute; padding-left: 165px;">
-                                                            <p:graphicImage style="width: 2.7cm!important;height: 2.7cm!important;" rendered="#{sessionController.institutionPreference.logoName ne null}" library="image" name="prabdhodha-logo-plain.jpg" ></p:graphicImage>
-                                                        </div>
-                                                        <div style="text-align: center;">
-                                                            <h:outputLabel value="#{channelBillController.billSession.billItem.bill.department.printingName}" style="text-align: center;"></h:outputLabel>
-                                                        </div>
-                                                        <div style="text-align: center;">
-                                                            <h:outputLabel value="#{channelBillController.billSession.billItem.bill.department.address} " style="text-align: center;"></h:outputLabel>
-                                                            <div style="text-align: center;">
-                                                                <h:outputLabel value="Tel:-#{channelBillController.billSession.billItem.bill.department.telephone1}" style="text-align: center;"></h:outputLabel>
-                                                            </div>
-
-                                                        </div>
-                                                        <p:spacer height="15"/>
-                                                        <div style="font-weight: bold; text-align: center;">
-                                                            <h:outputLabel value="Channell Bill"   style="text-align: center;"/>    
-                                                            <h:outputLabel value="**Duplicate**"  style="text-align: center;"/> 
-                                                            <h:outputLabel value="**Cancelled**"  rendered="#{channelBillController.billSession.billItem.bill.cancelled eq true}" style="text-align: center;"/> 
-                                                            <br></br>
-                                                            <h:outputLabel value="(Customer Copy)"   style="text-align: center;"/> 
-                                                        </div>
-                                                        <div style="text-align: center;">
-                                                            <h:outputLabel value="--------------------------" style="text-align: center;"></h:outputLabel>
-                                                        </div>
-                                                        <p:spacer height="30"/>
-
-                                                        <table >
-
-                                                            <tr>
-                                                                <td>
-                                                                    <b>
-                                                                        <h:outputLabel value="Number" ></h:outputLabel>
-                                                                    </b>
-                                                                </td>
-                                                                <td>
-                                                                    <p:spacer width="10" ></p:spacer>
-                                                                </td>
-                                                                <td>
-                                                                    <h:outputLabel value=":" ></h:outputLabel>
-                                                                </td>
-                                                                <td>
-                                                                    <b>
-                                                                        <ui:repeat value="#{channelBillController.billSession.billItem.bill.billItems}" var="cbi" >
-                                                                            <h:outputLabel value="#{cbi.billSession.serialNo}" style="font-size:30px !important;  font-weight: bold; margin: 5px;padding: 5px;border: 1px solid black; color: red;" ></h:outputLabel>
-                                                                        </ui:repeat>
-                                                                    </b>
-                                                                </td>
-
-                                                            </tr>
-
-
-                                                            <tr>
-                                                                <td>
-                                                                    <h:outputLabel value="Name" ></h:outputLabel>
-                                                                </td>
-                                                                <td>
-                                                                    <p:spacer width="10" ></p:spacer>
-                                                                </td>
-                                                                <td>
-                                                                    <h:outputLabel value=":" ></h:outputLabel>
-                                                                </td>
-                                                                <td>
-                                                                    <h:outputLabel value="#{channelBillController.billSession.billItem.bill.patient.person.nameWithTitle}" ></h:outputLabel>
-                                                                </td>
-
-                                                            </tr>
-
-                                                            <tr>
-                                                                <td>
-                                                                    <h:outputLabel value="Phone" ></h:outputLabel>
-                                                                </td>
-                                                                <td>
-                                                                    <p:spacer width="10" ></p:spacer>
-                                                                </td>
-                                                                <td>
-                                                                    <h:outputLabel value=":" ></h:outputLabel>
-                                                                </td>
-                                                                <td>
-                                                                    <h:outputLabel value="#{channelBillController.billSession.billItem.bill.patient.person.phone}" ></h:outputLabel>
-                                                                </td>
-                                                            </tr>
-
-
-
-                                                            <tr>
-                                                                <td>
-                                                                    <b>
-                                                                        <h:outputLabel value="Consultant" ></h:outputLabel>
-                                                                    </b>
-                                                                </td>
-                                                                <td>
-                                                                    <p:spacer width="10" ></p:spacer>
-                                                                </td>
-                                                                <td>
-                                                                    <h:outputLabel value=":" ></h:outputLabel>
-                                                                </td>
-                                                                <td>
-                                                                    <b>
-                                                                        <ui:repeat value="#{channelBillController.billSession.billItem.bill.billItems}" var="cbi" >
-                                                                            <h:outputLabel value="#{cbi.billSession.staff.person.nameWithTitle}" ></h:outputLabel>
-                                                                        </ui:repeat>
-                                                                    </b>
-                                                                </td>
-
-                                                            </tr>
-
-                                                            <tr>
-                                                                <td>
-                                                                    <b>
-                                                                        <h:outputLabel value="App. Date" ></h:outputLabel>
-                                                                    </b>
-                                                                </td>
-                                                                <td>
-                                                                    <p:spacer width="10" ></p:spacer>
-                                                                </td>
-                                                                <td>
-                                                                    <h:outputLabel value=":" ></h:outputLabel>
-                                                                </td>
-                                                                <td>
-                                                                    <b>
-                                                                        <h:outputLabel value="#{channelBillController.billSession.billItem.bill.singleBillSession.sessionDate}" >
-                                                                            <f:convertDateTime pattern="dd MMMM yyyy" ></f:convertDateTime>
-                                                                        </h:outputLabel>
-                                                                    </b>
-                                                                </td>
-
-                                                            </tr>
-
-                                                            <tr>
-                                                                <td>
-                                                                    <b>
-                                                                        <h:outputLabel value="App. Time" ></h:outputLabel>
-                                                                    </b>
-                                                                </td>
-                                                                <td>
-                                                                    <p:spacer width="10" ></p:spacer>
-                                                                </td>
-                                                                <td>
-                                                                    <h:outputLabel value=":" ></h:outputLabel>
-                                                                </td>
-                                                                <td>
-                                                                    <b>
-                                                                        <h:outputLabel value="#{channelBillController.billSession.billItem.bill.singleBillSession.serviceSession.startingTime}" >
-                                                                            <f:convertDateTime pattern="hh:mm a" ></f:convertDateTime>
-                                                                        </h:outputLabel>
-                                                                    </b>
-                                                                </td>
-
-                                                            </tr>
-
-                                                            <tr>
-                                                                <td>
-                                                                    <b>
-                                                                        <h:outputLabel value="Room No." ></h:outputLabel>
-                                                                    </b>
-                                                                </td>
-                                                                <td>
-                                                                    <p:spacer width="10" ></p:spacer>
-                                                                </td>
-                                                                <td>
-                                                                    <h:outputLabel value=":" ></h:outputLabel>
-                                                                </td>
-                                                                <td>
-
-                                                                    <h:outputLabel value="#{channelBillController.billSession.billItem.bill.singleBillSession.serviceSession.roomNo}" style="font-weight: bold;">
-                                                                    </h:outputLabel>
-
-                                                                </td>
-
-                                                            </tr>
-
-
-
-                                                            <ui:repeat value="#{channelBillController.billSession.billItem.bill.billFees}" var="cbif" >
-                                                                <tr>
-                                                                    <td>
-                                                                        <h:outputLabel value="#{cbif.fee.name}" rendered="#{cbif.feeGrossValue ne 0.0}"></h:outputLabel>
-                                                                    </td>
-                                                                    <td>
-                                                                        <p:spacer width="10" rendered="#{cbif.feeGrossValue ne 0.0}"></p:spacer>
-                                                                    </td>
-                                                                    <td>
-                                                                        <h:outputLabel value=":" rendered="#{cbif.feeGrossValue ne 0.0}"></h:outputLabel>
-                                                                    </td>
-                                                                    <td>
-                                                                        <h:outputLabel value="#{cbif.feeGrossValue}" rendered="#{cbif.feeGrossValue ne 0.0}">
-                                                                            <f:convertNumber pattern="#,##0.00" ></f:convertNumber>
-                                                                        </h:outputLabel>
-                                                                    </td>
-                                                                </tr>
-                                                            </ui:repeat>
-
-
-
-
-
-                                                            <h:panelGroup rendered="#{channelBillController.billSession.billItem.bill.discount gt 1}" >
-
-
-
-                                                                <tr>
-                                                                    <td>
-                                                                        <b>
-                                                                            <h:outputLabel value="Gross Total" ></h:outputLabel>
-                                                                        </b>
-                                                                    </td>
-                                                                    <td>
-                                                                        <p:spacer width="10" ></p:spacer>
-                                                                    </td>
-                                                                    <td>
-                                                                        <h:outputLabel value=":" ></h:outputLabel>
-                                                                    </td>
-                                                                    <td>
-                                                                        <b>
-                                                                            <h:outputLabel value="#{channelBillController.billSession.billItem.bill.total}" >
-                                                                                <f:convertNumber pattern="#,##0.00" ></f:convertNumber>
-                                                                            </h:outputLabel>
-                                                                        </b>
-                                                                    </td>
-                                                                </tr>
-
-                                                                <tr>
-                                                                    <td>
-                                                                        <b>
-                                                                            <h:outputLabel value="Discount" ></h:outputLabel>
-                                                                        </b>
-                                                                    </td>
-                                                                    <td>
-                                                                        <p:spacer width="10" ></p:spacer>
-                                                                    </td>
-                                                                    <td>
-                                                                        <h:outputLabel value=":" ></h:outputLabel>
-                                                                    </td>
-                                                                    <td>
-                                                                        <b>
-                                                                            <h:outputLabel value="#{channelBillController.billSession.billItem.bill.discount}" >
-                                                                                <f:convertNumber pattern="#,##0.00" ></f:convertNumber>
-                                                                            </h:outputLabel>
-                                                                        </b>
-                                                                    </td>
-                                                                </tr>
-
-                                                                <tr>
-                                                                    <td>
-                                                                        <b>
-                                                                            <h:outputLabel value="Net Total" ></h:outputLabel>
-                                                                        </b>
-                                                                    </td>
-                                                                    <td>
-                                                                        <p:spacer width="10" ></p:spacer>
-                                                                    </td>
-                                                                    <td>
-                                                                        <h:outputLabel value=":" ></h:outputLabel>
-                                                                    </td>
-                                                                    <td>
-                                                                        <b>
-                                                                            <h:outputLabel value="#{channelBillController.billSession.billItem.bill.netTotal}" >
-                                                                                <f:convertNumber pattern="#,##0.00" ></f:convertNumber>
-                                                                            </h:outputLabel>
-                                                                        </b>
-                                                                    </td>
-                                                                </tr>
-
-
-                                                            </h:panelGroup>
-
-
-                                                            <h:panelGroup rendered="#{channelBillController.billSession.billItem.bill.discount lt 1}" >
-
-                                                                <tr>
-                                                                    <td>
-                                                                        <b>
-                                                                            <h:outputLabel value="Total***" ></h:outputLabel>
-                                                                        </b>
-                                                                    </td>
-                                                                    <td>
-                                                                        <p:spacer width="10" ></p:spacer>
-                                                                    </td>
-                                                                    <td>
-                                                                        <h:outputLabel value=":" ></h:outputLabel>
-                                                                    </td>
-                                                                    <td>
-                                                                        <b>
-                                                                            <h:outputLabel value="#{channelBillController.billSession.billItem.bill.total}" >
-                                                                                <f:convertNumber pattern="#,##0.00" ></f:convertNumber>
-                                                                            </h:outputLabel>
-                                                                        </b>
-                                                                    </td>
-                                                                </tr>
-
-
-
-                                                            </h:panelGroup>
-
-
-
-                                                            <tr>
-                                                                <td>
-                                                                    <h:outputLabel value="Session Name" ></h:outputLabel>
-                                                                </td>
-                                                                <td>
-                                                                    <p:spacer width="10" ></p:spacer>
-                                                                </td>
-                                                                <td>
-                                                                    <h:outputLabel value=":" ></h:outputLabel>
-                                                                </td>
-                                                                <td>
-                                                                    <h:outputLabel value="#{channelBillController.billSession.billItem.bill.singleBillItem.item.name}"></h:outputLabel>
-                                                                </td>
-                                                            </tr>
-
-
-
-                                                            <tr>
-                                                                <td>
-                                                                    <h:outputLabel value="Bill At" ></h:outputLabel>
-                                                                </td>
-                                                                <td>
-                                                                    <p:spacer width="10" ></p:spacer>
-                                                                </td>
-                                                                <td>
-                                                                    <h:outputLabel value=":" ></h:outputLabel>
-                                                                </td>
-                                                                <td>
-                                                                    <h:outputLabel value="#{channelBillController.billSession.billItem.bill.createdAt}">
-                                                                        <f:convertDateTime pattern="dd MM yy hh:mm a" ></f:convertDateTime>
-                                                                    </h:outputLabel>
-                                                                </td>
-                                                            </tr>
-
-                                                            <tr>
-                                                                <td>
-                                                                    <h:outputLabel value="Cashier Sign." ></h:outputLabel>
-                                                                </td>
-                                                                <td>
-                                                                    <p:spacer width="10" ></p:spacer>
-                                                                </td>
-                                                                <td>
-                                                                    <h:outputLabel value=":" ></h:outputLabel>
-                                                                </td>
-                                                                <td>
-                                                                    <h:outputLabel value="...............................">
-                                                                    </h:outputLabel>
-                                                                </td>
-                                                            </tr>
-
-                                                            <tr>
-                                                                <td>
-                                                                    <h:outputLabel value="Cashier Name" ></h:outputLabel>
-                                                                </td>
-                                                                <td>
-                                                                    <p:spacer width="10" ></p:spacer>
-                                                                </td>
-                                                                <td>
-                                                                    <h:outputLabel value=":" ></h:outputLabel>
-                                                                </td>
-                                                                <td>
-                                                                    <h:outputLabel value="#{channelBillController.billSession.billItem.bill.creater.webUserPerson.name}" rendered="#{channelBillController.billSession.billItem.bill.paidBill eq null}" ></h:outputLabel>
-                                                                    <h:outputLabel value="#{channelBillController.billSession.billItem.bill.paidBill.creater.code}" rendered="#{channelBillController.billSession.billItem.bill.paidBill ne null}" ></h:outputLabel>
-                                                                </td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td colspan="4" >
-                                                                    <p:graphicImage cache="false" value="#{billController.getCreateBarcodeCode128(channelBillController.billSession.billItem.bill.patient.phn)}" 
-                                                                                    style="max-width: 7.5cm; padding: 10px; margin: 10px;" ></p:graphicImage>
-                                                                </td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td>
-                                                                    <p:spacer width="10" ></p:spacer>
-                                                                </td>                            
-                                                            </tr>
-                                                            <tr>
-                                                                <td>
-                                                                    <p:spacer width="10" ></p:spacer>
-                                                                </td>                            
-                                                            </tr>
-                                                            <tr>
-                                                                <td>
-                                                                    <p:spacer width="10" ></p:spacer>
-                                                                </td>                            
-                                                            </tr>
-                                                            <tr>
-                                                                <td>
-                                                                    <p:spacer width="10" ></p:spacer>
-                                                                </td>                            
-                                                            </tr>
-                                                            <tr>
-                                                                <td>
-                                                                    <p:spacer width="10" ></p:spacer>
-                                                                </td>                            
-                                                            </tr>
-                                                            <tr>
-                                                                <td>
-                                                                    <p:spacer width="10" ></p:spacer>
-                                                                </td>                            
-                                                            </tr>
-                                                            <tr>
-                                                                <td>
-                                                                    <p:spacer width="10" ></p:spacer>
-                                                                </td>                            
-                                                            </tr>
-                                                            <tr>
-                                                                <td>
-                                                                    <p:spacer width="10" ></p:spacer>
-                                                                </td>                            
-                                                            </tr>
-                                                        </table>
-
-                                                    </div>
-
-
-                                                </h:panelGroup>
-
-
-
-
-
-                                            </h:panelGroup>
-                                        </h:panelGroup>
-
-                                    </h:panelGroup>
-                                </div>
                             </h:panelGroup>
 
                         </p:tab>
 
-                        <p:panel id="panelBillPrint" >
-
-                            <h:panelGroup id="panelAddedBillPrint1" styleClass="noBorder">
-                                5
-                                <ch:bill_fees bill="#{channelBillController.billSession.billItem.bill}"/>
-                            </h:panelGroup>
-
-                        </p:panel>
 
                         <p:tab title="Cancel" id="cancel">                                                         
                             #{channelBillController.billSession.bill.billType}
@@ -1728,26 +832,7 @@
                                             <p:printer target="panelAddedBillPrintSettle" ></p:printer>
                                         </p:commandButton>
                                         <h:panelGroup id="panelAddedBillPrintSettle" styleClass="noBorder" >
-                                            <div >
-                                                <h:panelGroup rendered="#{sessionController.institutionPreference.opdBillPaperType eq 'FiveFivePaper'}">
-                                                    <h:panelGroup rendered="#{!sessionController.institutionPreference.pharmacyBillPrabodha}" > 
-                                                        <ch:channelRecipt bill="#{channelBillController.billSession.billItem.bill}" dup="false"/>
-<!--                                                        <ch:channelRecipt bill="#{channelBillController.billSession.billItem.bill}" dup="false"/>-->
-                                                    </h:panelGroup>
-                                                </h:panelGroup>
-                                            </div>
-                                            <div >
-                                                <h:panelGroup rendered="#{sessionController.institutionPreference.opdBillPaperType eq 'PosPaper'}">
-                                                    <h:panelGroup rendered="#{sessionController.institutionPreference.pharmacyBillPrabodha}" > 
-                                                        <ch:channelReciptPosDouble bill="#{channelBillController.billSession.billItem.bill}" dup="false"/>
-                                                    </h:panelGroup>
-
-                                                    <h:panelGroup rendered="#{!sessionController.institutionPreference.pharmacyBillPrabodha}" > 
-                                                        <ch:channelReciptPos bill="#{channelBillController.billSession.billItem.bill}" dup="false"/>
-                                                    </h:panelGroup>
-
-                                                </h:panelGroup>
-                                            </div>
+                                            <ez:bmsChannelBill bill="#{channelBillController.billSession.billItem.bill}" dup="false"/>
                                         </h:panelGroup>
                                     </p:dialog>
                                 </h:panelGroup>
@@ -1796,6 +881,7 @@
 
 
                         <p:tab title="Search">
+
                             <p:calendar id="calFrom"  value="#{channelSearchController.fromDate}" pattern="dd MMMM yyyy" >   
                                 <f:ajax event="dateSelect" execute="@this" render="bSessionSearch"/>
                             </p:calendar>
@@ -1938,7 +1024,9 @@
                             <h:panelGrid columns="2">
                                 <p:panel header="Selected Session">
                                     <h:panelGrid columns="1">
-                                        <p:commandButton value="Nurse View " action="#{bookingController.nurse}"  onclick="onSubmitButton();" >                                       
+                                        <p:commandButton value="Nurse View " 
+                                                         action="#{bookingController.nurse}" 
+                                                         onclick="onSubmitButton();" >                                       
                                         </p:commandButton>
                                         <p:commandButton value="Doctor View " action="#{bookingController.doctor}" ajax="false" onclick="onSubmitButton();">                                        
                                         </p:commandButton>

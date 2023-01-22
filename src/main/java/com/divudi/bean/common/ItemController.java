@@ -22,8 +22,10 @@ import com.divudi.entity.lab.ItemForItem;
 import com.divudi.entity.lab.Machine;
 import com.divudi.entity.pharmacy.Amp;
 import com.divudi.entity.pharmacy.Ampp;
+import com.divudi.entity.pharmacy.Atm;
 import com.divudi.entity.pharmacy.Vmp;
 import com.divudi.entity.pharmacy.Vmpp;
+import com.divudi.entity.pharmacy.Vtm;
 import com.divudi.facade.ItemFacade;
 import com.divudi.facade.ItemFeeFacade;
 import com.divudi.facade.util.JsfUtil;
@@ -31,6 +33,8 @@ import java.io.Serializable;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -579,9 +583,44 @@ public class ItemController implements Serializable {
         return lst;
     }
 
+    public List<Item> completeItemByName(String query, Class[] itemClasses, DepartmentType[] departmentTypes, int count) {
+        String sql;
+        List<Item> lst;
+        HashMap tmpMap = new HashMap();
+        if (query == null) {
+            lst = new ArrayList<>();
+        } else {
+            sql = "select c "
+                    + " from Item c "
+                    + " where c.retired=false ";
+
+            if (departmentTypes != null) {
+                sql += " and c.departmentType in :deps ";
+                tmpMap.put("deps", Arrays.asList(departmentTypes));
+            }
+
+            if (itemClasses != null) {
+                sql += " and type(c) in :types ";
+                tmpMap.put("types", Arrays.asList(itemClasses));
+            }
+
+            sql += " and c.name like :q ";
+            tmpMap.put("q", "%" + query.toUpperCase() + "%");
+
+            sql += " order by c.name";
+
+            if (count != 0) {
+                lst = getFacade().findBySQL(sql, tmpMap, TemporalType.TIMESTAMP, count);
+            } else {
+                lst = getFacade().findBySQL(sql, tmpMap, TemporalType.TIMESTAMP);
+            }
+        }
+        return lst;
+    }
+
     public Item findItemByCode(String code) {
         String sql;
-        Item lst=null;
+        Item lst = null;
         HashMap tmpMap = new HashMap();
         if (code == null) {
             return null;
@@ -594,8 +633,8 @@ public class ItemController implements Serializable {
             sql += " order by c.name";
             lst = getFacade().findFirstBySQL(sql, tmpMap, TemporalType.TIMESTAMP);
         }
-        if(lst==null){
-            
+        if (lst == null) {
+
         }
         return lst;
     }
@@ -630,6 +669,60 @@ public class ItemController implements Serializable {
         DepartmentType[] dts = new DepartmentType[]{DepartmentType.Pharmacy, null};
         Class[] classes = new Class[]{Vmp.class, Amp.class, Vmp.class, Amp.class, Vmpp.class, Ampp.class};
         return completeItem(query, classes, dts, 0);
+    }
+
+    public List<Item> completeMedicinesPlusTherapeutics(String query) {
+        String sql;
+        List<Item> lst;
+        HashMap tmpMap = new HashMap();
+        if (query == null) {
+            lst = new ArrayList<>();
+        } else {
+            sql = "select c "
+                    + " from PharmaceuticalItem c "
+                    + " where c.retired=false ";
+            sql += " and c.name like :q ";
+            tmpMap.put("q", "%" + query.toUpperCase() + "%");
+            sql += " order by c.name";
+            lst = getFacade().findBySQL(sql, tmpMap, TemporalType.TIMESTAMP);
+        }
+        return lst;
+    }
+
+    public List<Item> completePrescribingMedicines(String query) {
+        List<Item> pItems = new ArrayList<>();
+        Class[] classes = new Class[]{Vmp.class, Vtm.class, Atm.class, Amp.class, Vmp.class, Amp.class, Vmpp.class, Ampp.class};
+        Class[] vtmClasses = new Class[]{Vtm.class};
+        Class[] atmClasses = new Class[]{Atm.class};
+        Class[] vmpClasses = new Class[]{Vmp.class};
+        Class[] ampClasses = new Class[]{Amp.class};
+        List<Item> vtms = completeItemByName(query, vtmClasses, null, 0);
+        if (vtms != null && !vtms.isEmpty()) {
+            pItems = vtms;
+        }
+        if (pItems.size() > 30) {
+            return pItems;
+        }
+        List<Item> atms = completeItemByName(query, atmClasses, null, 0);
+        pItems.addAll(atms);
+        if (pItems.size() > 30) {
+            Collections.sort(pItems, (o1, o2) -> (o1.getName().compareTo(o2.getName())));
+//            Collections.sort(pItems);
+            return pItems;
+        }
+        List<Item> vmps = completeItemByName(query, vmpClasses, null, 0);
+        pItems.addAll(vmps);
+        if (pItems.size() > 30) {
+            Collections.sort(pItems, (o1, o2) -> (o1.getName().compareTo(o2.getName())));
+            return pItems;
+        }
+        List<Item> amps = completeItemByName(query, ampClasses, null, 0);
+        pItems.addAll(amps);
+        if (pItems.size() > 30) {
+            Collections.sort(pItems, (o1, o2) -> (o1.getName().compareTo(o2.getName())));
+            return pItems;
+        }
+        return completeItemByName(query, classes, null, 0);
     }
 
     public List<Item> completeItem(String query, Class[] itemClasses, DepartmentType[] departmentTypes) {

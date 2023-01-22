@@ -11,7 +11,7 @@ import javax.persistence.TypedQuery;
  
 public abstract class DataAccessService<T> {
  
-    @PersistenceContext
+    @PersistenceContext(unitName = "hmisPU")
     private EntityManager em;
  
     public DataAccessService() {

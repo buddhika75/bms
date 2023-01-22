@@ -4,6 +4,7 @@
  */
 package com.divudi.facade;
 
+import com.divudi.entity.pharmacy.DoseUnit;
 import com.divudi.entity.pharmacy.FrequencyUnit;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;

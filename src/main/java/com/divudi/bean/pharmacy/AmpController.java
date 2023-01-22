@@ -7,6 +7,7 @@
  * a Set of Related Tools
  */
 package com.divudi.bean.pharmacy;
+
 import com.divudi.bean.common.SessionController;
 import com.divudi.bean.common.UtilityController;
 import com.divudi.data.DepartmentType;
@@ -23,6 +24,7 @@ import com.divudi.facade.AmpFacade;
 import com.divudi.facade.StockFacade;
 import com.divudi.facade.VmpFacade;
 import com.divudi.facade.VtmsVmpsFacade;
+import com.divudi.facade.util.JsfUtil;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
@@ -316,11 +318,10 @@ public class AmpController implements Serializable {
         return ampList;
     }
 
-    
-    public void prepareAddNewVmp(){
+    public void prepareAddNewVmp() {
         addingVtmInVmp = new VtmsVmps();
     }
-    
+
     public List<Amp> completeAmpByCode(String qry) {
 
         Map m = new HashMap();
@@ -382,55 +383,6 @@ public class AmpController implements Serializable {
         items = null;
     }
 
-    private boolean errorCheck() {
-//        if (getCurrent().getInstitution() == null) {
-//            UtilityController.addErrorMessage("Please Select Manufacturer");
-//            return true;
-//        }
-
-        if (current.getCategory() == null) {
-            UtilityController.addErrorMessage("Please Select Category");
-            return true;
-        }
-
-        if (getTabId().toString().equals("tabVmp")) {
-            if (getCurrent().getVmp() == null) {
-                UtilityController.addErrorMessage("Please Select VMP");
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    private boolean errorCheckForGen() {
-        if (addingVtmInVmp == null) {
-            return true;
-        }
-        if (addingVtmInVmp.getVtm() == null) {
-            UtilityController.addErrorMessage("Select Vtm");
-            return true;
-        }
-
-        if (currentVmp == null) {
-            return true;
-        }
-        if (addingVtmInVmp.getStrength() == 0.0) {
-            UtilityController.addErrorMessage("Type Strength");
-            return true;
-        }
-        if (currentVmp.getCategory() == null) {
-            UtilityController.addErrorMessage("Select Category");
-            return true;
-        }
-        if (addingVtmInVmp.getStrengthUnit() == null) {
-            UtilityController.addErrorMessage("Select Strenth Unit");
-            return true;
-        }
-
-        return false;
-    }
-
     public String createVmpName() {
         return addingVtmInVmp.getVtm().getName()
                 + " " + addingVtmInVmp.getStrength()
@@ -458,37 +410,36 @@ public class AmpController implements Serializable {
         }
 
     }
-    
-               
-    
 
     public void saveSelected() {
-        if (errorCheck()) {
+        if (current == null) {
+            JsfUtil.addErrorMessage("Please select one to add");
             return;
         }
-//
-//        if (getTabId().toString().equals("tabGen")) {
-//            if (errorCheckForGen()) {
-//                return;
-//            }
-//
-//            saveVmp();
-//            getAddingVtmInVmp().setVmp(currentVmp);
-//            if (getAddingVtmInVmp().getId() == null || getAddingVtmInVmp().getId() == null) {
-//                getVivFacade().create(getAddingVtmInVmp());
-//            } else {
-//                getVivFacade().edit(getAddingVtmInVmp());
-//            }
-//
-//            getCurrent().setVmp(currentVmp);
-//        }
 
         if (current.getName() == null || current.getName().equals("")) {
-            current.setName(createAmpName());
+            JsfUtil.addErrorMessage("Please enter a name");
+            return;
         }
-        
+
+        if (current.getVmp() == null) {
+            JsfUtil.addErrorMessage("Please enter a product");
+            return;
+        }
+
+        if (current.getCategory()== null) {
+            JsfUtil.addErrorMessage("Please select a category");
+            return;
+        }
+
         current.setDepartmentType(DepartmentType.Pharmacy);
 
+        current.setMeasurementUnit(current.getVmp().getMeasurementUnit());
+        current.setIssueUnit(current.getVmp().getIssueUnit());
+        current.setBaseUnit(current.getVmp().getBaseUnit());
+        current.setBaseUnitsPerIssueUnit(current.getVmp().getBaseUnitsPerIssueUnit());
+        
+        
         if (getCurrent().getId() != null && getCurrent().getId() > 0) {
             getFacade().edit(current);
             UtilityController.addSuccessMessage("Updated Successfully.");
@@ -499,7 +450,7 @@ public class AmpController implements Serializable {
             UtilityController.addSuccessMessage("Saved Successfully");
         }
         recreateModel();
-        // getItems();
+
     }
 
     public void setSelectText(String selectText) {
@@ -655,10 +606,6 @@ public class AmpController implements Serializable {
         this.itemSupplierPrices = itemSupplierPrices;
     }
 
-   
-
-    
-    
     /**
      *
      */

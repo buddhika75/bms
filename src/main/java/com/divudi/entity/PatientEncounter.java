@@ -8,6 +8,7 @@ import com.divudi.data.PaymentMethod;
 import com.divudi.data.SymanticType;
 import com.divudi.data.inward.PatientEncounterType;
 import com.divudi.entity.clinical.ClinicalFindingValue;
+import com.divudi.entity.clinical.Prescription;
 import com.divudi.entity.inward.AdmissionType;
 import com.divudi.entity.inward.EncounterComponent;
 import com.divudi.entity.inward.PatientRoom;
@@ -108,6 +109,8 @@ public class PatientEncounter implements Serializable {
     List<PatientEncounter> childEncounters;
     @OneToMany(mappedBy = "encounter", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     List<ClinicalFindingValue> clinicalFindingValues;
+    @OneToMany(mappedBy = "encounter", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Prescription> prescriptions;
     String name;
     @Temporal(javax.persistence.TemporalType.DATE)
     Date dateTime;
@@ -138,7 +141,7 @@ public class PatientEncounter implements Serializable {
     long transDayCount;
     @ManyToOne
     Bill finalBill;
-    
+
     @ManyToOne
     Institution referredByInstitution;
     String referralId;
@@ -158,8 +161,6 @@ public class PatientEncounter implements Serializable {
     public void setTransPaidByPatient(double transPaidByPatient) {
         this.transPaidByPatient = transPaidByPatient;
     }
-    
-    
 
     public double getTransTotal() {
         return transTotal;
@@ -252,6 +253,7 @@ public class PatientEncounter implements Serializable {
     String comments;
     @Transient
     List<ClinicalFindingValue> diagnosis;
+
     @ManyToOne
     Department department;
 
@@ -276,12 +278,10 @@ public class PatientEncounter implements Serializable {
     private Date printingDischargeTime;
 
     public List<ClinicalFindingValue> getDiagnosis() {
-        if (diagnosis == null) {
-            diagnosis = new ArrayList<>();
-            for (ClinicalFindingValue v : clinicalFindingValues) {
-                if (v.getClinicalFindingItem().getSymanticType() == SymanticType.Disease_or_Syndrome) {
-                    diagnosis.add(v);
-                }
+        diagnosis = new ArrayList<>();
+        for (ClinicalFindingValue v : getClinicalFindingValues()) {
+            if (v.getClinicalFindingItem().getSymanticType() == SymanticType.Disease_or_Syndrome) {
+                diagnosis.add(v);
             }
         }
         return diagnosis;
@@ -292,14 +292,11 @@ public class PatientEncounter implements Serializable {
     }
 
     public List<ClinicalFindingValue> getInvestigations() {
-        if (investigations == null) {
-            investigations = new ArrayList<>();
-            for (ClinicalFindingValue v : clinicalFindingValues) {
-                if (v.getClinicalFindingItem().getSymanticType() == SymanticType.Laboratory_Procedure) {
-                    investigations.add(v);
-                }
+        investigations = new ArrayList<>();
+        for (ClinicalFindingValue v : getClinicalFindingValues()) {
+            if (v.getClinicalFindingItem().getSymanticType() == SymanticType.Laboratory_Procedure) {
+                investigations.add(v);
             }
-
         }
         return investigations;
     }
@@ -309,14 +306,11 @@ public class PatientEncounter implements Serializable {
     }
 
     public List<ClinicalFindingValue> getSymptoms() {
-        if (symptoms == null) {
-            symptoms = new ArrayList<>();
-            for (ClinicalFindingValue v : clinicalFindingValues) {
-                if (v.getClinicalFindingItem().getSymanticType() == SymanticType.Symptom) {
-                    symptoms.add(v);
-                }
+        symptoms = new ArrayList<>();
+        for (ClinicalFindingValue v : getClinicalFindingValues()) {
+            if (v.getClinicalFindingItem().getSymanticType() == SymanticType.Symptom) {
+                symptoms.add(v);
             }
-
         }
         return symptoms;
     }
@@ -326,12 +320,10 @@ public class PatientEncounter implements Serializable {
     }
 
     public List<ClinicalFindingValue> getSigns() {
-        if (signs == null) {
-            signs = new ArrayList<>();
-            for (ClinicalFindingValue v : clinicalFindingValues) {
-                if (v.getClinicalFindingItem().getSymanticType() == SymanticType.Sign) {
-                    signs.add(v);
-                }
+        signs = new ArrayList<>();
+        for (ClinicalFindingValue v : getClinicalFindingValues()) {
+            if (v.getClinicalFindingItem().getSymanticType() == SymanticType.Sign) {
+                signs.add(v);
             }
         }
         return signs;
@@ -342,12 +334,10 @@ public class PatientEncounter implements Serializable {
     }
 
     public List<ClinicalFindingValue> getProcedures() {
-        if (procedures == null) {
-            procedures = new ArrayList<>();
-            for (ClinicalFindingValue v : clinicalFindingValues) {
-                if (v.getClinicalFindingItem().getSymanticType() == SymanticType.Therapeutic_Procedure) {
-                    procedures.add(v);
-                }
+        procedures = new ArrayList<>();
+        for (ClinicalFindingValue v : getClinicalFindingValues()) {
+            if (v.getClinicalFindingItem().getSymanticType() == SymanticType.Therapeutic_Procedure) {
+                procedures.add(v);
             }
         }
         return procedures;
@@ -358,12 +348,10 @@ public class PatientEncounter implements Serializable {
     }
 
     public List<ClinicalFindingValue> getPlans() {
-        if (plans == null) {
-            plans = new ArrayList<>();
-            for (ClinicalFindingValue v : clinicalFindingValues) {
-                if (v.getClinicalFindingItem().getSymanticType() == SymanticType.Preventive_Procedure) {
-                    plans.add(v);
-                }
+        plans = new ArrayList<>();
+        for (ClinicalFindingValue v : getClinicalFindingValues()) {
+            if (v.getClinicalFindingItem().getSymanticType() == SymanticType.Preventive_Procedure) {
+                plans.add(v);
             }
         }
         return plans;
@@ -400,6 +388,9 @@ public class PatientEncounter implements Serializable {
 
     @XmlTransient
     public List<ClinicalFindingValue> getClinicalFindingValues() {
+        if (clinicalFindingValues == null) {
+            clinicalFindingValues = new ArrayList<>();
+        }
         return clinicalFindingValues;
     }
 
@@ -505,8 +496,8 @@ public class PatientEncounter implements Serializable {
     }
 
     public Patient getPatient() {
-        if(patient==null){
-            patient=new Patient();
+        if (patient == null) {
+            patient = new Patient();
         }
         return patient;
     }
@@ -842,6 +833,15 @@ public class PatientEncounter implements Serializable {
         this.height = height;
     }
 
-    
-    
+    public List<Prescription> getPrescriptions() {
+        if (prescriptions == null) {
+            prescriptions = new ArrayList<>();
+        }
+        return prescriptions;
+    }
+
+    public void setPrescriptions(List<Prescription> prescriptions) {
+        this.prescriptions = prescriptions;
+    }
+
 }

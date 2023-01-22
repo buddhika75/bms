@@ -20,6 +20,7 @@ import com.divudi.entity.lab.WorksheetItem;
 import com.divudi.entity.pharmacy.Amp;
 import com.divudi.entity.pharmacy.Ampp;
 import com.divudi.entity.pharmacy.Atm;
+import com.divudi.entity.pharmacy.DoseUnit;
 import com.divudi.entity.pharmacy.MeasurementUnit;
 import com.divudi.entity.pharmacy.Vmp;
 import com.divudi.entity.pharmacy.Vmpp;
@@ -128,8 +129,13 @@ public class Item implements Serializable, Comparable<Item> {
     private double dblValue = 0.0f;
     SessionNumberType sessionNumberType;
     boolean priceByBatch;
-    @ManyToOne
+    @ManyToOne //Strength Units in VMP & AMP
     MeasurementUnit measurementUnit;
+    @ManyToOne
+    private DoseUnit baseUnit;
+    @ManyToOne
+    private DoseUnit issueUnit;
+    private Double baseUnitsPerIssueUnit;
     @ManyToOne
     Category worksheet;
     @ManyToOne
@@ -185,6 +191,8 @@ public class Item implements Serializable, Comparable<Item> {
     int maxTableRows;
     @Enumerated(EnumType.STRING)
     private ItemType itemType;
+    @Enumerated(EnumType.STRING)
+    private ItemType medicineType;
     @Enumerated(EnumType.STRING)
     private Priority priority;
 
@@ -1076,6 +1084,35 @@ public class Item implements Serializable, Comparable<Item> {
         return itemType;
     }
 
+    public ItemType getMedicineType() {
+
+        if (this instanceof Amp) {
+            medicineType = ItemType.Amp;
+        }
+        if (this instanceof Ampp) {
+            medicineType = ItemType.Ampp;
+        }
+        if (this instanceof Atm) {
+            medicineType = ItemType.Atm;
+        }
+        if (this instanceof Vmp) {
+            medicineType = ItemType.Vmp;
+        }
+        if (this instanceof Vmpp) {
+            medicineType = ItemType.Vmpp;
+        }
+        if (this instanceof Vtm) {
+            medicineType = ItemType.Vtm;
+        }
+        if (this instanceof Service) {
+            medicineType = ItemType.Service;
+        }
+        if (this instanceof Investigation) {
+            medicineType = ItemType.Investigation;
+        }
+        return medicineType;
+    }
+
     public void setItemType(ItemType itemType) {
         this.itemType = itemType;
     }
@@ -1107,8 +1144,30 @@ public class Item implements Serializable, Comparable<Item> {
         this.priority = priority;
     }
 
-    
-    
+    public DoseUnit getBaseUnit() {
+        return baseUnit;
+    }
+
+    public void setBaseUnit(DoseUnit baseUnit) {
+        this.baseUnit = baseUnit;
+    }
+
+    public DoseUnit getIssueUnit() {
+        return issueUnit;
+    }
+
+    public void setIssueUnit(DoseUnit issueUnit) {
+        this.issueUnit = issueUnit;
+    }
+
+    public Double getBaseUnitsPerIssueUnit() {
+        return baseUnitsPerIssueUnit;
+    }
+
+    public void setBaseUnitsPerIssueUnit(Double baseUnitsPerIssueUnit) {
+        this.baseUnitsPerIssueUnit = baseUnitsPerIssueUnit;
+    }
+
     static class ReportItemComparator implements Comparator<ReportItem> {
 
         @Override

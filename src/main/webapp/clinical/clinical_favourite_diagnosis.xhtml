@@ -2,15 +2,139 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:ui="http://java.sun.com/jsf/facelets"
-      xmlns:h="http://java.sun.com/jsf/html">
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:autocomplete="http://java.sun.com/jsf/composite/autocomplete">
 
     <h:body>
 
         <ui:composition template="/resources/template/template.xhtml">
 
             <ui:define name="content">
-                
-                
+
+                <h:form >
+                    <p:panel  >
+                        <f:facet name="header" >
+                            <h:outputText value="Manage Favourite Diagnosis" >
+                            </h:outputText>
+
+                            <p:commandButton ajax="false" 
+                                             value="Back"
+                                             action="/clinical/favourite_index"
+                                             style="float: right;"></p:commandButton>
+
+                        </f:facet>
+
+                        <h:panelGrid columns="5" >
+                            <p:outputLabel value="Select Diagnosis" ></p:outputLabel>
+                            <p:autoComplete id="acItem" 
+                                            value="#{favouriteController.item}" 
+                                            forceSelection="true"
+                                            completeMethod="#{diagnosisController.completeDiagnosis}" 
+                                            var="vt" itemLabel="#{vt.name}" itemValue="#{vt}"
+                                            placeholder="Select Diagnosis">
+                            </p:autoComplete>
+                            <p:spacer height="1" width="10" ></p:spacer>
+                            <p:commandButton value="Fill"
+                                             id="btnFill"
+                                             process="btnFill"
+                                             update="tbl"
+                                             actionListener="#{favouriteController.fillFavouriteDisgnosis()}" >
+                            </p:commandButton>
+
+                            <p:commandButton value="Add New"
+                                             id="btnAdd"
+                                             process="btnAdd acItem"
+                                             onclick="PF('dlg2').show();"
+                                             action="#{favouriteController.prepareAddingFavouriteDiagnosis()}" >
+                            </p:commandButton>
+                        </h:panelGrid>
+
+                        <p:dataTable id="tbl" value="#{favouriteController.items}" var="fi" >
+                            <p:column  >
+                                <f:facet name="header" >
+                                    <h:outputText value="From - To" ></h:outputText>
+                                </f:facet>
+                                <h:outputText value="#{fi.favouriteFrom}" >
+                                    <f:convertNumber pattern="#,###.#" ></f:convertNumber>
+                                </h:outputText>
+                                <h:outputText value=" " ></h:outputText>
+                                <h:outputText value="#{fi.favouriteType}" >
+                                </h:outputText>
+                                <h:outputText value=" - " ></h:outputText>
+                                <h:outputText value="#{fi.favouriteTo}" >
+                                    <f:convertNumber pattern="#,###.#" ></f:convertNumber><!-- comment -->
+                                </h:outputText>
+                                <h:outputText value=" " ></h:outputText>
+                                <h:outputText value="#{fi.favouriteType}" ></h:outputText>
+                            </p:column>
+                            <p:column>
+                                <f:facet name="header" >
+                                    <h:outputText value="Diagnosis" ></h:outputText>
+                                </f:facet>
+                                <h:outputText value="#{fi.item.name}" ></h:outputText>
+                            </p:column>
+                            <p:column >
+                                <f:facet name="header" >
+                                    <h:outputText value="Actions" ></h:outputText>
+                                </f:facet>
+                                <p:commandButton value="Remove" ajax="false" action="#{favouriteController.removeFavourite()}" >
+                                    <f:setPropertyActionListener value="#{fi}" target="#{favouriteController.current}" ></f:setPropertyActionListener>
+                                </p:commandButton>
+                            </p:column>
+
+                        </p:dataTable>
+
+                    </p:panel>
+                </h:form>
+
+
+                <p:dialog id="dlgDetails" header="Add Favourite Diagnosis" widgetVar="dlg2" modal="true" >
+
+                    <h:form >
+                        <p:panelGrid columns="2" >
+
+                            <h:outputText value="Favourite Type" ></h:outputText>
+                            <p:selectOneMenu  value="#{favouriteController.current.favouriteType}" 
+                                              required="true">
+                                <f:selectItem itemLabel="Select" ></f:selectItem>
+                                <f:selectItems  value="#{enumController.favouriteTypes}"></f:selectItems>
+                            </p:selectOneMenu>
+
+                            <h:outputText value="From" ></h:outputText>
+                            <h:panelGroup >
+                                <p:inputText value="#{favouriteController.current.favouriteFrom}" 
+                                             required="true" ></p:inputText>
+                            </h:panelGroup>
+
+                            <h:outputText value="To" ></h:outputText>
+                            <h:panelGroup >
+                                <p:inputText value="#{favouriteController.current.favouriteTo}" 
+                                             required="true" ></p:inputText>
+                            </h:panelGroup>
+
+                            <h:outputText value="Medicine" ></h:outputText>
+
+                            <p:autoComplete id="acItem" 
+                                            value="#{favouriteController.current.item}" 
+                                            forceSelection="true"
+                                            completeMethod="#{itemController.completeMedicinesPlusTherapeutics}" 
+                                            var="vt" itemLabel="#{vt.name}" itemValue="#{vt}"
+                                            placeholder="Select Medicine">
+                            </p:autoComplete>
+
+
+
+                            <p:commandButton value="Save" ajax="false" 
+                                             action="#{favouriteController.addToFavouriteDiagnosis()}" ></p:commandButton>
+
+                        </p:panelGrid>
+                    </h:form>
+
+
+
+                </p:dialog> 
             </ui:define>
 
         </ui:composition>
