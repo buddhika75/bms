@@ -27,13 +27,13 @@
                                     <p:inputTextarea value="#{letterController.document.diagnosis}" rows="5" />     
                                     <p:outputLabel value="No of Days" />
                                     <p:inputText value="#{letterController.document.noOfDays}" autocomplete="off" >
-                                        <f:ajax event="keyup" execute="@this" 
-                                                render="td" listener="#{letterController.listnerDateChange}" />
+                                        <p:ajax event="keyup" process="@this" 
+                                                update="td" listener="#{letterController.listnerDateChange}" />
                                     </p:inputText>
                                     <p:outputLabel value="From Date" />
                                     <p:calendar pattern="yyyy MM dd" value="#{letterController.document.fromDate}" >
-                                        <f:ajax event="dateSelect" execute="@this" 
-                                                render="td" listener="#{letterController.listnerDateChange}" />
+                                        <p:ajax event="dateSelect" process="@this" 
+                                                update="td" listener="#{letterController.listnerDateChange}" />
                                     </p:calendar>
                                     <p:outputLabel value="To Date" />
                                     <p:calendar id="td" pattern="yyyy MM dd" value="#{letterController.document.toDate}" disabled="true" />

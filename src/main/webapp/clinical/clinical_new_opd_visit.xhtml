@@ -17,15 +17,6 @@
                                 <div class="row" >
                                     <div class="col" >
                                         <h:commandButton class="btn btn-success p-x5 m-2 "  value="Save" action="#{patientEncounterController.saveSelected()}" />
-
-                                        <h:outputLabel value="Visit of #{patientEncounterController.current.patient.person.nameWithTitle} on " >
-                                        </h:outputLabel>
-                                        <h:outputLabel value="#{patientEncounterController.current.createdAt}" >
-                                            <f:convertDateTime pattern="dd MMMM yyyy" ></f:convertDateTime>
-                                        </h:outputLabel>
-                                        <h:outputLabel value= "&nbsp; by #{patientEncounterController.current.opdDoctor.person.nameWithTitle}." >
-                                        </h:outputLabel>
-
                                         <h:commandButton class="btn btn-primary p-1 m-2"    value="Pharmacy" action="#{patientEncounterController.issueItems()}"  ></h:commandButton>
                                         <h:commandButton class="btn btn-primary p-1  m-2"    value="Order" action="#{patientEncounterController.issueServices()}"  ></h:commandButton>
                                         <h:commandButton  class="btn btn-secondary p-1 m-2"    value="Letters" action="clinical_letter_index" 
@@ -38,6 +29,15 @@
                                         <h:commandButton  class="btn btn-warning p-x5 m-2"    value="Previous Visit" 
                                                           disabled="#{patientEncounterController.startedEncounter eq patientEncounterController.current}"
                                                           action="#{patientEncounterController.backToStartingEncounter()}"  ></h:commandButton>
+                                        <h:outputLabel value="Visit of #{patientEncounterController.current.patient.person.nameWithTitle} on " >
+                                        </h:outputLabel>
+                                        <h:outputLabel value="#{patientEncounterController.current.createdAt}" >
+                                            <f:convertDateTime pattern="dd MMMM yyyy" ></f:convertDateTime>
+                                        </h:outputLabel>
+                                        <h:outputLabel value= "&nbsp; by #{patientEncounterController.current.opdDoctor.person.nameWithTitle}." >
+                                        </h:outputLabel>
+
+
 
                                     </div>
                                 </div>
@@ -149,7 +149,9 @@
 
                                         <p:dataTable id="tblDx" 
                                                      value="#{patientEncounterController.current.diagnosis}"
-                                                     emptyMessage="No Diagnosis Added Yet"
+                                                     emptyMessage="No Diagnosis Added Yet" rows="5"
+                                                     paginator="true"
+                                                     paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}"
                                                      var="edx" class="w-100" >
                                             <p:column width="10" >
                                                 <h:outputLabel value="#{edx.clinicalFindingItem.name}" ></h:outputLabel>
@@ -201,8 +203,8 @@
 
                                             </h:outputLabel>
 
-                                            <h:outputLabel value="Picture" ></h:outputLabel>
-                                            <h:panelGroup >
+                                            <h:outputLabel value="Picture" rendered="#{sessionController.hasPrivilege('ClinicalPatientPhoto')}" ></h:outputLabel>
+                                            <h:panelGroup rendered="#{sessionController.hasPrivilege('ClinicalPatientPhoto')}">
                                                 <p:graphicImage  style="border: 1px solid red; width: 150px;" 
                                                                  id="photos" cache="false"
                                                                  rendered="#{patientController.current.baImage ne null and false}"    
@@ -230,7 +232,7 @@
                                                      header="Personal Hx"  id="txtPatientComments" >
                                                 <p:inputTextarea rows="7" class="w-100"
                                                                  value="#{patientEncounterController.current.patient.comments}"
-                                                                 rendered="#{sessionController.hasPrivilege('ClinicalPatientCommentsView') or true}"
+                                                                 rendered="#{sessionController.hasPrivilege('ClinicalPatientCommentsView')}"
                                                                  disabled="#{!sessionController.hasPrivilege('ClinicalPatientCommentsEdit')}">
                                                     <p:ajax process="@this" ></p:ajax>
                                                 </p:inputTextarea>
@@ -266,15 +268,13 @@
                                         <h4>Past Visits</h4>
                                     </div>
                                     <div class="card-body" >
-                                        <p:dataTable value="#{patientEncounterController.currentPatientEncounters}" var="pe" 
+                                        <p:dataTable value="#{patientEncounterController.currentPatientEncounters}" 
+                                                     var="pe" 
                                                      class="w-100" rendered="true"
+                                                     rows="7"
                                                      paginator="true"
                                                      paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
                                                      >
-                                            <!--                                            <f:facet name="header" >
-                                                                                            <p:outputLabel value="Past Visits" ></p:outputLabel>
-                                                                                        </f:facet>-->
-
                                             <p:column headerText="Visit Date" >
                                                 <h:outputLabel value="#{pe.createdAt}" >
                                                     <f:convertDateTime pattern="dd MMMM yyyy" ></f:convertDateTime>
@@ -282,9 +282,9 @@
                                             </p:column>
                                             <p:column headerText="Dx" >
                                                 <ui:repeat value="#{pe.diagnosis}" var="dxs" >
-                                                    <h:outputLabel value="#{dxs.stringValue}" ></h:outputLabel>
-                                                    <h:outputLabel value="&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;" rendered="#{dxs.lobValue ne null}"></h:outputLabel>
-                                                    <h:outputLabel value="#{dxs.lobValue}" ></h:outputLabel>
+                                                    <h:outputLabel value="#{dxs.name}" ></h:outputLabel>
+                                                    <h:outputLabel value="&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;" rendered="#{dxs.comments ne null}"></h:outputLabel>
+                                                    <h:outputLabel value="#{dxs.comments}" ></h:outputLabel>
                                                     <br/>
                                                 </ui:repeat>
                                             </p:column>
@@ -306,7 +306,9 @@
                                     </div>
                                     <div class="card-body" >
                                         <p:dataTable  id="tblIxBills" 
-                                                      value="#{patientEncounterController.currentPatientInvestigations}" var="pi"  rows="5"
+                                                      value="#{patientEncounterController.currentPatientInvestigations}" 
+                                                      var="pi"  
+                                                      rows="5"
                                                       class="w-100"
                                                       rendered="true"
                                                       paginator="true"
@@ -347,7 +349,12 @@
                                             <p:column headerText="Data-Entered Reports"   >
                                                 <p:dataTable value="#{pi.patientReports}" 
                                                              var="dpr"
-                                                             rendered="#{pi.patientReports.size() ne 0 and false}"   >
+                                                             rendered="#{pi.patientReports.size() ne 0}"   
+                                                             rows="7"
+                                                             paginatorAlwaysVisible="false"
+                                                             paginator="true"
+                                                             paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                                             >
                                                     <p:column >
                                                         <p:commandLink id="cmdOldReport" style="text-decoration:underline;" 
                                                                        value="#{dpr.item.name}" target="_blank"
@@ -369,6 +376,7 @@
                                         <p:dataTable value="#{patientEncounterController.currentChannelBills}" 
                                                      var="bill" rendered="true"
                                                      class="w-100"
+                                                     rows="7"
                                                      paginator="true"
                                                      paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
                                                      >
@@ -476,6 +484,9 @@
                                         <p:dataTable rendered="true"
                                                      class="w-100"
                                                      id="tblPres" 
+                                                     rows="10"
+                                                     paginator="true"
+                                                     paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
                                                      value="#{patientEncounterController.current.prescriptions}"
                                                      var="cm" rowKey="#{cm.id}"
                                                      emptyMessage="No medicines added yet.">
