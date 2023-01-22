@@ -539,7 +539,11 @@
                                 <p:panel header="Booking &amp; Settling" rendered="#{bookingController.selectedBillSession.bill.paidBill eq bookingController.selectedBillSession.bill and bookingController.selectedBillSession.bill.balance eq 0.0}">
                                     <h:panelGrid columns="2">
                                         <p:outputLabel value="Name"/>
-                                        <p:outputLabel value="#{bookingController.selectedBillSession.bill.patient.person.nameWithTitle}"/>
+                                        <p:commandLink value="#{bookingController.selectedBillSession.bill.patient.person.nameWithTitle}"
+                                                       action="#{patientController.toPatientFromSearchPatients()}">
+                                            <f:setPropertyActionListener value="#{bookingController.selectedBillSession.bill.patient}"
+                                                                         target="#{patientController.current}" ></f:setPropertyActionListener>
+                                        </p:commandLink>
                                         <p:outputLabel value="Consultant"/>
                                         <p:outputLabel value="#{bookingController.selectedBillSession.serviceSession.staff.person.nameWithTitle}"/>
                                         <p:outputLabel value="Serial No"/>
@@ -576,7 +580,8 @@
                                         <p:outputLabel value="#{bookingController.selectedBillSession.bill.createdAt}"> 
                                             <f:convertDateTime pattern="dd/MMM/yyyy - hh:mm a" ></f:convertDateTime>
                                         </p:outputLabel>
-                                        <p:separator rendered="#{bookingController.selectedBillSession.bill.cancelled==true or bookingController.selectedBillSession.bill.refunded==true}" ></p:separator>
+                                        <p:separator 
+                                            rendered="#{bookingController.selectedBillSession.bill.cancelled==true or bookingController.selectedBillSession.bill.refunded==true}" ></p:separator>
                                         <p:separator rendered="#{bookingController.selectedBillSession.bill.cancelled==true or bookingController.selectedBillSession.bill.refunded==true}" ></p:separator>
                                         <p:outputLabel style="color: red" value="Payment" rendered="#{bookingController.selectedBillSession.bill.cancelled==true or bookingController.selectedBillSession.bill.refunded==true}" />
                                         <p:outputLabel style="color: red" value="#{bookingController.selectedBillSession.bill.billedBill.paymentMethod}" rendered="#{bookingController.selectedBillSession.bill.cancelled==true or bookingController.selectedBillSession.bill.refunded==true}"/>
@@ -587,7 +592,35 @@
                                             <f:convertDateTime pattern="dd/MMM/yyyy - hh:mm a"  ></f:convertDateTime>
                                         </p:outputLabel> 
 
-                                    </h:panelGrid>                            
+                                    </h:panelGrid>    
+
+                                    <h:panelGrid columns="2" rendered="#{bookingController.selectedBillSession.bill.cancelled}">
+                                        <p:outputLabel style="color: red" value="Cancelled Payment"/>
+                                        <p:outputLabel style="color: red" value="#{bookingController.selectedBillSession.bill.cancelledBill.paymentMethod}"/>
+                                        <p:outputLabel style="color: red" value="Cancel/Refund User" />
+                                        <p:outputLabel style="color: red" value="#{bookingController.selectedBillSession.bill.cancelledBill.creater.webUserPerson.nameWithTitle}" />
+                                        <p:outputLabel style="color: red" value="Cancel/Refund At" />
+                                        <p:outputLabel style="color: red" value="#{bookingController.selectedBillSession.bill.cancelledBill.createdAt}" >
+                                            <f:convertDateTime pattern="dd/MMM/yyyy - hh:mm a"  ></f:convertDateTime>
+                                        </p:outputLabel> 
+                                    </h:panelGrid>
+                                    
+                                    <h:panelGrid columns="2" rendered="#{bookingController.selectedBillSession.bill.refunded}">
+                                        <p:outputLabel style="color: red" value="Refunded Payment"/>
+                                        <p:outputLabel style="color: red" value="#{bookingController.selectedBillSession.bill.refundedBill.paymentMethod}"/>
+                                        <p:outputLabel style="color: red" value="Refunded Value"/>
+                                        <p:outputLabel style="color: red" value="#{bookingController.selectedBillSession.bill.refundedBill.netTotal}">
+                                            <f:convertDateTime pattern="#,##0.00" ></f:convertDateTime>
+                                        </p:outputLabel>
+                                        
+                                        <p:outputLabel style="color: red" value="Refund User" />
+                                        <p:outputLabel style="color: red" value="#{bookingController.selectedBillSession.bill.refundedBill.creater.webUserPerson.nameWithTitle}" />
+                                        <p:outputLabel style="color: red" value="Refund At" />
+                                        <p:outputLabel style="color: red" value="#{bookingController.selectedBillSession.bill.refundedBill.createdAt}" >
+                                            <f:convertDateTime pattern="dd/MMM/yyyy - hh:mm a"  ></f:convertDateTime>
+                                        </p:outputLabel> 
+                                    </h:panelGrid>
+
                                 </p:panel>
 
                                 <p:panel header="Booking" rendered="#{(bookingController.selectedBillSession.bill.paidBill ne bookingController.selectedBillSession.bill) and bookingController.selectedBillSession.bill.balance eq 0.0}">
