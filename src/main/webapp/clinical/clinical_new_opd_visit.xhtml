@@ -137,7 +137,7 @@
                                                              action="#{patientEncounterController.addDxAndRx()}" >
                                             </p:commandButton>
                                             <p:commandButton ajax="false" id="btnAddOnlyRx" value="Rx" 
-                                                             action="#{patientEncounterController.addDx()}" >
+                                                             action="#{patientEncounterController.addRxWithoutDx()}" >
                                             </p:commandButton>
                                         </h:panelGroup>
 
@@ -153,16 +153,13 @@
                                                      var="edx" class="w-100" >
                                             <p:column width="10" >
                                                 <h:outputLabel value="#{edx.clinicalFindingItem.name}" ></h:outputLabel>
+                                                <p:commandLink ajax="false" value="&nbsp;(X)" action="#{patientEncounterController.removeCfv()}" > 
+                                                    <f:setPropertyActionListener value="#{edx}" target="#{patientEncounterController.removingCfv}" />
+                                                </p:commandLink>
                                             </p:column>
                                             <p:column width="10" >
                                                 <h:outputLabel value="#{edx.lobValue}" ></h:outputLabel>
                                             </p:column>
-                                            <p:column width="10" >
-                                                <p:commandButton ajax="false" value="X" action="#{patientEncounterController.removeCfv()}" > 
-                                                    <f:setPropertyActionListener value="#{edx}" target="#{patientEncounterController.removingCfv}" />
-                                                </p:commandButton>
-                                            </p:column>
-
                                         </p:dataTable>
 
                                     </div>
@@ -481,7 +478,7 @@
                                                      emptyMessage="No medicines added yet.">
                                             <p:column >
                                                 <p:outputLabel value="#{cm.item.name}" ></p:outputLabel>
-                                                <p:commandLink id="clRemove" value="(X)" process="clRemove tblPres" update="tblPres" action="#{patientEncounterController.removePrescreption()}" >
+                                                <p:commandLink id="clRemove" value="&nbsp;(X)" process="clRemove tblPres" update="tblPres" action="#{patientEncounterController.removePrescreption()}" >
                                                     <f:setPropertyActionListener value="#{cm}" target="#{patientEncounterController.removingPrescreption}" ></f:setPropertyActionListener>
                                                 </p:commandLink>
                                             </p:column>

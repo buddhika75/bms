@@ -568,6 +568,108 @@ public class PatientEncounterController implements Serializable {
 //        setCurrent(getFacade().find(current.getId()));
     }
 
+    public void addRxWithoutDx() {
+        if (diagnosis == null) {
+            UtilityController.addErrorMessage("Please select a diagnosis");
+            return;
+        }
+        if (current == null) {
+            UtilityController.addErrorMessage("Please select a visit");
+            return;
+        }
+        List<ItemUsage> dxitems;
+
+        if (getCurrent().getWeight() != null && getCurrent().getWeight() > 0.1) {
+            dxitems = favouriteController.listFavouriteItems(diagnosis, ItemUsageType.FavouriteDiagnosis, current.getWeight());
+        } else if (getCurrent().getPatient() != null && getCurrent().getPatient().getAgeInDays() != null) {
+            System.out.println("by age");
+            Long ageInDays = getCurrent().getPatient().getAgeInDays();
+            System.out.println("ageInDays = " + ageInDays);
+            dxitems = favouriteController.listFavouriteItems(diagnosis, ItemUsageType.FavouriteDiagnosis, null, ageInDays);
+        } else {
+            return;
+        }
+        if (dxitems == null) {
+            return;
+        }
+        if (dxitems.isEmpty()) {
+            return;
+        }
+        for (ItemUsage iu : dxitems) {
+            if (iu.getItem() == null) {
+                continue;
+            }
+
+            List<ItemUsage> availableFavouriteMedicines = null;
+            ItemUsage addingMedicine;
+
+            if (getCurrent().getWeight() != null && getCurrent().getWeight() > 0.1) {
+                availableFavouriteMedicines = favouriteController.listFavouriteItems(iu.getItem(), ItemUsageType.FavouriteMedicine, current.getWeight());
+            } else if (getCurrent().getPatient() != null && getCurrent().getPatient().getAgeInDays() != null) {
+                System.out.println("by age");
+                Long ageInDays = getCurrent().getPatient().getAgeInDays();
+                System.out.println("ageInDays = " + ageInDays);
+                availableFavouriteMedicines = favouriteController.listFavouriteItems(iu.getItem(), ItemUsageType.FavouriteMedicine, null, ageInDays);
+            }
+
+            System.out.println("availableFavouriteMedicines = " + availableFavouriteMedicines);
+            if (availableFavouriteMedicines == null) {
+                continue;
+            }
+
+            System.out.println("availableFavouriteMedicines.isEmpty() = " + availableFavouriteMedicines.isEmpty());
+            if (availableFavouriteMedicines.isEmpty()) {
+                continue;
+            }
+
+            System.out.println("availableFavouriteMedicines.size() = " + availableFavouriteMedicines.size());
+            if (availableFavouriteMedicines.size() > 1) {
+                //TODO: Need to select the best out of the available
+                addingMedicine = availableFavouriteMedicines.get(0);
+            } else {
+                addingMedicine = availableFavouriteMedicines.get(0);
+
+            }
+            Prescription p = new Prescription();
+            System.out.println("addingMedicine = " + addingMedicine);
+            p.setItem(addingMedicine.getItem());
+            p.setCategory(addingMedicine.getCategory());
+            p.setDepartment(sessionController.getDepartment());
+            p.setInstitution(sessionController.getInstitution());
+            p.setDose(addingMedicine.getDose());
+            p.setDoseUnit(addingMedicine.getDoseUnit());
+            p.setDuration(addingMedicine.getDuration());
+            p.setDurationUnit(addingMedicine.getDurationUnit());
+            p.setEncounter(getCurrent());
+            p.setFrequencyUnit(addingMedicine.getFrequencyUnit());
+            p.setIssue(addingMedicine.getIssue());
+            p.setIssueUnit(addingMedicine.getIssueUnit());
+            p.setOrderNo((double) getCurrent().getPrescriptions().size() + 1);
+            p.setPatient(getCurrent().getPatient());
+            p.setWebUser(sessionController.getLoggedUser());
+
+            p.setCreatedAt(new Date());
+            p.setCreater(sessionController.getLoggedUser());
+            try {
+
+            } catch (Exception e) {
+
+            }
+            System.out.println("getCurrent().getPrescriptions() = " + getCurrent().getPrescriptions());
+            getCurrent().getPrescriptions().add(p);
+            System.out.println("p = " + p);
+            System.out.println("getCurrent().getPrescriptions() = " + getCurrent().getPrescriptions());
+
+        }
+
+        save(getCurrent());
+
+        diagnosis = null;
+        diagnosisComments = "";
+        UtilityController.addSuccessMessage("Medicines for Diagnosis added.");
+//        setCurrent(getFacade().find(current.getId()));
+    }
+
     public List<PatientEncounter> getCurrentPatientEncounters() {
         return currentPatientEncounters;
     }
@@ -1182,6 +1284,7 @@ public class PatientEncounterController implements Serializable {
         if (current == null) {
             return "";
         }
+        getPharmacySaleController().resetAll();
         getPharmacySaleController().setSearchedPatient(current.getPatient());
         getPharmacySaleController().setPatientSearchTab(1);
         getPharmacySaleController().setOpdEncounterComments(current.getComments());
@@ -1189,6 +1292,9 @@ public class PatientEncounterController implements Serializable {
         getPharmacySaleController().setPatientTabId("tabSearchPt");
 //        getPharmacySaleController().getBill().setPatientEncounter(current);
 //        getPharmacySaleController().getBill().setPatient(current.getPatient());
+        getPharmacySaleController().addItemsFromVisit(current.getPrescriptions());
+        
+
         return "/clinical/clinical_pharmacy_sale";
     }
 

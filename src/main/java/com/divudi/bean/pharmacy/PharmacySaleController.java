@@ -38,8 +38,10 @@ import com.divudi.entity.Person;
 import com.divudi.entity.PreBill;
 import com.divudi.entity.PriceMatrix;
 import com.divudi.entity.Staff;
+import com.divudi.entity.clinical.Prescription;
 import com.divudi.entity.memberShip.MembershipScheme;
 import com.divudi.entity.pharmacy.Amp;
+import com.divudi.entity.pharmacy.MeasurementUnit;
 import com.divudi.entity.pharmacy.PharmaceuticalBillItem;
 import com.divudi.entity.pharmacy.Stock;
 import com.divudi.entity.pharmacy.UserStock;
@@ -178,6 +180,55 @@ public class PharmacySaleController implements Serializable {
     public void searchPatientListener() {
         //  createPaymentSchemeItems();
         calculateAllRates();
+    }
+
+    public void addItemsFromVisit(List<Prescription> ps) {
+        if (ps == null) {
+            return;
+        }
+        if (ps.isEmpty()) {
+            return;
+        }
+        if (getPreBill() == null) {
+            return;
+        }
+        for (Prescription p : ps) {
+            MeasurementUnit iu;
+            if (p.getItem() == null) {
+                continue;
+            }
+            if(p.getItem().getMeasurementUnit()==null){
+                System.out.println("No Measurement Unit for " + p.getItem().getName());
+                continue;
+            }
+            if(p.getItem().getIssueUnit()==null){
+                System.out.println("No Issue Unit for " + p.getItem().getName());
+                continue;
+            }
+            if (p.getDose() == null) {
+                continue;
+            }
+            if (p.getDose() < 0.0000000000001) {
+                continue;
+            }
+            if(p.getDoseUnit()==null){
+                continue;
+            }
+            if(p.getDoseUnit().equals(p.getItem().getIssueUnit())){
+                
+            }
+
+            Item pi = p.getItem();
+            Stock s = null;
+            if (pi instanceof Amp) {
+                s = findAvailableStocks((Amp) pi, qty);
+            }
+
+            if (s != null) {
+                setStock(s);
+                setQty(pi.getDblValue());
+            }
+        }
     }
 
     public PaymentMethodData getPaymentMethodData() {
@@ -534,6 +585,21 @@ public class PharmacySaleController implements Serializable {
 //        itemsWithoutStocks = completeRetailSaleItems(qry);
         ////System.out.println("selectedSaleitems = " + itemsWithoutStocks);
         return stockList;
+    }
+
+    public Stock findAvailableStocks(Amp amp, Double rQty) {
+        String sql;
+        Map m = new HashMap();
+        m.put("d", getSessionController().getLoggedUser().getDepartment());
+        m.put("s", rQty);
+        m.put("n", (Item) amp);
+        sql = "select i from Stock i "
+                + " where i.stock >:s "
+                + " and i.department=:d "
+                + " and i.itemBatch.item=:n"
+                + " order by i.itemBatch.dateOfExpire";
+        Stock ts = getStockFacade().findFirstBySQL(sql, m);
+        return ts;
     }
 
     //matara pharmacy auto complete
