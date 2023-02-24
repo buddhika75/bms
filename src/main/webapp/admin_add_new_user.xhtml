@@ -43,9 +43,9 @@
                                                  value="#{webUserController.current.webUserPerson.address}"
                                                  requiredMessage="Please enter an address."></p:inputText>
                                     <h:outputText value="Mobile" rendered="#{!webUserController.createOnlyUserForExsistingUser}"></h:outputText>
-                                    <p:inputMask mask="999-9999999" required="true" rendered="#{!webUserController.createOnlyUserForExsistingUser}"
+                                    <p:inputText  required="true" rendered="#{!webUserController.createOnlyUserForExsistingUser}"
                                                  value="#{webUserController.current.webUserPerson.mobile}"
-                                                 requiredMessage="Plase enter a phone number"></p:inputMask>
+                                                 requiredMessage="Plase enter a phone number"></p:inputText>
                                     <h:outputText value="Speciality" rendered="#{!webUserController.createOnlyUserForExsistingUser}" ></h:outputText>                                            
                                     <autocomplete:completeSpeciality value="#{webUserController.speciality}" disable="#{webUserController.createOnlyUser}" rendered="#{!webUserController.createOnlyUserForExsistingUser}"/>
 

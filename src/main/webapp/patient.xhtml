@@ -60,8 +60,8 @@
                                         var="pta" itemLabel="#{pta.name}" itemValue="#{pta}" forceSelection="true" value="#{patientController.current.person.area}" ></p:autoComplete>
 
                         <h:outputLabel value="Phone"/>
-                        <p:inputMask mask="999-9999999" id="txtNewPtPhone" autocomplete="off" maxlength="11" value="#{patientController.current.person.phone}">
-                        </p:inputMask>
+                        <p:inputText  id="txtNewPtPhone" autocomplete="off" maxlength="11" value="#{patientController.current.person.phone}">
+                        </p:inputText>
                         <h:outputLabel value="Date of Birth"/>
 
                         <h:panelGrid columns="4">

@@ -9,6 +9,7 @@ package com.divudi.data;
  * @author www.divudi.com
  */
 public enum Privileges {
+
     //Main Menu Privileges
     TheaterIssueBHT,
     Opd,
@@ -27,7 +28,9 @@ public enum Privileges {
     CashTransaction,
     //Submenu Privileges
     OpdBilling,
+    OpdCollectingCentreBillingMenu,
     OpdCollectingCentreBilling,
+    OpdCollectingCentreBillSearch,
     OpdPreBilling,
     OpdBillSearch,
     OpdBillItemSearch,
@@ -69,8 +72,13 @@ public enum Privileges {
     InwardReactivate,
     InwardCheck,
     InwardUnCheck,
+    InwardFinalBillCancel,
+    InwardOutSideMarkAsUnPaid,
     ShowInwardFee,
-    
+    InwardPharmacyMenu,
+    InwardPharmacyIssueRequest,
+    InwardPharmacyIssueRequestSearch,
+    InwardBillSettleWithoutCheck,
     LabBilling,
     LabBillCancelSpecial,
     LabBillRefundSpecial,
@@ -94,6 +102,11 @@ public enum Privileges {
     LabRevertSample,
     LabPrinting,
     LabReprinting,
+    LabReportEdit,
+    LabReportPrint,
+    AdminReportSearch,
+    LabReportSearchByDepartment,
+    LabSummeries,
     LabSummeriesLevel1,
     LabSummeriesLevel2,
     LabSummeriesLevel3,
@@ -103,14 +116,27 @@ public enum Privileges {
     LabEditPatient,
     LabInvestigationFee,
     LabAddInwardServices,
-    LabSearchBillLoggedInstitution,
+    LabReportSearchByLoggedInstitution,
     IncomeReport,
     LabReport,
     DuesAndAccess,
     CheckEnteredData,
     LabAdiministrator,
-    LabPatientDetailsEdit,
-    
+    LabReports,
+    LabItems,
+    LabItemFeeUpadate,
+    LabItemFeeDelete,
+    LabLists,
+    LabSetUp,
+    LabInwardBilling,
+    LabInwardSearchServiceBill,
+    LabCollectingCentreBilling,
+    LabCCBilling,
+    LabCCBillingSearch,
+    LabReportSearch,
+    LabReporting,
+    //dont remove
+    LabSearchBillLoggedInstitution,
     PaymentBilling,
     PaymentBillSearch,
     PaymentBillReprint,
@@ -154,6 +180,7 @@ public enum Privileges {
     PharmacyPurchaseCancellation,
     PharmacyPurchaseReturn,
     PharmacyStockAdjustment,
+    PharmacyStockAdjustmentSingleItem,
     PharmacyReAddToStock,
     PharmacyStockIssue,
     PharmacyDealorPayment,
@@ -164,6 +191,7 @@ public enum Privileges {
     PharmacyAdministration,
     PharmacySetReorderLevel,
     PharmacyReturnWithoutTraising,
+    PharmacyBHTIssueAccept,
     //theater
     Theatre,
     TheatreAddSurgery,
@@ -187,8 +215,6 @@ public enum Privileges {
     TheaterIssueOpdSearchPreBillForReturnItemOnly,
     TheaterIssueOpdSearchPreBillReturn,
     TheaterIssueOpdSearchPreBillAddToStock,
-    
-    
     ClinicalPatientSummery,
     ClinicalPatientDetails,
     ClinicalPatientPhoto,
@@ -196,16 +222,7 @@ public enum Privileges {
     ClinicalVisitSummery,
     ClinicalHistory,
     ClinicalAdministration,
-    ClinicalAdministrationEditLetter,
     ClinicalPatientDelete,
-    ClinicalPatientAdd,
-    ClinicalPatientEdit,
-    ClinicalPatientCommentsView,
-    ClinicalPatientCommentsEdit,
-    ClinicalPatientNameChange,
-    ClinicalMembershipAdd,
-    ClinicalMembershipEdit,
-    
     ChannelAdd,
     ChannelCancel,
     ChannelRefund,
@@ -270,6 +287,11 @@ public enum Privileges {
     ChannellingDoctorLeaveByDate,
     ChannellingDoctorLeaveByServiceSession,
     ChannellingChannelSheduling,
+    ChannellingChannelShedulRemove,
+    ChannellingChannelShedulName,
+    ChannellingChannelShedulStartingNo,
+    ChannellingChannelShedulRoomNo,
+    ChannellingChannelShedulMaxRowNo,
     ChannellingChannelAgentFee,
     ChannellingDoctorSessionView,
     ChannellingPayment,
@@ -277,79 +299,6 @@ public enum Privileges {
     ChannellingPaymentDueSearch,
     ChannellingPaymentDoneSearch,
     ChannellingApoinmentNumberCountEdit,
-    MemberShip,
-    MembershipSchemes,
-    MemberShipInwardMemberShip,
-    MemberShipInwardMemberShipSchemesDicounts,
-    MemberShipInwardMemberShipInwardMemberShipReport,
-    MemberShipOpdMemberShipDis,
-    MemberShipOpdMemberShipDisByDepartment,
-    MemberShipOpdMemberShipDisByCategory,
-    MemberShipOpdMemberShipDisOpdMemberShipReport,
-    
-    HrAdmin,
-    EmployeeHistoryReport,
-    hrDeleteLateLeave,
-    HrGenerateSalary,
-    
-    
-    Developers,
-
-    //Cashier
-    AllCashierSummery,
-    
-    //Administration
-    SearchAll,
-    ChannelBookingChange,
-    
-
-    OpdCollectingCentreBillingMenu,
-
-    OpdCollectingCentreBillSearch,
-
-
-    InwardFinalBillCancel,
-    InwardOutSideMarkAsUnPaid,
-
-    InwardPharmacyMenu,
-    InwardPharmacyIssueRequest,
-    InwardPharmacyIssueRequestSearch,
-    InwardBillSettleWithoutCheck,
-
-    LabReportEdit,
-    LabSummeries,
-
-    LabReportSearchByLoggedInstitution,
-
-    LabReports,
-    LabItems,
-    LabItemFeeUpadate,
-    LabItemFeeDelete,
-    LabLists,
-    LabSetUp,
-    LabInwardBilling,
-    LabInwardSearchServiceBill,
-    LabCollectingCentreBilling,
-    LabCCBilling,
-    LabCCBillingSearch,
-    LabReportSearch,
-    LabReporting,
-    //dont remove
-
-
-
-    PharmacyStockAdjustmentSingleItem,
-
-    PharmacyBHTIssueAccept,
-    //theater
-
-
-    ChannellingChannelShedulRemove,
-    ChannellingChannelShedulName,
-    ChannellingChannelShedulStartingNo,
-    ChannellingChannelShedulRoomNo,
-    ChannellingChannelShedulMaxRowNo,
-
     ChannellingEditSerialNo,
     ChannellingEditPatientDetails,
     ChannellingPrintInPastBooking,
@@ -372,7 +321,7 @@ public enum Privileges {
     ChannelDebitNote,
     ChannelDebitNoteSearch,
     ChannelCashCancelRestriction,
-
+    ChannelBookingChange,
     ChannelBookingBokking,
     ChannelBookingReprint,
     ChannelBookingCancel,
@@ -388,17 +337,30 @@ public enum Privileges {
     ChannelCashierTransactionExpencess,
     ChannelCashierTransactionExpencessSearch,
     ChannelActiveVat,
-    
-
+    MemberShip,
+    MemberShipAdd,
+    MemberShipEdit,
+    MembershipReports,
+    MembershipDiscountManagement,
+    MembershipAdministration,
+    MembershipSchemes,
+    MemberShipInwardMemberShip,
+    MemberShipInwardMemberShipSchemesDicounts,
+    MemberShipInwardMemberShipInwardMemberShipReport,
+    MemberShipOpdMemberShipDis,
+    MemberShipOpdMemberShipDisByDepartment,
+    MemberShipOpdMemberShipDisByCategory,
+    MemberShipOpdMemberShipDisOpdMemberShipReport,
     MemberShipMemberDeActive,
     MemberShipMemberReActive,
-    
-
+    HrAdmin,
     HrReports,
     HrReportsLevel1,
     HrReportsLevel2,
     HrReportsLevel3,
-  
+    EmployeeHistoryReport,
+    hrDeleteLateLeave,
+    HrGenerateSalary,
     HrGenerateSalarySpecial,
     HrAdvanceSalary,
     HrPrintSalary,
@@ -412,10 +374,24 @@ public enum Privileges {
     HrAdditionalForms,
     HrEditRetiedDate,
     HrRemoveResignDate,
-    
-    
+    Developers,
+    //Cashier
+    AllCashierSummery,
+    //Administration
+    SearchAll,
     ChangePreferece,
     SendBulkSMS,
+    
+    
+    
+    ClinicalAdministrationEditLetter,
+    ClinicalPatientAdd,
+    ClinicalPatientEdit,
+    ClinicalPatientCommentsView,
+    ClinicalPatientCommentsEdit,
+    ClinicalPatientNameChange,
+    ClinicalMembershipAdd,
+    ClinicalMembershipEdit,
 
     
     
@@ -423,4 +399,138 @@ public enum Privileges {
     
     
     
+    
+    
+    ;
+
+    public String getLabel() {
+        switch (this) {
+            case Opd:
+                return "Online Settlement";
+            case OpdCancel:
+                return "OPD Bill Cancellation";
+            case OpdReturn:
+                return "OPD Bill Return";
+            default:
+                return this.toString();
+
+        }
+    }
+
+    public String getCategory() {
+        switch (this) {
+            case Opd:
+            case OpdCancel:
+            case OpdReturn:
+            case OpdBilling:
+            case OpdReprint:
+            case OpdBillSearch:
+            case OpdPreBilling:
+            case OpdReactivate:
+            case OpdBillItemSearch:
+            case OpdBillSearchEdit:
+            case OpdCollectingCentreBilling:
+            case OpdCollectingCentreBillSearch:
+            case OpdCollectingCentreBillingMenu:
+                return "OPD";
+            case Lab:
+            case LabItems:
+            case LabLists:
+            case LabSetUp:
+            case LabReport:
+            case LabBilling:
+            case LabCashier:
+            case LabReceive:
+            case LabReports:
+            case LabPrinting:
+            case LabCCBilling:
+            case LabDataentry:
+            case LabReporting:
+            case LabSummeries:
+            case LabBillSearch:
+            case LabReportEdit:
+            case LabReprinting:
+            case LabAutherizing:
+            case LabBillReprint:
+            case LabEditPatient:
+            case LabReportPrint:
+            case LabReportSearch:
+            case LabRevertSample:
+            case LabBillRefunding:
+            case LabBillReturning:
+            case LabDeAutherizing:
+            case LabInwardBilling:
+            case LabItemFeeDelete:
+            case LabAdiministrator:
+            case LabBillCancelling:
+            case LabBillItemSearch:
+            case LabItemFeeUpadate:
+            case LabCCBillingSearch:
+            case LabReportSearchAll:
+            case LabReportSearchOwn:
+            case LabSampleReceiving:
+            case LabSummeriesLevel1:
+            case LabSummeriesLevel2:
+            case LabSummeriesLevel3:
+            case LabBillReactivating:
+            case LabInvestigationFee:
+            case LabSampleCollecting:
+            case LabAddInwardServices:
+            case LabBillCancelSpecial:
+            case LabBillRefundSpecial:
+            case LabBillSearchCashier:
+            case LabCasheirBillSearch:
+            case LabReportFormatEditing:
+            case LabCollectingCentreBilling:
+            case LabInwardSearchServiceBill:
+            case LabReportSearchByDepartment:
+            case LabSearchBillLoggedInstitution:
+            case LabReportSearchByLoggedInstitution:
+                return "Lab";
+            case Pharmacy:
+            case PharmacySale:
+            case PharmacySaleWh:
+            case PharmacySearch:
+            case PharmacyReports:
+            case PharmacySummery:
+            case PharmacyPurchase:
+            case PharmacyTransfer:
+            case PharmacyPurchaseWh:
+            case PharmacySaleCancel:
+            case PharmacySaleReturn:
+            case PharmacyStockIssue:
+            case PharmacyGoodReceive:
+            case PharmacySaleReprint:
+            case PharmacyReAddToStock:
+            case PharmacySaleCancelWh:
+            case PharmacySaleReturnWh:
+            case PharmacyDealorPayment:
+            case PharmacyGoodReceiveWh:
+            case PharmacyInwardBilling:
+            case PharmacyOrderApproval:
+            case PharmacyOrderCreation:
+            case PharmacySaleReprintWh:
+            case PharmacyAdministration:
+            case PharmacyBHTIssueAccept:
+            case PharmacyPurchaseReturn:
+            case PharmacyGoodReceiveEdit:
+            case PharmacyPurchaseReprint:
+            case PharmacySetReorderLevel:
+            case PharmacyStockAdjustment:
+            case PharmacyGoodReceiveCancel:
+            case PharmacyGoodReceiveReturn:
+            case PharmacyOrderCancellation:
+            case PharmacyInwardBillingCancel:
+            case PharmacyInwardBillingReturn:
+            case PharmacyPurchaseCancellation:
+            case PharmacyReturnWithoutTraising:
+            case PharmacyStockAdjustmentSingleItem:
+                return "Pharmacy";
+            default:
+                return this.toString();
+
+        }
+    }
+
 }
+

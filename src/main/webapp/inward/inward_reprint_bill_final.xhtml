@@ -108,8 +108,8 @@
 
                                         <h:outputLabel value="Phone" >
                                         </h:outputLabel>
-                                        <p:inputMask mask="999-9999999" disabled="#{!webUserController.hasPrivilege('InwardFinalBillReportEdit')}" value="#{inwardSearch.bill.patient.person.phone}" >
-                                        </p:inputMask>
+                                        <p:inputText  disabled="#{!webUserController.hasPrivilege('InwardFinalBillReportEdit')}" value="#{inwardSearch.bill.patient.person.phone}" >
+                                        </p:inputText>
                                         <h:outputLabel value="Patient ​Address" ></h:outputLabel>
                                         <h:inputText disabled="#{!webUserController.hasPrivilege('InwardFinalBillReportEdit')}" value="#{inwardSearch.bill.patient.person.address}" ></h:inputText>
 

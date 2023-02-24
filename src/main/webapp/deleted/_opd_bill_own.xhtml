@@ -94,8 +94,8 @@
                                                 <p:autoComplete id="acNewPtArea" converter="areaCon" completeMethod="#{areaController.completeArea}" var="pta" itemLabel="#{pta.name}" itemValue="#{pta}" forceSelection="true" value="#{billController.newPatient.person.area}" ></p:autoComplete>
 
                                                 <h:outputLabel value="Phone"/>
-                                                <p:inputMask mask="999-9999999" id="txtNewPtPhone" autocomplete="off" maxlength="11" value="#{billController.newPatient.person.phone}">
-                                                </p:inputMask>
+                                                <p:inputText  id="txtNewPtPhone" autocomplete="off" maxlength="11" value="#{billController.newPatient.person.phone}">
+                                                </p:inputText>
                                                 <h:outputLabel value="Date of Birth"/>
                                                 <p:calendar  value="#{billController.newPatient.person.dob}" id="calNewPtDob"  navigator="true" pattern="dd/MM/yy" >
                                                     <f:ajax event="dateSelect" execute="@this" render="txtNewPtAge"/>

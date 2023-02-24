@@ -12,106 +12,93 @@
 
             <ui:define name="content">
 
-                <p:panel header="Patient Search" >
-                    <h:panelGrid columns="2" styleClass="alignTop" >
-                        <p:panel header="Search Criteria" style="font-size: 150%;">
+                <div class="row" >
+                    <div class="col-4" >
+                        <h:form>
 
-                            <h:form>
+                            <h:panelGrid columns="1" >
 
-                                <h:panelGrid columns="1" >
+                                <p:commandButton id="btnAddPt" ajax="false" style="width: 250px;"
+                                                 value="New"
+                                                 action="#{patientController.prepareAdd()}"  >
+                                </p:commandButton>
+                                <p:commandButton ajax="false" value="Search"
+                                                 id="btnSearch"
+                                                 style="width: 250px;"
+                                                 action="#{patientController.searchPatient()}"
+                                                 ></p:commandButton>
+                                <p:defaultCommand target="btnSearch" ></p:defaultCommand>
+                            </h:panelGrid>
 
-                                    <p:commandButton id="btnAddPt" ajax="false" style="width: 250px;"
-                                                     value="New"
-                                                     action="#{patientController.prepareAdd()}"  >
+                            <h:panelGrid columns="1" >
+
+                                <h:outputLabel value="Name" >
+                                </h:outputLabel>
+                                <h:inputText autocomplete="off"  value="#{patientController.searchName}" ></h:inputText>
+
+                                <h:outputLabel value="Phone Number" ></h:outputLabel>
+                                <p:inputText autocomplete="off"     value="#{patientController.searchPhone}" ></p:inputText>
+
+                                <h:outputLabel value="NIC" ></h:outputLabel>
+                                <h:inputText  autocomplete="off"  value="#{patientController.searchNic}"></h:inputText>
+
+                                <h:outputLabel value="PHN" ></h:outputLabel>
+                                <h:inputText  autocomplete="off"  value="#{patientController.searchPhn}"></h:inputText>
+
+                                <h:outputLabel value="Patient Code" ></h:outputLabel>
+                                <h:inputText  autocomplete="off"  value="#{patientController.searchPatientCode}"></h:inputText>
+
+                                <h:outputLabel value="Patient ID" ></h:outputLabel>
+                                <h:inputText  autocomplete="off"  value="#{patientController.searchPatientillId}"></h:inputText>
+
+                                <h:outputLabel value="Bill ID" ></h:outputLabel>
+                                <h:inputText  autocomplete="off"  value="#{patientController.searchBillId}"></h:inputText>
+
+                                <h:outputLabel value="Sample ID" ></h:outputLabel>
+                                <h:inputText  autocomplete="off"  value="#{patientController.searchSampleId}"></h:inputText>
+
+                            </h:panelGrid>
+
+                        </h:form>
+                    </div>
+                    <div class="col-8" >
+                        <h:form>
+                            <p:dataTable value="#{patientController.searchPatients}" var="p"
+                                         
+                                         >
+                                <p:column headerText="Name" >
+                                    <p:outputLabel value="#{p.person.name}" ></p:outputLabel>
+                                </p:column>
+                                <p:column headerText="Age" width="50">
+                                    <p:outputLabel value="#{p.person.age}"></p:outputLabel>
+                                </p:column>
+                                <p:column headerText="Sex" width="50">
+                                    <p:outputLabel value="#{p.person.sex}"></p:outputLabel>
+                                </p:column>
+                                <p:column headerText="Address">
+                                    <p:outputLabel value="#{p.person.address}"></p:outputLabel>
+                                </p:column>
+                                <p:column headerText="Phone" width="80">
+                                    <p:outputLabel value="#{p.person.phone}">
+                                    </p:outputLabel>
+                                </p:column>
+                                <p:column headerText="Actions" width="80">
+
+                                    <p:commandButton ajax="false" value="View" action="#{patientController.toPatientFromSearchPatients()}" >
+                                        <f:setPropertyActionListener value="#{p}" target="#{patientController.current}" ></f:setPropertyActionListener>
                                     </p:commandButton>
-                                    <p:commandButton ajax="false" value="Search"
-                                                     id="btnSearch"
-                                                     style="width: 250px;"
-                                                     action="#{patientController.searchPatient()}"
-                                                     ></p:commandButton>
-                                    <p:defaultCommand target="btnSearch" ></p:defaultCommand>
-                                </h:panelGrid>
 
-                                <h:panelGrid columns="1" >
+                                    <p:commandButton ajax="false" value="Queue" action="#{patientController.toAddToQueueFromSearchPatients()}" >
+                                        <f:setPropertyActionListener value="#{p}" target="#{patientController.current}" ></f:setPropertyActionListener>
+                                    </p:commandButton>
 
-                                    
-
-                                    <h:outputLabel value="Name" >
-                                    </h:outputLabel>
-                                    <h:inputText autocomplete="off"  value="#{patientController.searchName}" ></h:inputText>
-
-                                    <h:outputLabel value="Phone Number" ></h:outputLabel>
-                                    <p:inputMask autocomplete="off"   mask="999-9999999"  value="#{patientController.searchPhone}" ></p:inputMask>
-
-                                    <h:outputLabel value="NIC" ></h:outputLabel>
-                                    <h:inputText  autocomplete="off"  value="#{patientController.searchNic}"></h:inputText>
-
-                                    <h:outputLabel value="PHN" ></h:outputLabel>
-                                    <h:inputText  autocomplete="off"  value="#{patientController.searchPhn}"></h:inputText>
-
-                                    
-                                    <h:outputLabel value="Patient Code" ></h:outputLabel>
-                                    <h:inputText  autocomplete="off"  value="#{patientController.searchPatientCode}"></h:inputText>
-
-                                    <h:outputLabel value="Patient ID" ></h:outputLabel>
-                                    <h:inputText  autocomplete="off"  value="#{patientController.searchPatientillId}"></h:inputText>
-
-                                    <h:outputLabel value="Bill ID" ></h:outputLabel>
-                                    <h:inputText  autocomplete="off"  value="#{patientController.searchBillId}"></h:inputText>
-
-                                    <h:outputLabel value="Sample ID" ></h:outputLabel>
-                                    <h:inputText  autocomplete="off"  value="#{patientController.searchSampleId}"></h:inputText>
-
-
-                                </h:panelGrid>
-
-                            </h:form>
-
-                        </p:panel>
-                        <p:panel header="Search Results" >
-                            <h:form>
-                                <p:dataTable value="#{patientController.searchPatients}" var="p" >
-                                    <p:column headerText="Name" >
-                                        <p:outputLabel value="#{p.person.name}" ></p:outputLabel>
-                                    </p:column>
-                                   <p:column headerText="Age" width="50">
-                                        <p:outputLabel value="#{p.person.age}"></p:outputLabel>
-                                    </p:column>
-                                    <p:column headerText="Sex" width="50">
-                                        <p:outputLabel value="#{p.person.sex}"></p:outputLabel>
-                                    </p:column>
-                                    <p:column headerText="Address">
-                                        <p:outputLabel value="#{p.person.address}"></p:outputLabel>
-                                    </p:column>
-                                    <p:column headerText="Phone" width="80">
-                                        <p:outputLabel value="#{p.person.phone}">
-                                        </p:outputLabel>
-                                    </p:column>
-                                    <p:column headerText="Actions" width="80">
-
-                                        <p:commandButton ajax="false" value="View" action="#{patientController.toPatientFromSearchPatients()}" >
-                                            <f:setPropertyActionListener value="#{p}" target="#{patientController.current}" ></f:setPropertyActionListener>
-                                        </p:commandButton>
-
-                                        <p:commandButton ajax="false" value="Queue" action="#{patientController.toAddToQueueFromSearchPatients()}" >
-                                            <f:setPropertyActionListener value="#{p}" target="#{patientController.current}" ></f:setPropertyActionListener>
-                                        </p:commandButton>
-
-                                    </p:column>
-                                </p:dataTable>
-                            </h:form>
-                        </p:panel>
-
-
-                    </h:panelGrid>
-
-                </p:panel>
-
-
+                                </p:column>
+                            </p:dataTable>
+                        </h:form>
+                    </div>
+                </div>
 
             </ui:define>
-
-
 
         </ui:composition>
 
