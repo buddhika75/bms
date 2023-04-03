@@ -279,9 +279,10 @@
                                             </p:column>
                                             <p:column headerText="Dx" >
                                                 <ui:repeat value="#{pe.diagnosis}" var="dxs" >
-                                                    <h:outputLabel value="#{dxs.name}" ></h:outputLabel>
-                                                    <h:outputLabel value="&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;" rendered="#{dxs.comments ne null}"></h:outputLabel>
-                                                    <h:outputLabel value="#{dxs.comments}" ></h:outputLabel>
+                                                    <h:outputLabel value="#{dxs.clinicalFindingItem.name}" ></h:outputLabel>
+                                                    <h:outputLabel value="&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;"
+                                                                   rendered="#{dxs.stringValue ne null}"></h:outputLabel>
+                                                    <h:outputLabel value="#{dxs.stringValue}" ></h:outputLabel>
                                                     <br/>
                                                 </ui:repeat>
                                             </p:column>
