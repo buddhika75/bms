@@ -355,8 +355,8 @@
                                 </p:inputText>
 
                                 <h:outputLabel value="Phone"/>
-                                <p:inputMask mask="999-9999999" id="txtNewPtPhone" autocomplete="off" maxlength="11" value="#{channelBillController.newPatient.person.phone}">
-                                </p:inputMask>
+                                <p:inputText  id="txtNewPtPhone" autocomplete="off" maxlength="11" value="#{channelBillController.newPatient.person.phone}">
+                                </p:inputText>
                                 <h:outputLabel value="Sex"/>
                                 <p:selectOneMenu id="txtNewSex"  value="#{channelBillController.newPatient.person.sex}" style="width: 200px;">
                                     <f:selectItem itemLabel="Select Sex"/>
@@ -721,8 +721,8 @@
                         </p:tab>
 
 
-                        <p:tab title="Cancel" id="cancel">                                                         
-                            #{channelBillController.billSession.bill.billType}
+                        <p:tab title="Cancel" id="cancel"  disabled="#{!sessionController.hasPrivilege('ChannelBookingCancel')}">                                                         
+                            
 
                             <h:panelGroup rendered="#{channelBillController.billSession.billItem.bill.paymentMethod eq 'Agent'}" >
                                 <p:outputLabel value="Re-payment Method"/>
@@ -767,7 +767,8 @@
                         </p:tab>
 
 
-                        <p:tab title="Refund" id="refund">                          
+                        <p:tab title="Refund" id="refund"   disabled="#{!sessionController.hasPrivilege('ChannelBookingRefund')}">                          
+                         
                             <h:panelGroup>
                                 <h:panelGrid columns="2" rendered="#{channelBillController.billSession.billItem.bill.paymentMethod eq 'Agent'}" >
 

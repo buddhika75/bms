@@ -446,7 +446,7 @@
 
                         </p:panel>
 
-                        <p:tab title="Cancel" id="cancel">                                                         
+                        <p:tab title="Cancel" id="cancel"  disabled="#{!sessionController.hasPrivilege('ChannelBookingCancel')}">                                                         
                             #{channelBillController.billSession.bill.billType}
 
                             <h:panelGroup rendered="#{channelBillController.billSession.billItem.bill.paymentMethod eq 'Agent'}" >
@@ -492,7 +492,7 @@
                         </p:tab>
 
 
-                        <p:tab title="Refund" id="refund">                          
+                        <p:tab title="Refund" id="refund"  disabled="#{!sessionController.hasPrivilege('ChannelBookingRefund')}">                          
                             <h:panelGroup>
                                 <h:panelGrid columns="2" rendered="#{channelBillController.billSession.billItem.bill.paymentMethod eq 'Agent'}" >
 

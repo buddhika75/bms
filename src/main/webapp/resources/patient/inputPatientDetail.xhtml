@@ -63,13 +63,13 @@
 
             <h:panelGroup>
                 <!--<p:outputLabel value="Mobile Phone"/>-->
-                <p:inputMask id="mno" mask="999-9999999" autocomplete="off" maxlength="11" 
+                <p:inputText id="mno"  autocomplete="off" maxlength="11" 
                              value="#{cc.attrs.patient.person.mobile}" required="true" requiredMessage="Please Enter A Mobile Number">
-                </p:inputMask>
+                </p:inputText>
                 <!--<p:outputLabel value="Home Phone"/>-->
-                <p:inputMask id="hno" mask="999-9999999" autocomplete="off" maxlength="11" style="margin-top: 8px;"
+                <p:inputText id="hno"  autocomplete="off" maxlength="11" style="margin-top: 8px;"
                              value="#{cc.attrs.patient.person.phone}" required="true" requiredMessage="Please enter a home phone number">
-                </p:inputMask>
+                </p:inputText>
             </h:panelGroup>
          </p:panelGrid>    
                 <p:tooltip for="txtNewPtName" value="Patient Name"  showDelay="0" hideDelay="0"   ></p:tooltip>
