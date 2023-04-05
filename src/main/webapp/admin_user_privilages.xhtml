@@ -21,8 +21,9 @@
             </h:panelGrid>
 
             <h:panelGrid  columns="2" >                          
-                <p:autoComplete id="acPri" completeMethod="#{userPrivilageController.completePrivilegeses}"
-                                value="#{userPrivilageController.completePrivilegeses}"
+                <p:autoComplete id="acPri" 
+                                completeMethod="#{userPrivilageController.completePrivilegeses}"
+                                value="#{userPrivilageController.currentPrivilege}"
                                 var="p"
                                 itemLabel="#{p}"
                                 itemValue="#{p}" >
@@ -42,7 +43,10 @@
                         <p:outputLabel value="#{i.privilege}" ></p:outputLabel>
                     </p:column>
                     <p:column >
-                        <p:commandButton id="btnRemove" value="Remove" action="#{userPrivilageController.remove()}" >
+                        <p:commandButton 
+                            process="btnRemove"
+                            update="tbl"
+                            id="btnRemove" value="Remove" action="#{userPrivilageController.remove()}" >
                             <f:setPropertyActionListener value="#{i}" target="#{userPrivilageController.current}" ></f:setPropertyActionListener>
                         </p:commandButton>
                     </p:column>

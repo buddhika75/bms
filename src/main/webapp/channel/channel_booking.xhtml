@@ -614,14 +614,14 @@
                                         <p:outputLabel style="color: red" value="#{bookingController.selectedBillSession.bill.refundedBill.paymentMethod}"/>
                                         <p:outputLabel style="color: red" value="Refunded Value"/>
                                         <p:outputLabel style="color: red" value="#{bookingController.selectedBillSession.bill.refundedBill.netTotal}">
-                                            <f:convertDateTime pattern="#,##0.00" ></f:convertDateTime>
+                                            <f:convertNumber pattern="#,##0.00" ></f:convertNumber>
                                         </p:outputLabel>
 
                                         <p:outputLabel style="color: red" value="Refund User" />
                                         <p:outputLabel style="color: red" value="#{bookingController.selectedBillSession.bill.refundedBill.creater.webUserPerson.nameWithTitle}" />
                                         <p:outputLabel style="color: red" value="Refund At" />
                                         <p:outputLabel style="color: red" value="#{bookingController.selectedBillSession.bill.refundedBill.createdAt}" >
-                                            <f:convertDateTime pattern="dd/MMM/yyyy - hh:mm a"  ></f:convertDateTime>
+                                            <f:convertNumber pattern="dd/MMM/yyyy - hh:mm a"  ></f:convertNumber>
                                         </p:outputLabel> 
                                     </h:panelGrid>
 
@@ -898,7 +898,7 @@
                                              readonly="#{!sessionController.hasPrivilege('ClinicalPatientNameChange')}"
                                              value="#{bookingController.selectedBillSession.bill.patient.person.name}" />
                                 <p:outputLabel value="Patient"/>
-                                <p:inputText autocomplete="off" value="#{bookingController.selectedBillSession.bill.patient.person.phone}"/>
+                                <p:inputText autocomplete="off" value="#{bookingController.selectedBillSession.bill.patient.person.phone}"  disabled="#{!sessionController.hasPrivilege('ClinicalPatientPhoneNumberEdit')}"/>
                                 <p:outputLabel value="Current Serial No"/>
                                 <ui:repeat value="#{bookingController.selectedBillSession.bill.billItems}" var="bis" >
                                     <p:outputLabel value="#{bis.billSession.serialNo}">                                        
