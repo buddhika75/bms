@@ -447,7 +447,6 @@ public class PatientReportController implements Serializable {
 
             Transport.send(message);
 
-
             JsfUtil.addSuccessMessage("Email Sent SUccessfully");
 
         } catch (MessagingException e) {
@@ -1405,18 +1404,17 @@ public class PatientReportController implements Serializable {
     }
 
     public void printPatientReport() {
-        
+
         if (currentPatientReport == null) {
             UtilityController.addErrorMessage("Error. No currentPatientReport");
             return;
         }
-        
+
         if (currentPtIx == null) {
             UtilityController.addErrorMessage("Error. No currentPtIx");
             return;
         }
 
-        
         currentPtIx.setPrinted(true);
         currentPtIx.setPrintingAt(Calendar.getInstance().getTime());
         currentPtIx.setPrintingUser(getSessionController().getLoggedUser());
@@ -1663,12 +1661,12 @@ public class PatientReportController implements Serializable {
     }
 
     public PatientReport getCurrentPatientReport() {
-        PatientReport cpt;
-        if (currentPatientReport != null && currentPatientReport.getId() != null && currentPatientReport.getId() != 0) {
-            cpt = getFacade().find(currentPatientReport.getId());
-            currentPatientReport = cpt;
-        }
-        System.out.println("currentPatientReport = " + currentPatientReport.toString());
+//        PatientReport cpt;
+//        if (currentPatientReport != null && currentPatientReport.getId() != null && currentPatientReport.getId() != 0) {
+//            cpt = getFacade().find(currentPatientReport.getId());
+//            currentPatientReport = cpt;
+//        }
+//        System.out.println("currentPatientReport = " + currentPatientReport.toString());
         return currentPatientReport;
     }
 
@@ -1690,7 +1688,16 @@ public class PatientReportController implements Serializable {
     }
 
     public void createNewReport(PatientInvestigation pi) {
-        Investigation ix = (Investigation) pi.getInvestigation().getReportedAs();
+        Investigation ix;
+        if (pi.getInvestigation().getReportedAs() != null) {
+            ix = (Investigation) pi.getInvestigation().getReportedAs();
+        }else if(pi.getInvestigation()!=null){
+            ix=pi.getInvestigation();
+        }else{
+            JsfUtil.addErrorMessage("Error");
+            return ;
+        }
+
         currentReportInvestigation = ix;
         currentPtIx = pi;
         if (ix.getReportType() == InvestigationReportType.Microbiology) {
@@ -1718,7 +1725,9 @@ public class PatientReportController implements Serializable {
     }
 
     public void setCurrentPatientReport(PatientReport currentPatientReport) {
+
         this.currentPatientReport = currentPatientReport;
+
         if (currentPatientReport != null) {
             getCommonReportItemController().setCategory(currentPatientReport.getItem().getReportFormat());
             currentPtIx = currentPatientReport.getPatientInvestigation();
