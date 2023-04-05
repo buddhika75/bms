@@ -484,7 +484,11 @@
 
                                     <h:panelGrid columns="2">
                                         <p:outputLabel value="Name"/>
-                                        <p:outputLabel value="#{bookingController.selectedBillSession.bill.patient.person.nameWithTitle}"/>
+                                        <p:commandLink value="#{bookingController.selectedBillSession.bill.patient.person.nameWithTitle}"
+                                                       action="#{patientController.toPatientFromSearchPatients()}">
+                                            <f:setPropertyActionListener value="#{bookingController.selectedBillSession.bill.patient}"
+                                                                         target="#{patientController.current}" ></f:setPropertyActionListener>
+                                        </p:commandLink>
                                         <p:outputLabel value="Consultant"/>
                                         <p:outputLabel value="#{bookingController.selectedBillSession.serviceSession.staff.person.nameWithTitle}"/>
                                         <p:outputLabel value="Serial No"/>
@@ -604,7 +608,7 @@
                                             <f:convertDateTime pattern="dd/MMM/yyyy - hh:mm a"  ></f:convertDateTime>
                                         </p:outputLabel> 
                                     </h:panelGrid>
-                                    
+
                                     <h:panelGrid columns="2" rendered="#{bookingController.selectedBillSession.bill.refunded}">
                                         <p:outputLabel style="color: red" value="Refunded Payment"/>
                                         <p:outputLabel style="color: red" value="#{bookingController.selectedBillSession.bill.refundedBill.paymentMethod}"/>
@@ -612,7 +616,7 @@
                                         <p:outputLabel style="color: red" value="#{bookingController.selectedBillSession.bill.refundedBill.netTotal}">
                                             <f:convertDateTime pattern="#,##0.00" ></f:convertDateTime>
                                         </p:outputLabel>
-                                        
+
                                         <p:outputLabel style="color: red" value="Refund User" />
                                         <p:outputLabel style="color: red" value="#{bookingController.selectedBillSession.bill.refundedBill.creater.webUserPerson.nameWithTitle}" />
                                         <p:outputLabel style="color: red" value="Refund At" />
@@ -626,7 +630,14 @@
                                 <p:panel header="Booking" rendered="#{(bookingController.selectedBillSession.bill.paidBill ne bookingController.selectedBillSession.bill) and bookingController.selectedBillSession.bill.balance eq 0.0}">
                                     <h:panelGrid columns="2">
                                         <p:outputLabel value="Name"/>
-                                        <p:outputLabel value="#{bookingController.selectedBillSession.bill.patient.person.nameWithTitle}"/>
+
+
+                                        <p:commandLink value="#{bookingController.selectedBillSession.bill.patient.person.nameWithTitle}"
+                                                       action="#{patientController.toPatientFromSearchPatients()}">
+                                            <f:setPropertyActionListener value="#{bookingController.selectedBillSession.bill.patient}"
+                                                                         target="#{patientController.current}" ></f:setPropertyActionListener>
+                                        </p:commandLink>
+
                                         <p:outputLabel value="Consultant"/>
                                         <p:outputLabel value="#{bookingController.selectedBillSession.serviceSession.staff.person.nameWithTitle}"/>
                                         <p:outputLabel value="Serial No"/>
