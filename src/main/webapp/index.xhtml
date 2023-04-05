@@ -12,6 +12,13 @@
             <ui:define name="content">
 
                 <p:panelGrid columns="4"  >
+                    
+                    <h:form >
+                        <p:commandButton value="Add All Privileges"  
+                                         action="#{userPrivilageController.allAllPrivileges()}" ajax="false" onclick="onSubmitButton();" >  
+                        </p:commandButton>
+                    </h:form>
+                    
                     <p:panel header="Channelling" rendered="#{searchController.channelingPanelVisible}" >
                         <h:panelGroup >
                             <table style="min-height: 300px;  padding: 2px; margin: auto;position:relative ;">

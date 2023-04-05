@@ -259,7 +259,7 @@
                                                 </p:inputText>
 
                                                 <h:outputLabel value="Phone"/>
-                                                <p:inputText  id="txtNewPtPhone" autocomplete="off" maxlength="11" value="#{patientController.current.person.phone}">
+                                                <p:inputText  id="txtNewPtPhone" autocomplete="off" maxlength="11" value="#{patientController.current.person.phone}" disabled="#{!sessionController.hasPrivilege('ClinicalPatientPhoneNumberEdit')}">
                                                 </p:inputText>
                                                 <h:outputLabel value="Date of Birth"/>
                                                 <p:calendar  value="#{patientController.current.person.dob}" id="calNewPtDob"  navigator="true" pattern="dd/MM/yyyy" >

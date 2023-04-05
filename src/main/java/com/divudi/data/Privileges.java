@@ -4,12 +4,13 @@
  */
 package com.divudi.data;
 
+import java.io.Serializable;
+
 /**
  *
  * @author www.divudi.com
  */
-public enum Privileges {
-
+public enum Privileges  implements Serializable{
     //Main Menu Privileges
     TheaterIssueBHT,
     Opd,
@@ -390,6 +391,7 @@ public enum Privileges {
     ClinicalPatientEdit,
     ClinicalPatientCommentsView,
     ClinicalPatientCommentsEdit,
+    ClinicalPatientPhoneNumberEdit,
     ClinicalPatientNameChange,
     ClinicalMembershipAdd,
     ClinicalMembershipEdit,
