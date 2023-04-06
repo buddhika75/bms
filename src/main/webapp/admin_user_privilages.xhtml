@@ -9,7 +9,8 @@
                 >
     <ui:define name="content">
         <h:form  >
-            <p:panelGrid columns="1" >
+            <p:panelGrid columns="1" 
+                         rendered="#{sessionController.hasPrivilege('Admin')}" >
 
                 <h:panelGrid  columns="3" >                          
                     <h:outputLabel value="Select User"/>

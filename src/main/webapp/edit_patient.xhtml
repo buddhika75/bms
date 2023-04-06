@@ -59,7 +59,7 @@
                     <h:outputLabel value="Phone"/>
                     <p:inputText  id="txtNewPtPhone"
                                   value="#{patientController.current.person.phone}"
-                                  disabled="#{!sessionController.hasPrivilege('ClinicalPatientPhoneNumberEdit')}">
+                                  disabled="#{(!sessionController.hasPrivilege('ClinicalPatientPhoneNumberEdit')) and patientController.current.id ne null}">
                     </p:inputText>
                 </h:panelGrid>
                 <h:commandButton value="Save" action="#{patientController.saveSelected()}"/>

@@ -61,7 +61,7 @@
 
                         <h:outputLabel value="Phone"/>
                         <p:inputText  id="txtNewPtPhone" autocomplete="off" maxlength="11" value="#{patientController.current.person.phone}"
-                                     disabled= "#{!sessionController.hasPrivilege('ClinicalPatientPhoneNumberEdit')}"
+                                     disabled= "#{(!sessionController.hasPrivilege('ClinicalPatientPhoneNumberEdit')) and patientController.current.id ne null}"
                                       >
                         </p:inputText>
                         <h:outputLabel value="Date of Birth"/>
