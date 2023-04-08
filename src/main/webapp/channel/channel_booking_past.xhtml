@@ -639,7 +639,7 @@
                                 <p:outputLabel value="Name"/>
                                 <p:inputText autocomplete="off" value="#{bookingPastController.selectedBillSession.bill.patient.person.name}" />
                                 <p:outputLabel value="Phone"/>
-                                <p:inputText autocomplete="off" value="#{bookingPastController.selectedBillSession.bill.patient.person.phone}" disabled="#{!sessionController.hasPrivilege('ClinicalPatientPhoneNumberEdit')}/>
+                                <p:inputText autocomplete="off" value="#{bookingPastController.selectedBillSession.bill.patient.person.phone}" disabled="#{!sessionController.hasPrivilege('ClinicalPatientPhoneNumberEdit')}"/>
                                 <p:outputLabel value="Current Serial No"/>
                                 <ui:repeat value="#{bookingPastController.selectedBillSession.bill.billItems}" var="bis" >
                                     <p:outputLabel value="#{bis.billSession.serialNo}">                                        
