@@ -59,7 +59,7 @@ import javax.persistence.TemporalType;
 import org.apache.commons.io.IOUtils;
 import org.primefaces.model.DefaultStreamedContent;
 import org.primefaces.model.StreamedContent;
-import org.primefaces.model.UploadedFile;
+import org.primefaces.model.file.UploadedFile;
 
 /**
  *
@@ -242,8 +242,6 @@ public class StaffController implements Serializable {
         staffWithCode = getEjbFacade().findBySQL(sql, hm);
 
     }
-    
-    
 
     ReportKeyWord reportKeyWord;
 
@@ -344,17 +342,17 @@ public class StaffController implements Serializable {
         for (Staff s : staffWithCode) {
         }
     }
-    
-    public void createActiveStaffOnylSalaryGeneratedTable(){
-        staffWithCode=new ArrayList<>();
+
+    public void createActiveStaffOnylSalaryGeneratedTable() {
+        staffWithCode = new ArrayList<>();
         hrReportController.getReportKeyWord().setSalaryCycle(staffSalaryController.getSalaryCycle());
-        staffWithCode=hrReportController.fetchOnlySalaryGeneratedStaff();
+        staffWithCode = hrReportController.fetchOnlySalaryGeneratedStaff();
     }
-    
-    public void createActiveStaffOnylSalaryNotGeneratedTable(Date ssDate){
-        List<Staff> salaryGeneratedStaff=new ArrayList<>();
+
+    public void createActiveStaffOnylSalaryNotGeneratedTable(Date ssDate) {
+        List<Staff> salaryGeneratedStaff = new ArrayList<>();
         hrReportController.getReportKeyWord().setSalaryCycle(staffSalaryController.getSalaryCycle());
-        salaryGeneratedStaff=hrReportController.fetchOnlySalaryGeneratedStaff();
+        salaryGeneratedStaff = hrReportController.fetchOnlySalaryGeneratedStaff();
         createActiveStaffTable(ssDate);
         staffWithCode.removeAll(salaryGeneratedStaff);
     }
@@ -469,7 +467,7 @@ public class StaffController implements Serializable {
         }
         return suggestions;
     }
-    
+
     public List<Staff> completeConsultant(String query) {
         List<Staff> suggestions;
         String sql;
@@ -490,7 +488,7 @@ public class StaffController implements Serializable {
         }
         return suggestions;
     }
-    
+
     public List<Staff> completeStaffCodeChannel(String query) {
         List<Staff> suggestions;
         String sql;
@@ -619,7 +617,6 @@ public class StaffController implements Serializable {
         hm.put("sp", speciality);
         ss = getFacade().findBySQL(sql, hm);
 
-
         return ss;
     }
 
@@ -655,7 +652,7 @@ public class StaffController implements Serializable {
         ////System.out.println("file name is not null");
         ////System.out.println(file.getFileName());
         try {
-            in = getFile().getInputstream();
+            in = getFile().getInputStream();
             getCurrent().setFileName(file.getFileName());
             getCurrent().setFileType(file.getContentType());
             getCurrent().setBaImage(IOUtils.toByteArray(in));
@@ -683,10 +680,14 @@ public class StaffController implements Serializable {
                 l = 0l;
             }
             Staff temImg = getFacade().find(Long.valueOf(id));
+            // Modified by Dr M H B Ariyaratne with assistance from ChatGPT from OpenAI
             if (temImg != null) {
-                return new DefaultStreamedContent(new ByteArrayInputStream(temImg.getBaImage()), temImg.getFileType());
+                return DefaultStreamedContent.builder()
+                        .contentType(temImg.getFileType())
+                        .stream(() -> new ByteArrayInputStream(temImg.getBaImage()))
+                        .build();
             } else {
-                return new DefaultStreamedContent();
+                return DefaultStreamedContent.builder().build();
             }
         }
     }
@@ -703,17 +704,16 @@ public class StaffController implements Serializable {
             ////System.out.println("staff null");
             return new DefaultStreamedContent();
         }
-        ////System.out.println("staf is " + current);
+// Modified by Dr M H B Ariyaratne with assistance from ChatGPT from OpenAI
         if (current.getId() != null && current.getBaImage() != null) {
-            ////System.out.println(current.getFileType());
-            ////System.out.println(current.getFileName());
-            return new DefaultStreamedContent(new ByteArrayInputStream(current.getBaImage()), current.getFileType(), current.getFileName());
+            return DefaultStreamedContent.builder()
+                    .contentType(current.getFileType())
+                    .name(current.getFileName())
+                    .stream(() -> new ByteArrayInputStream(current.getBaImage()))
+                    .build();
         } else {
-            ////System.out.println("nulls");
-            return new DefaultStreamedContent();
+            return DefaultStreamedContent.builder().build();
         }
-//        }
-
     }
 
     public StreamedContent displaySignature(Long stfId) {
@@ -731,12 +731,15 @@ public class StaffController implements Serializable {
         if (temStaff == null) {
             return new DefaultStreamedContent();
         } else {
+// Modified by Dr M H B Ariyaratne with assistance from ChatGPT from OpenAI
             if (temStaff.getId() != null && temStaff.getBaImage() != null) {
-                ////System.out.println(temStaff.getFileType());
-                ////System.out.println(temStaff.getFileName());
-                return new DefaultStreamedContent(new ByteArrayInputStream(temStaff.getBaImage()), temStaff.getFileType(), temStaff.getFileName());
+                return DefaultStreamedContent.builder()
+                        .contentType(temStaff.getFileType())
+                        .name(temStaff.getFileName())
+                        .stream(() -> new ByteArrayInputStream(temStaff.getBaImage()))
+                        .build();
             } else {
-                return new DefaultStreamedContent();
+                return DefaultStreamedContent.builder().build();
             }
         }
     }
@@ -1123,9 +1126,6 @@ public class StaffController implements Serializable {
         staffes = getFacade().findBySQL(temSql);
     }
 
-    
-    
-    
     public List<Staff> getItemsToRemove() {
         return itemsToRemove;
     }

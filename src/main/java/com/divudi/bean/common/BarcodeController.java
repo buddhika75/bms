@@ -62,7 +62,11 @@ public class BarcodeController {
             //   ////System.out.println("getCurrent().getCode() = " + getPatientController().getCurrent().getCode());
             try {
                 BarcodeImageHandler.saveJPEG(BarcodeFactory.createCode128C(getPatientController().getCurrent().getCode()), barcodeFile);
-                barcode = new DefaultStreamedContent(new FileInputStream(barcodeFile), "image/jpeg");
+                FileInputStream stream = new FileInputStream(barcodeFile);
+                barcode = DefaultStreamedContent.builder()
+                        .contentType("image/jpeg")
+                        .stream(() -> stream)
+                        .build();
             } catch (Exception ex) {
                 //   ////System.out.println("ex = " + ex.getMessage());
             }
@@ -75,7 +79,11 @@ public class BarcodeController {
                 bc.setDrawingText(true);
                 BarcodeImageHandler.saveJPEG(bc, barcodeFile);
                 //   ////System.out.println("12");
-                barcode = new DefaultStreamedContent(new FileInputStream(barcodeFile), "image/jpeg");
+                FileInputStream stream = new FileInputStream(barcodeFile);
+                barcode = DefaultStreamedContent.builder()
+                        .contentType("image/jpeg")
+                        .stream(() -> stream)
+                        .build();
             } catch (Exception ex) {
                 //   ////System.out.println("ex = " + ex.getMessage());
             }
@@ -92,7 +100,11 @@ public class BarcodeController {
         File barcodeFile = new File(code);
         try {
             BarcodeImageHandler.saveJPEG(BarcodeFactory.createCode128C(code), barcodeFile);
-            barcode = new DefaultStreamedContent(new FileInputStream(barcodeFile), "image/jpeg");
+            FileInputStream stream = new FileInputStream(barcodeFile);
+            barcode = DefaultStreamedContent.builder()
+                    .contentType("image/jpeg")
+                    .stream(() -> stream)
+                    .build();
         } catch (Exception ex) {
             //   ////System.out.println("ex = " + ex.getMessage());
         }
@@ -109,7 +121,11 @@ public class BarcodeController {
         File barcodeFile = new File(code);
         try {
             BarcodeImageHandler.saveJPEG(BarcodeFactory.createInt2of5(code), barcodeFile);
-            barcode = new DefaultStreamedContent(new FileInputStream(barcodeFile), "image/jpeg");
+            FileInputStream stream = new FileInputStream(barcodeFile);
+            barcode = DefaultStreamedContent.builder()
+                    .contentType("image/jpeg")
+                    .stream(() -> stream)
+                    .build();
         } catch (Exception ex) {
             //   ////System.out.println("ex = " + ex.getMessage());
         }
@@ -126,7 +142,11 @@ public class BarcodeController {
         File barcodeFile = new File(code);
         try {
             BarcodeImageHandler.saveJPEG(BarcodeFactory.createGlobalTradeItemNumber(code), barcodeFile);
-            barcode = new DefaultStreamedContent(new FileInputStream(barcodeFile), "image/jpeg");
+            FileInputStream stream = new FileInputStream(barcodeFile);
+            barcode = DefaultStreamedContent.builder()
+                    .contentType("image/jpeg")
+                    .stream(() -> stream)
+                    .build();
         } catch (Exception ex) {
             //   ////System.out.println("ex = " + ex.getMessage());
         }
@@ -143,7 +163,11 @@ public class BarcodeController {
         File barcodeFile = new File(code);
         try {
             BarcodeImageHandler.saveJPEG(BarcodeFactory.createEAN13(code), barcodeFile);
-            barcode = new DefaultStreamedContent(new FileInputStream(barcodeFile), "image/jpeg");
+            FileInputStream stream = new FileInputStream(barcodeFile);
+            barcode = DefaultStreamedContent.builder()
+                    .contentType("image/jpeg")
+                    .stream(() -> stream)
+                    .build();
         } catch (Exception ex) {
             //   ////System.out.println("ex = " + ex.getMessage());
         }
@@ -160,7 +184,11 @@ public class BarcodeController {
         File barcodeFile = new File(code);
         try {
             BarcodeImageHandler.saveJPEG(BarcodeFactory.createEAN128(code), barcodeFile);
-            barcode = new DefaultStreamedContent(new FileInputStream(barcodeFile), "image/jpeg");
+            FileInputStream stream = new FileInputStream(barcodeFile);
+            barcode = DefaultStreamedContent.builder()
+                    .contentType("image/jpeg")
+                    .stream(() -> stream)
+                    .build();
         } catch (Exception ex) {
             //   ////System.out.println("ex = " + ex.getMessage());
         }
@@ -177,7 +205,11 @@ public class BarcodeController {
         File barcodeFile = new File(code);
         try {
             BarcodeImageHandler.saveJPEG(BarcodeFactory.createCodabar(code), barcodeFile);
-            barcode = new DefaultStreamedContent(new FileInputStream(barcodeFile), "image/jpeg");
+            FileInputStream stream = new FileInputStream(barcodeFile);
+            barcode = DefaultStreamedContent.builder()
+                    .contentType("image/jpeg")
+                    .stream(() -> stream)
+                    .build();
         } catch (Exception ex) {
             //   ////System.out.println("ex = " + ex.getMessage());
         }
@@ -201,7 +233,11 @@ public class BarcodeController {
         File barcodeFile = new File(code);
         try {
             BarcodeImageHandler.saveJPEG(BarcodeFactory.createCode128(code), barcodeFile);
-            barcode = new DefaultStreamedContent(new FileInputStream(barcodeFile), "image/jpeg");
+            FileInputStream stream = new FileInputStream(barcodeFile);
+            barcode = DefaultStreamedContent.builder()
+                    .contentType("image/jpeg")
+                    .stream(() -> stream)
+                    .build();
         } catch (Exception ex) {
             System.out.println("ex = " + ex.getMessage());
         }
@@ -227,7 +263,11 @@ public class BarcodeController {
         File barcodeFile = new File(code);
         try {
             BarcodeImageHandler.saveJPEG(BarcodeFactory.createCode128(code), barcodeFile);
-            barcode = new DefaultStreamedContent(new FileInputStream(barcodeFile), "image/jpeg");
+            FileInputStream stream = new FileInputStream(barcodeFile);
+            barcode = DefaultStreamedContent.builder()
+                    .contentType("image/jpeg")
+                    .stream(() -> stream)
+                    .build();
         } catch (Exception ex) {
             System.out.println("ex = " + ex.getMessage());
         }
@@ -244,7 +284,11 @@ public class BarcodeController {
         File barcodeFile = new File(code);
         try {
             BarcodeImageHandler.saveJPEG(BarcodeFactory.createCode128A(code), barcodeFile);
-            barcode = new DefaultStreamedContent(new FileInputStream(barcodeFile), "image/jpeg");
+            FileInputStream stream = new FileInputStream(barcodeFile);
+            barcode = DefaultStreamedContent.builder()
+                    .contentType("image/jpeg")
+                    .stream(() -> stream)
+                    .build();
         } catch (Exception ex) {
             //   ////System.out.println("ex = " + ex.getMessage());
         }
@@ -261,7 +305,11 @@ public class BarcodeController {
         File barcodeFile = new File(code);
         try {
             BarcodeImageHandler.saveJPEG(BarcodeFactory.createCode128B(code), barcodeFile);
-            barcode = new DefaultStreamedContent(new FileInputStream(barcodeFile), "image/jpeg");
+            FileInputStream stream = new FileInputStream(barcodeFile);
+            barcode = DefaultStreamedContent.builder()
+                    .contentType("image/jpeg")
+                    .stream(() -> stream)
+                    .build();
         } catch (Exception ex) {
             //   ////System.out.println("ex = " + ex.getMessage());
         }
@@ -278,7 +326,11 @@ public class BarcodeController {
         File barcodeFile = new File(code);
         try {
             BarcodeImageHandler.saveJPEG(BarcodeFactory.createCode128C(code), barcodeFile);
-            barcode = new DefaultStreamedContent(new FileInputStream(barcodeFile), "image/jpeg");
+            FileInputStream stream = new FileInputStream(barcodeFile);
+            barcode = DefaultStreamedContent.builder()
+                    .contentType("image/jpeg")
+                    .stream(() -> stream)
+                    .build();
         } catch (Exception ex) {
             //   ////System.out.println("ex = " + ex.getMessage());
         }
@@ -295,7 +347,11 @@ public class BarcodeController {
         File barcodeFile = new File(code);
         try {
             BarcodeImageHandler.saveJPEG(BarcodeFactory.create2of7(code), barcodeFile);
-            barcode = new DefaultStreamedContent(new FileInputStream(barcodeFile), "image/jpeg");
+            FileInputStream stream = new FileInputStream(barcodeFile);
+            barcode = DefaultStreamedContent.builder()
+                    .contentType("image/jpeg")
+                    .stream(() -> stream)
+                    .build();
         } catch (Exception ex) {
             //   ////System.out.println("ex = " + ex.getMessage());
         }
@@ -310,8 +366,12 @@ public class BarcodeController {
             return new DefaultStreamedContent();
         } else {
             // So, browser is requesting the image. Get ID value from actual request param.
+            // Modified by Dr M H B Ariyaratne with assistance from ChatGPT from OpenAI
             String code = context.getExternalContext().getRequestParameterMap().get("code");
-            return new DefaultStreamedContent(new ByteArrayInputStream(getBarcodeBytes(code)), "jpg");
+            return DefaultStreamedContent.builder()
+                    .contentType("image/jpeg")
+                    .stream(() -> new ByteArrayInputStream(getBarcodeBytes(code)))
+                    .build();
         }
     }
 

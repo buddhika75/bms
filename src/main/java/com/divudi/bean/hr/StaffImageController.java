@@ -25,7 +25,7 @@ import javax.inject.Named;
 import org.apache.commons.io.IOUtils;
 import org.primefaces.model.DefaultStreamedContent;
 import org.primefaces.model.StreamedContent;
-import org.primefaces.model.UploadedFile;
+import org.primefaces.model.file.UploadedFile;
 
 /**
  *
@@ -87,7 +87,7 @@ public class StaffImageController implements Serializable {
         ////System.out.println("file name is not null");
         ////System.out.println(file.getFileName());
         try {
-            in = getFile().getInputstream();
+            in = getFile().getInputStream();
             File f = new File(getStaffController().getCurrent().toString() + getStaffController().getCurrent().getFileType());
             FileOutputStream out = new FileOutputStream(f);
 
@@ -104,7 +104,7 @@ public class StaffImageController implements Serializable {
             getStaffController().getCurrent().setRetireComments(f.getAbsolutePath());
             getStaffController().getCurrent().setFileName(file.getFileName());
             getStaffController().getCurrent().setFileType(file.getContentType());
-            in = file.getInputstream();
+            in = file.getInputStream();
             getStaffController().getCurrent().setBaImage(IOUtils.toByteArray(in));
             getStaffFacade().edit(getStaffController().getCurrent());
             return "";
@@ -150,9 +150,13 @@ public class StaffImageController implements Serializable {
                     //System.err.println("Try  " + e.getMessage());
                     return new DefaultStreamedContent();
                 }
+// Modified by Dr M H B Ariyaratne with assistance from ChatGPT from OpenAI
+                final byte[] finalImgArr = imgArr;
+                StreamedContent str = DefaultStreamedContent.builder()
+                        .contentType(temImg.getFileType())
+                        .stream(() -> new ByteArrayInputStream(finalImgArr))
+                        .build();
 
-                StreamedContent str = new DefaultStreamedContent(new ByteArrayInputStream(imgArr), temImg.getFileType());
-                //System.err.println("Stream " + str);
                 return str;
             } else {
                 return new DefaultStreamedContent();
@@ -171,15 +175,17 @@ public class StaffImageController implements Serializable {
 
         Staff temStaff = getStaffFacade().findFirstBySQL("select s from Staff s where s.baImage != null and s.id = " + stfId);
 
-        ////System.out.println("Printing");
+// Modified by Dr M H B Ariyaratne with assistance from ChatGPT from OpenAI
         if (temStaff == null) {
-            return new DefaultStreamedContent();
+            return DefaultStreamedContent.builder().build();
         } else if (temStaff.getId() != null && temStaff.getBaImage() != null) {
-            ////System.out.println(temStaff.getFileType());
-            ////System.out.println(temStaff.getFileName());
-            return new DefaultStreamedContent(new ByteArrayInputStream(temStaff.getBaImage()), temStaff.getFileType(), temStaff.getFileName());
+            return DefaultStreamedContent.builder()
+                    .contentType(temStaff.getFileType())
+                    .name(temStaff.getFileName())
+                    .stream(() -> new ByteArrayInputStream(temStaff.getBaImage()))
+                    .build();
         } else {
-            return new DefaultStreamedContent();
+            return DefaultStreamedContent.builder().build();
         }
     }
 

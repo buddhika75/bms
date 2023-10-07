@@ -496,26 +496,35 @@ public class PatientController implements Serializable {
     public void createPatientBarcode() {
         File barcodeFile = new File("ptbarcode");
         if (current != null && current.getCode() != null && !current.getCode().trim().equals("")) {
+            // Modified by Dr M H B Ariyaratne with assistance from ChatGPT from OpenAI
             try {
                 BarcodeImageHandler.saveJPEG(BarcodeFactory.createCode128(getCurrent().getCode()), barcodeFile);
-                barcode = new DefaultStreamedContent(new FileInputStream(barcodeFile), "image/jpeg");
-
-            } catch (Exception ex) {
-                //   //System.out.println("ex = " + ex.getMessage());
+                FileInputStream stream = new FileInputStream(barcodeFile);
+                barcode = DefaultStreamedContent.builder()
+                        .contentType("image/jpeg")
+                        .stream(() -> stream)
+                        .build();
+            } catch (Exception e) {
+                // Handle exception
             }
+
         } else {
-            //   //System.out.println("else = ");
+            // Modified by Dr M H B Ariyaratne with assistance from ChatGPT from OpenAI
             try {
                 Barcode bc = BarcodeFactory.createCode128A("0000");
                 bc.setBarHeight(5);
                 bc.setBarWidth(3);
                 bc.setDrawingText(true);
                 BarcodeImageHandler.saveJPEG(bc, barcodeFile);
-                //   //System.out.println("12");
-                barcode = new DefaultStreamedContent(new FileInputStream(barcodeFile), "image/jpeg");
+                FileInputStream stream = new FileInputStream(barcodeFile);
+                barcode = DefaultStreamedContent.builder()
+                        .contentType("image/jpeg")
+                        .stream(() -> stream)
+                        .build();
             } catch (Exception ex) {
-                //   //System.out.println("ex = " + ex.getMessage());
+                // Handle exception
             }
+
         }
     }
 
@@ -545,45 +554,53 @@ public class PatientController implements Serializable {
         getCurrent().getPerson().setDob(getCommonFunctions().guessDob(yearMonthDay));
     }
 
+    // Modified by Dr M H B Ariyaratne with assistance from ChatGPT from OpenAI
     public StreamedContent getPhoto(Patient p) {
-        ////System.out.println("p is " + p);
         FacesContext context = FacesContext.getCurrentInstance();
         if (context.getRenderResponse()) {
-            return new DefaultStreamedContent();
+            return DefaultStreamedContent.builder().build();
         } else if (p == null) {
-            return new DefaultStreamedContent();
+            return DefaultStreamedContent.builder().build();
         } else {
             if (p.getId() != null && p.getBaImage() != null) {
-                ////System.out.println("giving image");
-                return new DefaultStreamedContent(new ByteArrayInputStream(p.getBaImage()), p.getFileType(), p.getFileName());
+                return DefaultStreamedContent.builder()
+                        .contentType(p.getFileType())
+                        .name(p.getFileName())
+                        .stream(() -> new ByteArrayInputStream(p.getBaImage()))
+                        .build();
             } else {
-                return new DefaultStreamedContent();
+                return DefaultStreamedContent.builder().build();
             }
         }
-
     }
 
+// Modified by Dr M H B Ariyaratne with assistance from ChatGPT from OpenAI
     public StreamedContent getPhotoByByte(byte[] p) {
-        ////System.out.println("p is " + p);
         FacesContext context = FacesContext.getCurrentInstance();
         if (context.getRenderResponse()) {
-            return new DefaultStreamedContent();
+            return DefaultStreamedContent.builder().build();
         } else if (p == null) {
-            return new DefaultStreamedContent();
+            return DefaultStreamedContent.builder().build();
         } else {
-//   //System.out.println("giving image");
-            return new DefaultStreamedContent(new ByteArrayInputStream(p), "image/png", "photo.");
+            return DefaultStreamedContent.builder()
+                    .contentType("image/png")
+                    .name("photo.")
+                    .stream(() -> new ByteArrayInputStream(p))
+                    .build();
         }
     }
 
+    // Modified by Dr M H B Ariyaratne with assistance from ChatGPT from OpenAI
     public StreamedContent getPhotoByByteNew(Patient p) {
         Patient pa = getFacade().find(p.getId());
         byte[] img = pa.getBaImage();
         if (img == null) {
-            return new DefaultStreamedContent();
+            return DefaultStreamedContent.builder().build();
         } else {
-//   //System.out.println("giving image");
-            return new DefaultStreamedContent(new ByteArrayInputStream(img), "image/png");
+            return DefaultStreamedContent.builder()
+                    .contentType("image/png")
+                    .stream(() -> new ByteArrayInputStream(img))
+                    .build();
         }
     }
 

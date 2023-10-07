@@ -25,15 +25,17 @@ public class ImageViewController {
      */
     public ImageViewController() {
     }
-    
+
+    // Modified by Dr M H B Ariyaratne with assistance from ChatGPT from OpenAI
     public StreamedContent getPhotoByByte(byte[] p) {
-        FacesContext context = FacesContext.getCurrentInstance();
         if (p == null) {
-            return new DefaultStreamedContent();
+            return DefaultStreamedContent.builder().build();
         } else {
-//   //System.out.println("giving image");
-                        return new DefaultStreamedContent(new ByteArrayInputStream((byte[])p), "image/png");
+            return DefaultStreamedContent.builder()
+                    .contentType("image/png")
+                    .stream(() -> new ByteArrayInputStream(p))
+                    .build();
         }
     }
-    
+
 }

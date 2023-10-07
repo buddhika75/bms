@@ -189,8 +189,6 @@ public class BillController implements Serializable {
     private List<BillEntry> lstBillEntriesPrint;
     BillType billType;
 
-    
-    
     public BillType getBillType() {
         return billType;
     }
@@ -236,9 +234,7 @@ public class BillController implements Serializable {
     @Inject
     SearchController searchController;
 
-    
-    
-    public void createBillForPatientCardPrinting(Patient requestedPatient){
+    public void createBillForPatientCardPrinting(Patient requestedPatient) {
         clearBillItemValues();
         clearBillValues();
         paymentMethodData = null;
@@ -247,12 +243,14 @@ public class BillController implements Serializable {
         setPatientTabId("tabSearchPt");
         setSearchedPatient(requestedPatient);
         Item ti = getItemController().findItemByCode("card_issue");
-        if(ti==null) return;
+        if (ti == null) {
+            return;
+        }
         getCurrentBillItem().setItem(ti);
         addToBill();
         settleBill();
     }
-    
+
     public String toAddNewCollectingCentre() {
         return "/lab/collecting_centre";
     }
@@ -1229,11 +1227,9 @@ public class BillController implements Serializable {
         double billFeeNetTotal = billFeeValues[2];
         double billFeeVatPlusNetValue = billFeeValues[3] + billFeeValues[2];
 
-
         if (billFeeTotal != b.getTotal() || billFeeDiscount != b.getDiscount() || billFeeNetTotal != b.getNetTotal() || roundOff(billItemVatPlusNetValue) != roundOff(b.getVatPlusNetTotal())) {
             return true;
         }
-
 
         return false;
     }
@@ -1836,7 +1832,6 @@ public class BillController implements Serializable {
             bi.setVat(entryVat);
             bi.setVatPlusNetValue(roundOff(entryVatPlusNet));
 
-
             billGross += bi.getGrossValue();
             billNet += bi.getNetValue();
             billDiscount += bi.getDiscount();
@@ -2035,7 +2030,6 @@ public class BillController implements Serializable {
         reminingCashPaid = cashPaid;
 
         for (BillEntry be : billEntrys) {
-
 
             if ((reminingCashPaid != 0.0) || !getSessionController().getLoggedPreference().isPartialPaymentOfOpdPreBillsAllowed()) {
 
@@ -2499,16 +2493,20 @@ public class BillController implements Serializable {
 
     public StreamedContent getCreateBarcodeCode128(String code) {
         StreamedContent barcode = null;
-     //   //System.out.println("code = " + code);
+        //   //System.out.println("code = " + code);
         if (code == null || code.trim().equals("")) {
             return null;
         }
         File barcodeFile = new File(code);
         try {
             BarcodeImageHandler.saveJPEG(BarcodeFactory.createCode128(code), barcodeFile);
-            barcode = new DefaultStreamedContent(new FileInputStream(barcodeFile), "image/jpeg");
+            FileInputStream stream = new FileInputStream(barcodeFile);
+            barcode = DefaultStreamedContent.builder()
+                    .contentType("image/jpeg")
+                    .stream(() -> stream)
+                    .build();
         } catch (Exception ex) {
-         //   //System.out.println("ex = " + ex.getMessage());
+            //   //System.out.println("ex = " + ex.getMessage());
         }
 
         return barcode;
@@ -2700,8 +2698,6 @@ public class BillController implements Serializable {
         return itemController;
     }
 
-    
-    
     /**
      *
      */

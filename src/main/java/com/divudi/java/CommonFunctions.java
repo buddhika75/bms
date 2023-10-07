@@ -10,12 +10,25 @@ import com.divudi.data.Title;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.TimeZone;
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 
 /**
  *
  * @author buddhika
  */
 public class CommonFunctions {
+
+    public static Date convertLocalDateTimeToDate(LocalDateTime localDateTime) {
+        return Date.from(localDateTime.atZone(ZoneId.systemDefault()).toInstant());
+    }
+
+    public static LocalDateTime convertDateToLocalDateTime(Date date) {
+        return date.toInstant()
+                .atZone(ZoneId.systemDefault())
+                .toLocalDateTime();
+    }
 
     public static double round(double numberToRound, int decimalPlaces) {
         if (numberToRound == 0) {
@@ -54,7 +67,7 @@ public class CommonFunctions {
         calendar.set(year, month, 1, 0, 0, 0);
         return calendar.getTime();
     }
-    
+
     public static Date getEndOfMonth(Date date) {
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(date);
@@ -132,8 +145,6 @@ public class CommonFunctions {
     public static Date getStartOfMonth() {
         return getStartOfMonth(new Date());
     }
-
-    
 
     public static Date getEndOfDay() {
         return getEndOfDay(new Date());

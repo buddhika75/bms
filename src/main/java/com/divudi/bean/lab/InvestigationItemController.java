@@ -64,7 +64,8 @@ import org.jdom.output.Format;
 import org.jdom.output.XMLOutputter;
 import org.primefaces.model.DefaultStreamedContent;
 import org.primefaces.model.StreamedContent;
-import org.primefaces.model.UploadedFile;
+import org.primefaces.model.file.UploadedFile;
+//import org.primefaces.model.file.UploadedFile;
 
 /**
  *
@@ -625,7 +626,7 @@ public class InvestigationItemController implements Serializable {
                 + " and upper(i.name) like :qry";
         m.put("vt", InvestigationItemType.Value);
         m.put("qry", "%" + qry.toUpperCase() + "%");
-        iivs = getEjbFacade().findBySQL(sql,m);
+        iivs = getEjbFacade().findBySQL(sql, m);
         if (iivs == null) {
             iivs = new ArrayList<>();
         }
@@ -852,7 +853,7 @@ public class InvestigationItemController implements Serializable {
         if (file != null) {
             try {
                 File uploadedFile = new File("/tmp/" + file.getFileName());
-                InputStream inputStream = file.getInputstream();
+                InputStream inputStream = file.getInputStream();
                 OutputStream out = new FileOutputStream(uploadedFile);
                 int read = 0;
                 byte[] bytes = new byte[1024];
@@ -922,12 +923,17 @@ public class InvestigationItemController implements Serializable {
 
     private StreamedContent downloadingFile;
 
+    // Modified by Dr M H B Ariyaratne with assistance from ChatGPT from OpenAI
     public void createXml() {
         if (currentInvestigation == null) {
             return;
         }
         InputStream stream = new ByteArrayInputStream(ixToXml(currentInvestigation).getBytes(Charset.defaultCharset()));
-        downloadingFile = new DefaultStreamedContent(stream, "image/jpg", currentInvestigation.getName() + ".xml");
+        downloadingFile = DefaultStreamedContent.builder()
+                .contentType("application/xml")
+                .name(currentInvestigation.getName() + ".xml")
+                .stream(() -> stream)
+                .build();
     }
 
     public StreamedContent getDownloadingFile() {

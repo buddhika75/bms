@@ -6,7 +6,12 @@
 package com.divudi.entity;
 
 import java.util.List;
+import java.util.Map;
+import java.util.Spliterator;
+import java.util.function.Consumer;
+import org.primefaces.model.FilterMeta;
 import org.primefaces.model.LazyDataModel;
+import org.primefaces.model.SortMeta;
 
 public class LazyBillFee extends LazyDataModel<BillFee> {
 
@@ -27,10 +32,10 @@ public class LazyBillFee extends LazyDataModel<BillFee> {
         return null;
     }
 
-    @Override
-    public Object getRowKey(BillFee billFee) {
-        return billFee.getId();
-    }
+//    @Override
+//    public Object getRowKey(BillFee billFee) {
+//        return billFee.getId();
+//    }
 
 //    @Override
 //    public List<BillFee> load(int first, int pageSize, String sortField, SortOrder sortOrder, Map<String, String> filters) {
@@ -143,4 +148,19 @@ public class LazyBillFee extends LazyDataModel<BillFee> {
 //    public List<BillFee> load(){
 //    
 //    }
+
+    @Override
+    public List<BillFee> load(int i, int i1, Map<String, SortMeta> map, Map<String, FilterMeta> map1) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    @Override
+    public void forEach(Consumer<? super BillFee> action) {
+        super.forEach(action); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/OverriddenMethodBody
+    }
+
+    @Override
+    public Spliterator<BillFee> spliterator() {
+        return super.spliterator(); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/OverriddenMethodBody
+    }
 }
