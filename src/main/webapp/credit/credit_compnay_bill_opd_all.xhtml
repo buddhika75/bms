@@ -60,7 +60,7 @@
                                 <p:column>
                                     <h:outputLabel value="#{ix.institutionCode}"/>
                                 </p:column>
-                                <f:ajax execute="@this" event="itemSelect" render="#{p:component('items')} tot" 
+                                <f:ajax execute="@this" event="itemSelect" render="#{p:resolveFirstComponentWithId('items',view).clientId} tot" 
                                         listener="#{cashRecieveBillController.selectInstitutionListener()}"/>
                             </p:autoComplete>                           
                         </h:panelGroup>

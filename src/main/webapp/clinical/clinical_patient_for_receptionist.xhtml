@@ -132,7 +132,7 @@
                                         <p:column headerText="No" width="30">#{bs.serialNo}</p:column>
                                         <p:column headerText="Patient Name" >#{bs.bill.patient.person.nameWithTitle}</p:column>
                                         <p:column headerText="Actions" width="100">
-                                            <p:commandButton value="View Patient" process="bSession" update=":#{p:component('panelSearch')} :#{p:component('panelDetails')} "  >
+                                            <p:commandButton value="View Patient" process="bSession" update=":#{p:resolveFirstComponentWithId('panelSearch',view).clientId} :#{p:resolveFirstComponentWithId('panelDetails',view).clientId} "  >
                                                 <f:setPropertyActionListener value="#{bs.bill.patient}" target="#{patientController.current}" >
                                                 </f:setPropertyActionListener>
                                             </p:commandButton>

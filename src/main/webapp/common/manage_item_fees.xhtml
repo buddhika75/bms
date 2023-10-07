@@ -169,7 +169,7 @@
                                         <tr>
                                             <td>
                                                 <p:inputText id="txtFeeName" value="#{f.name}" >
-                                                    <p:ajax process="txtFeeName" event="blur" listener="#{itemFeeManager.updateFee(f)}" update=":#{p:component('lblTotal')}" ></p:ajax>
+                                                    <p:ajax process="txtFeeName" event="blur" listener="#{itemFeeManager.updateFee(f)}" update=":#{p:resolveFirstComponentWithId('lblTotal',view).clientId}" ></p:ajax>
                                                 </p:inputText>
                                             </td>
 
@@ -195,7 +195,7 @@
 
                                             <td>
                                                 <p:inputText id="txtFeeVal" value="#{f.fee}" >
-                                                    <p:ajax process="txtFeeVal" event="blur" listener="#{itemFeeManager.updateFee(f)}" update=":#{p:component('lblTotal')}" ></p:ajax>
+                                                    <p:ajax process="txtFeeVal" event="blur" listener="#{itemFeeManager.updateFee(f)}" update=":#{p:resolveFirstComponentWithId('lblTotal',view).clientId}" ></p:ajax>
                                                 </p:inputText>
                                             </td>
 

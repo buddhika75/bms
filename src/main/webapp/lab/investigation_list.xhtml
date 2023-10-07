@@ -75,8 +75,8 @@
                                          paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
                                          rowsPerPageTemplate="10,20,50,100,1000"
                                          >
-                                <p:ajax event="rowSelect" process="@this" update=":#{p:component('actions')}" ></p:ajax>
-                                <p:ajax event="rowUnselect" process="@this" update=":#{p:component('actions')}" ></p:ajax>
+                                <p:ajax event="rowSelect" process="@this" update=":#{p:resolveFirstComponentWithId('actions',view).clientId}" ></p:ajax>
+                                <p:ajax event="rowUnselect" process="@this" update=":#{p:resolveFirstComponentWithId('actions',view).clientId}" ></p:ajax>
 
                                 <p:column headerText="No." width="25" >
                                     <h:outputLabel value="#{rowIndex + 1}" ></h:outputLabel>

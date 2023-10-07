@@ -44,7 +44,7 @@
                                 <p:outputLabel value=" X #{vt.dblValue}" 
                                                rendered="#{vt.class eq 'class com.divudi.entity.pharmacy.Ampp'}"/>                            
                             </p:column>
-                            <f:ajax execute="@this" event="blur" render="#{p:component('tab')}" listener="#{storeTransferRequestController.onEdit()}"/>
+                            <f:ajax execute="@this" event="blur" render="#{p:resolveFirstComponentWithId('tab',view).clientId}" listener="#{storeTransferRequestController.onEdit()}"/>
                         </p:autoComplete>
                         <p:inputText autocomplete="off" value="#{storeTransferRequestController.currentBillItem.tmpQty}"/>
                         <p:commandButton value="Add Item" action="#{storeTransferRequestController.addItem}" ajax="false"/>
@@ -64,8 +64,8 @@
 
                     <p:column headerText="Qty" >                          
                         <p:inputText autocomplete="off"  id="qty" value="#{bi.tmpQty}" label="Qty">                         
-                            <f:ajax event="blur" render=":#{p:component('tab')} "  execute="@this" listener="#{storeTransferRequestController.onEdit(bi)}" ></f:ajax>
-                            <f:ajax event="focus" render=":#{p:component('tab')} "  execute="@this" listener="#{storeTransferRequestController.onEdit(bi)}" ></f:ajax>
+                            <f:ajax event="blur" render=":#{p:resolveFirstComponentWithId('tab',view).clientId} "  execute="@this" listener="#{storeTransferRequestController.onEdit(bi)}" ></f:ajax>
+                            <f:ajax event="focus" render=":#{p:resolveFirstComponentWithId('tab',view).clientId} "  execute="@this" listener="#{storeTransferRequestController.onEdit(bi)}" ></f:ajax>
                         </p:inputText>
                     </p:column>  
 
