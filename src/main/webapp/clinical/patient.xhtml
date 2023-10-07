@@ -158,6 +158,13 @@
                                                           value="#{patientController.current.person.phone}"
                                                           disabled="#{(!sessionController.hasPrivilege('ClinicalPatientPhoneNumberEdit')) and patientController.current.id ne null}">
                                             </p:inputText>
+
+                                            <h:outputLabel value="Mobile"/>
+                                            <p:inputText  id="txtNewPtMobile" autocomplete="off"
+                                                          maxlength="11"
+                                                          value="#{patientController.current.person.mobile}"
+                                                          disabled="#{(!sessionController.hasPrivilege('ClinicalPatientPhoneNumberEdit')) and patientController.current.id ne null}">
+                                            </p:inputText>
                                             <h:outputLabel value="Date of Birth"/>
                                             <p:calendar  value="#{patientController.current.person.dob}" id="calNewPtDob"  navigator="true" pattern="dd/MM/yyyy" >
                                                 <f:ajax event="dateSelect" execute="calNewPtDob" render="lblPtAge"/>
