@@ -25,54 +25,57 @@
 
                             <p:panel id="panelSearch" header="Search Patients" >
                                 <h:form>
-                                    <h:panelGrid columns="2" >
+                                    <h:panelGrid columns="1" >
+                                        <h:outputLabel value="Search by Name/Code/Phone/NIC/Title" />
+                                        <p:autoComplete 
+                                            widgetVar="aPt" 
+                                            id="acPt" 
+                                            class="w-100"
+                                            forceSelection="true" 
+                                            value="#{patientController.current}" 
+                                            minQueryLength="5"
+                                            maxResults="10"
+                                            queryDelay="500"
+                                            completeMethod="#{patientController.completePatientByNameOrCodeOrTitle}" 
+                                            var="apt" itemLabel="#{apt.person.name}" 
+                                            itemValue="#{apt}"  >
+                                            <p:column headerText="Name">
+                                                <h:outputLabel value="#{apt.person.nameWithTitle}" />
+                                            </p:column>
+                                            <p:column headerText="Age">
+                                                <h:outputLabel value="#{apt.age}" />
+                                            </p:column>
+                                            <p:column headerText="Mobile">
+                                                <h:outputLabel value="#{apt.person.mobile}" />
+                                            </p:column>
+                                            <p:column headerText="Phone">
+                                                <h:outputLabel value="#{apt.person.phone}" />
+                                            </p:column>
+                                            <p:column headerText="Sex">
+                                                <h:outputLabel value="#{apt.person.sex}" />
+                                            </p:column>
+                                            <p:column headerText="Address">
+                                                <h:outputLabel value="#{apt.person.address}" />
+                                            </p:column>
+                                            <p:column headerText="Date of Birth">
+                                                <h:outputLabel value="#{apt.person.dob}" >
+                                                    <f:convertDateTime pattern="dd MMMM yyyy"/>
+                                                </h:outputLabel>
+                                            </p:column>
+                                        </p:autoComplete>
 
 
-                                        <h:panelGrid columns="1" >
-                                            <h:outputLabel value="Search by Name/Code/Phone/NIC/Title" />
-                                            <p:autoComplete widgetVar="aPt" id="acPt" forceSelection="true" 
-                                                            value="#{patientController.current}" minQueryLength="3" maxResults="30"
-                                                            completeMethod="#{patientController.completePatientByNameOrCodeOrTitle}" 
-                                                            var="apt" itemLabel="#{apt.person.name}" scrollHeight="500"
-                                                            itemValue="#{apt}"  >
-                                                <p:column headerText="Name">
-                                                    <h:outputLabel value="#{apt.person.nameWithTitle}" />
-                                                </p:column>
 
-                                                <p:column headerText="Age">
-                                                    <h:outputLabel value="#{apt.age}" />
-                                                </p:column>
-                                                <p:column headerText="Code">
-                                                    <h:outputLabel value="#{apt.code}" />
-                                                </p:column>
-                                                <p:column headerText="Sex">
-                                                    <h:outputLabel value="#{apt.person.sex}" />
-                                                </p:column>
-                                                <p:column headerText="Address">
-                                                    <h:outputLabel value="#{apt.person.address}" />
-                                                </p:column>
-                                                <p:column headerText="Date of Birth">
-                                                    <h:outputLabel value="#{apt.person.dob}" >
-                                                        <f:convertDateTime pattern="dd MMMM yyyy"/>
-                                                    </h:outputLabel>
-                                                </p:column>
-                                            </p:autoComplete>
-
-
-
-                                            <p:commandButton id="btnViewPt" ajax="false" style="width: 250px;"
-                                                             value="View Selected Patient"
-                                                             action="#{patientController.patientSelected()}"  >
-                                            </p:commandButton>
-                                            <p:commandButton id="btnAddPt" ajax="false" style="width: 250px;"
-                                                             value="Clear to Add New Patient"
-                                                             action="#{patientController.prepareAdd()}"  >
-                                            </p:commandButton>
-
-                                        </h:panelGrid>
+                                        <p:commandButton id="btnViewPt" ajax="false" style="width: 250px;"
+                                                         value="View Selected Patient"
+                                                         action="#{patientController.patientSelected()}"  >
+                                        </p:commandButton>
+                                        <p:commandButton id="btnAddPt" ajax="false" style="width: 250px;"
+                                                         value="Clear to Add New Patient"
+                                                         action="#{patientController.prepareAdd()}"  >
+                                        </p:commandButton>
 
                                     </h:panelGrid>
-
                                 </h:form>
 
 
@@ -255,11 +258,15 @@
                                                 </h:panelGrid>
 
                                                 <h:outputLabel value="Address"/>
-                                                <p:inputText autocomplete="off"  id="txtNewPtAddress" value="#{patientController.current.person.address}">
-                                                </p:inputText>
+                                                <p:inputTextarea id="txtNewPtAddress" value="#{patientController.current.person.address}">
+                                                </p:inputTextarea>
 
                                                 <h:outputLabel value="Phone"/>
                                                 <p:inputText id="txtNewPtPhone" autocomplete="off" maxlength="11" value="#{patientController.current.person.phone}" disabled="#{(!sessionController.hasPrivilege('ClinicalPatientPhoneNumberEdit')) and patientController.current.id ne null}">
+                                                </p:inputText>
+
+                                                <h:outputLabel value="Mobile"/>
+                                                <p:inputText id="txtNewPtMobile" autocomplete="off" maxlength="11" value="#{patientController.current.person.mobile}" disabled="#{(!sessionController.hasPrivilege('ClinicalPatientPhoneNumberEdit')) and patientController.current.id ne null}">
                                                 </p:inputText>
 
                                                 <h:outputLabel value="Date of Birth"/>

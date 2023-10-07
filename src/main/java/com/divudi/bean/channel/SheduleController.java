@@ -185,10 +185,10 @@ public class SheduleController implements Serializable {
         m.put("name", "%" + query.toUpperCase() + "%");
         m.put("code", "%" + query.toUpperCase() + "%");
         if (getSpeciality() != null) {
-            sql = "select p from Staff p where p.retired=false and (upper(p.person.name) like :name or  upper(p.code) like :code ) and p.speciality =:sp order by p.person.name";
+            sql = "select p from Staff p where p.retired=false and ((p.person.name) like :name or  (p.code) like :code ) and p.speciality =:sp order by p.person.name";
             m.put("sp", speciality);
         } else {
-            sql = "select p from Staff p where p.retired=false and (upper(p.person.name) like :name or  upper(p.code) like :code ) order by p.person.name";
+            sql = "select p from Staff p where p.retired=false and ((p.person.name) like :name or  (p.code) like :code ) order by p.person.name";
         }
         suggestions = getStaffFacade().findBySQL(sql, m);
         return suggestions;
@@ -216,7 +216,7 @@ public class SheduleController implements Serializable {
             suggestions = new ArrayList<>();
         } else {
             if (getCurrentStaff() != null) {
-                sql = "select p from ServiceSession p where p.retired=false and upper(p.name) like '%" + query.toUpperCase() + "%' and p.staff.id = " + getCurrentStaff().getId() + " order by p.name";
+                sql = "select p from ServiceSession p where p.retired=false and (p.name) like '%" + query.toUpperCase() + "%' and p.staff.id = " + getCurrentStaff().getId() + " order by p.name";
                 suggestions = getFacade().findBySQL(sql);
             } else {
                 suggestions = new ArrayList<>();

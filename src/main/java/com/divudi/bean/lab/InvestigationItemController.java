@@ -607,7 +607,7 @@ public class InvestigationItemController implements Serializable {
             return new ArrayList<>();
         } else {
             String sql;
-            sql = "select i from InvestigationItem i where i.retired=false and i.ixItemType = com.divudi.data.InvestigationItemType.Value and upper(i.name) like '%" + qry.toUpperCase() + "%' and i.item.id = " + currentInvestigation.getId();
+            sql = "select i from InvestigationItem i where i.retired=false and i.ixItemType = com.divudi.data.InvestigationItemType.Value and (i.name) like '%" + qry.toUpperCase() + "%' and i.item.id = " + currentInvestigation.getId();
             iivs = getEjbFacade().findBySQL(sql);
         }
         if (iivs == null) {
@@ -623,7 +623,7 @@ public class InvestigationItemController implements Serializable {
         sql = "select i from InvestigationItem i "
                 + " where i.retired=false "
                 + " and i.ixItemType =:vt "
-                + " and upper(i.name) like :qry";
+                + " and (i.name) like :qry";
         m.put("vt", InvestigationItemType.Value);
         m.put("qry", "%" + qry.toUpperCase() + "%");
         iivs = getEjbFacade().findBySQL(sql, m);
@@ -642,7 +642,7 @@ public class InvestigationItemController implements Serializable {
             Map m = new HashMap();
             sql = "select i from InvestigationItem i "
                     + " where i.retired=false "
-                    + " and i.ixItemType = :t and upper(i.name) like :q "
+                    + " and i.ixItemType = :t and (i.name) like :q "
                     + " order by i.name";
             m.put("t", InvestigationItemType.Template);
             m.put("q", "%" + qry.toUpperCase() + "%");
@@ -733,7 +733,7 @@ public class InvestigationItemController implements Serializable {
     }
 
     public List<InvestigationItem> getSelectedItems() {
-        selectedItems = getFacade().findBySQL("select c from InvestigationItem c where c.retired=false and upper(c.name) like '%" + getSelectText().toUpperCase() + "%' order by c.name");
+        selectedItems = getFacade().findBySQL("select c from InvestigationItem c where c.retired=false and (c.name) like '%" + getSelectText().toUpperCase() + "%' order by c.name");
         if (selectedItems == null) {
             selectedItems = new ArrayList<>();
         }

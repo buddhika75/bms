@@ -178,49 +178,46 @@ public class PatientController implements Serializable {
         searchPatients = getFacade().findBySQL(j, m);
     }
 
+    // Modified by Dr M H B Ariyaratne with assistance from ChatGPT from OpenAI
     public void searchPatientByDetails() {
+        StringBuilder j = new StringBuilder("select p from Patient p where p.retired=false");
+        Map<String, Object> m = new HashMap<>();
+        List<String> conditions = new ArrayList<>();
 
-        String j;
-        Map m = new HashMap();
-        if (false) {
-            Patient temP = new Patient();
-            temP.getPerson().getName();
-            temP.setRetired(true);
-        }
-
-        j = "select p from Patient p where p.retired=false and ";
-
-        if (searchName != null && !searchName.trim().equals("")) {
-            j += " lower(p.person.name) like :name ";
+        if (searchName != null && !searchName.trim().isEmpty()) {
+            conditions.add("(lower(p.person.name) like :name)");
             m.put("name", "%" + searchName.toLowerCase() + "%");
         }
 
-        if (searchPatientCode != null && !searchPatientCode.trim().equals("")) {
-            j += " lower(p.code) like :name ";
-            m.put("name", "%" + searchPatientCode.toLowerCase() + "%");
+        if (searchPatientCode != null && !searchPatientCode.trim().isEmpty()) {
+            conditions.add("(lower(p.code) like :code)");
+            m.put("code", "%" + searchPatientCode.toLowerCase() + "%");
         }
 
-        if (searchPhone != null && !searchPhone.trim().equals("")) {
-            j += " p.person.phone =:phone";
+        if (searchPhone != null && !searchPhone.trim().isEmpty()) {
+            conditions.add("((p.person.phone = :phone) or (p.person.mobile = :phone))");
             m.put("phone", searchPhone);
         }
 
-        if (searchNic != null && !searchNic.trim().equals("")) {
-            j += " p.person.nic =:nic";
+        if (searchNic != null && !searchNic.trim().isEmpty()) {
+            conditions.add("p.person.nic = :nic");
             m.put("nic", searchNic);
-
         }
 
-        if (searchPhn != null && !searchPhn.trim().equals("")) {
-            j += " p.phn =:phn";
+        if (searchPhn != null && !searchPhn.trim().isEmpty()) {
+            conditions.add("p.phn = :phn");
             m.put("phn", searchPhn);
-
         }
 
-        j += " order by p.person.name";
+        if (!conditions.isEmpty()) {
+            j.append(" and (");
+            j.append(String.join(" or ", conditions));
+            j.append(")");
+        }
 
-        searchPatients = getFacade().findBySQL(j, m);
+        j.append(" order by p.person.name");
 
+        searchPatients = getFacade().findBySQL(j.toString(), m);
     }
 
     public void searchByPatientId() {
@@ -671,7 +668,7 @@ public class PatientController implements Serializable {
             suggestions = new ArrayList<>();
         } else {
             sql = "select p from Patient p where p.retired=false "
-                    + " and upper(p.person.name) like :q "
+                    + " and (p.person.name) like :q "
                     + "  order by p.person.name";
             hm.put("q", "%" + query.toUpperCase() + "%");
             ////System.out.println(sql);
@@ -694,12 +691,12 @@ public class PatientController implements Serializable {
         String sql;
         HashMap hm = new HashMap();
         sql = "select p from Patient p where p.retired=false "
-                + " and (upper(p.person.name) like :q "
-                + " or upper(p.code) like :q "
-                + " or upper(p.person.nic) like :q "
-                + " or upper(p.person.mobile) like :q "
-                + " or upper(p.person.phone) like :q "
-                + " or upper(p.person.address) like :q )"
+                + " and ((p.person.name) like :q "
+                + " or (p.code) like :q "
+                + " or (p.person.nic) like :q "
+                + " or (p.person.mobile) like :q "
+                + " or (p.person.phone) like :q "
+                + " or (p.person.address) like :q )"
                 + "order by p.person.name";
         hm.put("q", "%" + query.trim().toUpperCase() + "%");
         patientList = getFacade().findBySQL(sql, hm, 30);
@@ -713,13 +710,13 @@ public class PatientController implements Serializable {
         String sql;
         HashMap hm = new HashMap();
         sql = "select p from Patient p where p.retired=false "
-                + " and ( upper(p.person.name) like  :q "
-                + " or upper(p.code) =:eq "
-                + " or upper(p.phn) =:eq "
-                + " or upper(p.person.nic) = :eq "
-                + " or upper(p.person.mobile) = :eq "
-                + " or upper(p.person.phone) = :eq "
-                + " or upper(p.person.address) like :q ) ";
+                + " and ((p.person.name) like  :q "
+                + " or (p.code) =:eq "
+                + " or (p.phn) =:eq "
+                + " or (p.person.nic) = :sw "
+                + " or (p.person.mobile) like :sw "
+                + " or (p.person.phone) like :sw "
+                + " or (p.person.address) like :q ) ";
 
 //        if (title != null) {
 //            sql += " and p.person.title=:t ";
@@ -728,6 +725,7 @@ public class PatientController implements Serializable {
         sql += " order by p.person.name ";
 
         hm.put("q", "%" + query.trim().toUpperCase() + "%");
+        hm.put("sw", query.trim().toUpperCase() + "%");
         hm.put("eq", query.toUpperCase());
         patientList = getFacade().findBySQL(sql, hm);
         return patientList;
@@ -1201,7 +1199,7 @@ public class PatientController implements Serializable {
                 + " and bi.retired<>:ret "
                 + " and bi.bill.patient=:pt "
                 + " and (bi.bill.insId=:bn or bi.bill.deptId=:bn or bi.bill.id=:bid) "
-                + " and lower(bi.item.name)=:name";
+                + " and (bi.item.name)=:name";
         Map m = new HashMap();
         m.put("pt", current);
         m.put("ret", false);

@@ -728,7 +728,7 @@ public class SessionController implements Serializable, HttpSessionListener {
         }
         String temSQL;
         loginRequestResponse = "#{";
-        temSQL = "SELECT u FROM WebUser u WHERE u.retired = false and lower(u.name)=:n order by u.id desc";
+        temSQL = "SELECT u FROM WebUser u WHERE u.retired = false and (u.name)=:n order by u.id desc";
         Map m = new HashMap();
 
         m.put("n", temUserName.trim().toLowerCase());
@@ -841,7 +841,7 @@ public class SessionController implements Serializable, HttpSessionListener {
         }
         String temSQL;
         loginRequestResponse = "#{";
-        temSQL = "SELECT u FROM WebUser u WHERE u.retired = false and lower(u.name)=:n order by u.id desc";
+        temSQL = "SELECT u FROM WebUser u WHERE u.retired = false and (u.name)=:n order by u.id desc";
         Map m = new HashMap();
 
         m.put("n", temUserName.trim().toLowerCase());
