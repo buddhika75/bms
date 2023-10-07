@@ -44,7 +44,7 @@
 
 
 
-                <p:panelGrid id="gpTbl" style="width: 100%;" >
+                <p:panelGrid id="gpTbl" style="width: 100%;" columns="1" >
 
                     <f:facet name="header" >
                         Current Privileges
@@ -54,6 +54,7 @@
                                  style="width:100%;"
                                  value="#{userPrivilageController.items}"
                                  var="i"
+                                 rowKey="#{i.id}"
                                  paginator="true"
                                  rows="10"
                                  paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
