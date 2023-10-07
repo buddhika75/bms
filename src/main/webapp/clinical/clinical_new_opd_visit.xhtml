@@ -79,9 +79,13 @@
 
                                             <p:commandLink value="BP" action="#{patientEncounterController.createBpChart()}" ajax="false"  target="_blank"></p:commandLink>
                                             <h:panelGroup >
-                                                <p:inputText style="width: 3em;" maxlength="3" value="#{patientEncounterController.current.sbp}" ></p:inputText>
+                                                <p:inputText style="width: 3em;" maxlength="3" value="#{patientEncounterController.current.sbp}" >
+                                                    <p:ajax process="@this" ></p:ajax>
+                                                </p:inputText>
                                                 <p:outputLabel value="/" ></p:outputLabel>
-                                                <p:inputText  style="width: 3em;" maxlength="3" value="#{patientEncounterController.current.dbp}" ></p:inputText>
+                                                <p:inputText  style="width: 3em;" maxlength="3" value="#{patientEncounterController.current.dbp}" >
+                                                    <p:ajax process="@this" ></p:ajax>
+                                                </p:inputText>
                                                 <p:outputLabel  value="&nbsp;mmHg"  ></p:outputLabel>
                                             </h:panelGroup>
 

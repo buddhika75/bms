@@ -66,11 +66,9 @@ public class PatientController implements Serializable {
     @Inject
     ApplicationController applicationController;
 
-    
-    
     private String billNoForPaymentForMembership;
     private boolean billNumberForPaymentMatchesPatient;
-    
+
     private Patient current;
     private List<Patient> items = null;
 
@@ -309,7 +307,6 @@ public class PatientController implements Serializable {
         p.setName(nameReq);
         p.setAddress(addressReq);
         p.setPhone(phoneReq);
-
 
         getPersonFacade().create(p);
         getFacade().create(pt);
@@ -669,9 +666,9 @@ public class PatientController implements Serializable {
     private List<Patient> patientList;
 
     /**
-     * 
+     *
      * @param query
-     * @return 
+     * @return
      */
     public List<Patient> completePatientByNameOrCode(String query) {
         if (query == null) {
@@ -711,7 +708,6 @@ public class PatientController implements Serializable {
 //            sql += " and p.person.title=:t ";
 //            hm.put("t", title);
 //        }
-
         sql += " order by p.person.name ";
 
         hm.put("q", "%" + query.trim().toUpperCase() + "%");
@@ -818,14 +814,16 @@ public class PatientController implements Serializable {
             getPersonFacade().create(getCurrent().getPerson());
 
         } else {
-            if (sessionController.hasPrivilege(Privileges.ClinicalPatientEdit)) {
-                getCurrent().getPerson().setEditedAt(Calendar.getInstance().getTime());
-                getCurrent().getPerson().setEditer(getSessionController().getLoggedUser());
-                getPersonFacade().edit(getCurrent().getPerson());
-            } else {
-                JsfUtil.addErrorMessage("You have no Privilege to Edit Patients.");
-                return;
-            }
+            getCurrent().getPerson().setEditedAt(Calendar.getInstance().getTime());
+            getCurrent().getPerson().setEditer(getSessionController().getLoggedUser());
+            getPersonFacade().edit(getCurrent().getPerson());
+
+//            if (sessionController.hasPrivilege(Privileges.ClinicalPatientEdit)) {
+//
+//            } else {
+//                JsfUtil.addErrorMessage("You have no Privilege to Edit Patients.");
+//                return;
+//            }
         }
         if (getCurrent().getId() == null) {
 
@@ -1173,13 +1171,13 @@ public class PatientController implements Serializable {
     }
 
     public boolean isBillNumberForPaymentMatchesPatient() {
-        if(billNoForPaymentForMembership==null || billNoForPaymentForMembership.trim().equals("")){
+        if (billNoForPaymentForMembership == null || billNoForPaymentForMembership.trim().equals("")) {
             billNumberForPaymentMatchesPatient = false;
             return billNumberForPaymentMatchesPatient;
         }
         String cardIssue = "Card issue";
         cardIssue = cardIssue.trim().toLowerCase();
-        
+
         String j = "select count(bi) from BillItem bi "
                 + " where bi.bill.retired<>:ret "
                 + " and bi.bill.cancelled<>:ret "
@@ -1193,15 +1191,15 @@ public class PatientController implements Serializable {
         m.put("name", cardIssue);
         m.put("bn", billNoForPaymentForMembership);
 
-        try{
+        try {
             Long bid = Long.parseLong(billNoForPaymentForMembership);
             m.put("bid", bid);
-        }catch(Exception e){
+        } catch (Exception e) {
             m.put("bid", 0);
         }
-        
-        Long count = getFacade().countBySql(j,m);
-        if(count==null||count==0l){
+
+        Long count = getFacade().countBySql(j, m);
+        if (count == null || count == 0l) {
             billNumberForPaymentMatchesPatient = false;
             return billNumberForPaymentMatchesPatient;
         }
@@ -1212,9 +1210,6 @@ public class PatientController implements Serializable {
     public void setBillNumberForPaymentMatchesPatient(boolean billNumberForPaymentMatchesPatient) {
         this.billNumberForPaymentMatchesPatient = billNumberForPaymentMatchesPatient;
     }
-    
-    
-    
 
     /**
      *
