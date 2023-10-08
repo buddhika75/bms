@@ -36,7 +36,7 @@
                                       var="spe" 
                                       scrollHeight="450"
                                       selectionMode="single" 
-                                     >
+                                      >
                             <p:ajax  event="rowSelect" process="@this" update=":#{p:resolveFirstComponentWithId('scStaff',view).clientId}  :#{p:resolveFirstComponentWithId('tblSessionsOfSelectedConsultant',view).clientId}" listener="#{bookingPastController.listnerStaffListForRowSelect}"/> 
                             <p:ajax  event="rowSelect" process="@this" update=":#{p:resolveFirstComponentWithId('scStaff',view).clientId}  :#{p:resolveFirstComponentWithId('tblSessionsOfSelectedConsultant',view).clientId}" listener="#{bookingPastController.generateSessions}"/> 
                             <p:column style="text-wrap: avoid; text-overflow: clip; white-space: nowrap;" >
@@ -178,49 +178,40 @@
                     </h:panelGroup>
                 </div>
                 <div class="col-md-4" >
-                    <h:panelGroup >
-                        <table style="height: 35em;">
-                            <tr>
-                                <th>
-                                    <p:outputLabel value="Bookings" ></p:outputLabel>
-                                </th>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <p:dataTable id="tblBookingsOfSelectedSession" style="height: 300px;"
-                                                 value="#{bookingPastController.billSessions}" var='bs'
-                                                 selectionMode="single" rowKey="#{bs.id}"
-                                                 rowStyleClass="#{bs.bill.cancelled eq true or bs.bill.refunded eq true ? 'redText':''}"
-                                                 selection="#{bookingPastController.selectedBillSession}" scrollable="true" scrollHeight="275">
-                                        <p:ajax event="rowSelect" process="@this" update=":#{p:resolveFirstComponentWithId('detail',view).clientId}" 
-                                                listener="#{channelBillController.createBillfees}" />  
+                    <p:outputLabel value="Bookings" ></p:outputLabel>
+                    <p:dataTable id="tblBookingsOfSelectedSession" 
+                                 style="height: 350px;"
+                                 value="#{bookingPastController.billSessions}" var='bs'
+                                 selectionMode="single" rowKey="#{bs.id}"
+                                 rowStyleClass="#{bs.bill.cancelled eq true or bs.bill.refunded eq true ? 'redText':''}"
+                                 selection="#{bookingPastController.selectedBillSession}" scrollable="true" scrollHeight="275">
+                        <p:ajax event="rowSelect" process="@this" update=":#{p:resolveFirstComponentWithId('detail',view).clientId}" 
+                                listener="#{channelBillController.createBillfees}" />  
 
-                                        <p:column headerText="No" style="width: 5px!important;">#{bs.serialNo}</p:column>
-                                        <p:column headerText="Name" style="width: 60px!important;">#{bs.bill.patient.person.nameWithTitle}</p:column>
-                                        <p:column headerText="Paid" style="width: 20px!important;">
-                                            <p:outputLabel rendered="#{bs.bill.paidAmount eq 0}" value="Credit" style="color: green;"/>
-                                            <p:outputLabel rendered="#{bs.bill.paidAmount eq 0 and bs.bill.paymentMethod eq 'OnCall'}" value="-On Call" style="color: green;"/>
-                                            <p:outputLabel rendered="#{bs.bill.paidAmount eq 0 and bs.bill.paymentMethod eq 'Staff'}" value="-Staff" style="color: green;"/>
-                                            <p:outputLabel rendered="#{bs.bill.paidAmount ne 0}" value="Paid"/>
-                                            <p:outputLabel rendered="#{bs.bill.paidAmount ne 0 and bs.bill.paymentMethod eq 'Agent'}" value="-Agent"/>
-                                            <p:outputLabel rendered="#{bs.bill.paidAmount ne 0 and bs.bill.paymentMethod eq 'OnCall'}" value="-On Call" />
-                                            <p:outputLabel rendered="#{bs.bill.paidAmount ne 0 and bs.bill.paymentMethod eq 'Staff'}" value="-Staff" />
-                                        </p:column>
-                                        <p:column headerText="C/R" style="width: 10px!important;" >
-                                            <p:outputLabel value="Cancelled" rendered="#{bs.bill.cancelled==true}"/>
-                                            <p:outputLabel value="Refunded" rendered="#{bs.bill.refunded==true}"/>
-                                        </p:column>   
-                                        <p:column headerText="Agent" style="width: 5px!important;">
-                                            <p:outputLabel value="#{bs.bill.creditCompany.institutionCode}"/>                          
-                                        </p:column> 
-                                        <p:column headerText="P/A" style="width: 10px!important;">                           
-                                            <p:outputLabel value="Absent"  rendered="#{bs.absent}"/>  
-                                        </p:column> 
-                                    </p:dataTable>    
-                                </td>
-                            </tr>
-                        </table>
-                    </h:panelGroup> 
+                        <p:column headerText="No" style="width: 5px!important;">#{bs.serialNo}</p:column>
+                        <p:column headerText="Name" style="width: 60px!important;">#{bs.bill.patient.person.nameWithTitle}</p:column>
+                        <p:column headerText="Paid" style="width: 20px!important;">
+                            <p:outputLabel rendered="#{bs.bill.paidAmount eq 0}" value="Credit" style="color: green;"/>
+                            <p:outputLabel rendered="#{bs.bill.paidAmount eq 0 and bs.bill.paymentMethod eq 'OnCall'}" value="-On Call" style="color: green;"/>
+                            <p:outputLabel rendered="#{bs.bill.paidAmount eq 0 and bs.bill.paymentMethod eq 'Staff'}" value="-Staff" style="color: green;"/>
+                            <p:outputLabel rendered="#{bs.bill.paidAmount ne 0}" value="Paid"/>
+                            <p:outputLabel rendered="#{bs.bill.paidAmount ne 0 and bs.bill.paymentMethod eq 'Agent'}" value="-Agent"/>
+                            <p:outputLabel rendered="#{bs.bill.paidAmount ne 0 and bs.bill.paymentMethod eq 'OnCall'}" value="-On Call" />
+                            <p:outputLabel rendered="#{bs.bill.paidAmount ne 0 and bs.bill.paymentMethod eq 'Staff'}" value="-Staff" />
+                        </p:column>
+                        <p:column headerText="C/R" style="width: 10px!important;" >
+                            <p:outputLabel value="Cancelled" rendered="#{bs.bill.cancelled==true}"/>
+                            <p:outputLabel value="Refunded" rendered="#{bs.bill.refunded==true}"/>
+                        </p:column>   
+                        <p:column headerText="Agent" style="width: 5px!important;">
+                            <p:outputLabel value="#{bs.bill.creditCompany.institutionCode}"/>                          
+                        </p:column> 
+                        <p:column headerText="P/A" style="width: 10px!important;">                           
+                            <p:outputLabel value="Absent"  rendered="#{bs.absent}"/>  
+                        </p:column> 
+                    </p:dataTable>    
+
+
                 </div>
             </div>
 

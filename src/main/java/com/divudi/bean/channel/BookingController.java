@@ -930,6 +930,10 @@ public class BookingController implements Serializable {
     }
 
     public void listnerSessionRowSelect() {
+        if (serviceSessions == null) {
+            selectedServiceSession = null;
+            return;
+        }
         for (ServiceSession ss : serviceSessions) {
             if (ss.getSessionText().toLowerCase().contains(selectTextSession.toLowerCase())) {
                 selectedServiceSession = ss;

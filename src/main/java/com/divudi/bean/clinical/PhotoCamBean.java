@@ -25,7 +25,7 @@ import org.primefaces.event.CaptureEvent;
  *
  * @author Buddhika
  */
-@Named(value = "photoCamBean")
+@Named
 @RequestScoped
 public class PhotoCamBean implements Serializable {
 
