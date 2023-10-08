@@ -410,7 +410,7 @@ public class CollectingCentreBillController implements Serializable {
 //        this.recurseCount = recurseCount;
 //    }
     public boolean findByFilter(String property, String value) {
-        String sql = "Select b From Bill b where b.retired=false and upper(b." + property + ") like '%" + value.toUpperCase() + " %'";
+        String sql = "Select b From Bill b where b.retired=false and (b." + property + ") like '%" + value.toUpperCase() + " %'";
         Bill b = getBillFacade().findFirstBySQL(sql);
         //System.err.println("SQL " + sql);
         //System.err.println("Bill " + b);
@@ -892,7 +892,7 @@ public class CollectingCentreBillController implements Serializable {
         jpql = "Select b from Bill b"
                 + " where b.retired = false "
                 + " and b.billType=:bt "
-                + " and upper(b.referralNumber) =:rid ";
+                + " and (b.referralNumber) =:rid ";
         m.put("rid", referralId.toUpperCase());
         m.put("bt", BillType.CollectingCentreBill);
         List<Bill> tempBills = getFacade().findBySQL(jpql, m);
@@ -1737,8 +1737,8 @@ public class CollectingCentreBillController implements Serializable {
 
         sql = "select p from BilledBill p where p.retired=false and "
                 + "p.cancelled=false and p.refunded=false and p.billType=:btp "
-                + " and (upper(p.patient.person.name)  "
-                + "like :q or upper(p.insId)  "
+                + " and ((p.patient.person.name)  "
+                + "like :q or (p.insId)  "
                 + "like :q) order by p.insId";
         ////System.out.println(sql);
         hm.put("q", "%" + query.toUpperCase() + "%");

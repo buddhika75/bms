@@ -1196,7 +1196,7 @@ public class PharmacyBean {
         }
         name = name.trim();
         PharmaceuticalItemCategory cat;
-        cat = getPharmaceuticalItemCategoryFacade().findFirstBySQL("SELECT c FROM PharmaceuticalItemCategory c Where upper(c.name) = '" + name.toUpperCase() + "' ");
+        cat = getPharmaceuticalItemCategoryFacade().findFirstBySQL("SELECT c FROM PharmaceuticalItemCategory c Where (c.name) = '" + name.toUpperCase() + "' ");
         if (cat == null && createNew == true) {
             cat = new PharmaceuticalItemCategory();
             cat.setName(name);
@@ -1218,7 +1218,7 @@ public class PharmacyBean {
         }
         name = name.trim();
         PharmaceuticalItemType cat;
-        cat = pharmaceuticalItemTypeFacade.findFirstBySQL("SELECT c FROM PharmaceuticalItemType c Where upper(c.name) = '" + name.toUpperCase() + "' ");
+        cat = pharmaceuticalItemTypeFacade.findFirstBySQL("SELECT c FROM PharmaceuticalItemType c Where (c.name) = '" + name.toUpperCase() + "' ");
         if (cat == null && createNew == true) {
             cat = new PharmaceuticalItemType();
             cat.setName(name);
@@ -1242,7 +1242,7 @@ public class PharmacyBean {
         }
         name = name.trim();
         StoreItemCategory cat;
-        cat = getStoreItemCategoryFacade().findFirstBySQL("SELECT c FROM StoreItemCategory c Where upper(c.name) = '" + name.toUpperCase() + "' ");
+        cat = getStoreItemCategoryFacade().findFirstBySQL("SELECT c FROM StoreItemCategory c Where (c.name) = '" + name.toUpperCase() + "' ");
         if (cat == null && createNew == true) {
             cat = new StoreItemCategory();
             cat.setName(name);
@@ -1272,7 +1272,7 @@ public class PharmacyBean {
         name = name.trim();
         String sql;
         Map map = new HashMap();
-        sql = "SELECT c FROM MeasurementUnit c Where upper(c.name) =:n ";
+        sql = "SELECT c FROM MeasurementUnit c Where (c.name) =:n ";
         map.put("n", name.toUpperCase());
         m = getMeasurementUnitFacade().findFirstBySQL(sql, map);
         if (m == null && createNew == true) {
@@ -1428,7 +1428,7 @@ public class PharmacyBean {
         Vtm vtm = null;
         Map m = new HashMap();
         m.put("n", name.toUpperCase());
-        vtm = getVtmFacade().findFirstBySQL("SELECT c FROM Vtm c Where upper(c.name) =:n ", m);
+        vtm = getVtmFacade().findFirstBySQL("SELECT c FROM Vtm c Where (c.name) =:n ", m);
         if (vtm == null && createNew) {
             vtm = new Vtm();
             vtm.setName(name);

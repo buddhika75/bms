@@ -78,7 +78,7 @@ public class DepartmentController implements Serializable {
                 current = null;
             }
         } else {
-            String sql = "Select d from Department d where d.retired=false and upper(d.name) like :dn order by d.name";
+            String sql = "Select d from Department d where d.retired=false and (d.name) like :dn order by d.name";
             Map m = new HashMap();
             m.put("dn", "%" + selectText.toUpperCase() + "%");
             searchItems = getFacade().findBySQL(sql, m);
@@ -168,7 +168,7 @@ public class DepartmentController implements Serializable {
     }
 
     public List<Department> getSelectedItems() {
-        selectedItems = getFacade().findBySQL("select c from Department c where c.retired=false and upper(c.name) like '%" + getSelectText().toUpperCase() + "%' order by c.name");
+        selectedItems = getFacade().findBySQL("select c from Department c where c.retired=false and (c.name) like '%" + getSelectText().toUpperCase() + "%' order by c.name");
         return selectedItems;
     }
 
@@ -179,7 +179,7 @@ public class DepartmentController implements Serializable {
         HashMap hm = new HashMap();
         sql = "select c from Department c "
                 + " where c.retired=false "
-                + " and upper(c.name) like :q"
+                + " and (c.name) like :q"
                 + " order by c.name";
         hm.put("q", "%" + qry.toUpperCase() + "%");
         departmentList = getFacade().findBySQL(sql, hm);
@@ -192,7 +192,7 @@ public class DepartmentController implements Serializable {
         HashMap hm = new HashMap();
         sql = "select c from Department c "
                 + " where c.retired=false "
-                + " and (upper(c.name) like :q or upper(c.institution.name) like :q )"
+                + " and ((c.name) like :q or (c.institution.name) like :q )"
                 + " order by c.name";
         hm.put("q", "%" + qry.toUpperCase() + "%");
         return getFacade().findBySQL(sql, hm);

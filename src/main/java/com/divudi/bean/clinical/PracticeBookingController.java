@@ -202,14 +202,14 @@ public class PracticeBookingController implements Serializable {
         List<Doctor> docs;
         if (speciality == null) {
             sql = "select d from Doctor d where d.retired=false"
-                    + " and upper(d.person.name) like :q "
+                    + " and (d.person.name) like :q "
                     + " order by d.person.name ";
             m.put("q", "%" + qry.toUpperCase() + "%");
             docs = getDoctorFacade().findBySQL(sql,m);
         } else {
             sql = "select d from Doctor d where d.retired=false "
                     + " and d.speciality=:sp"
-                    + " and upper(d.person.name) like :q "
+                    + " and (d.person.name) like :q "
                     + " order by d.person.name ";
             m.put("sp", speciality);
             m.put("q", "%" + qry.toUpperCase() + "%");
@@ -476,9 +476,9 @@ public class PracticeBookingController implements Serializable {
             suggestions = new ArrayList<Staff>();
         } else {
             if (getSpeciality() != null) {
-                sql = "select p from Staff p where p.retired=false and (upper(p.person.name) like '%" + query.toUpperCase() + "%'or  upper(p.code) like '%" + query.toUpperCase() + "%' ) and p.speciality.id = " + getSpeciality().getId() + " order by p.person.name";
+                sql = "select p from Staff p where p.retired=false and ((p.person.name) like '%" + query.toUpperCase() + "%'or  (p.code) like '%" + query.toUpperCase() + "%' ) and p.speciality.id = " + getSpeciality().getId() + " order by p.person.name";
             } else {
-                sql = "select p from Staff p where p.retired=false and (upper(p.person.name) like '%" + query.toUpperCase() + "%'or  upper(p.code) like '%" + query.toUpperCase() + "%' ) order by p.person.name";
+                sql = "select p from Staff p where p.retired=false and ((p.person.name) like '%" + query.toUpperCase() + "%'or  (p.code) like '%" + query.toUpperCase() + "%' ) order by p.person.name";
             }
             //////System.out.println(sql);
             suggestions = getStaffFacade().findBySQL(sql);

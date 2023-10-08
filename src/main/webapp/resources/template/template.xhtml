@@ -32,7 +32,7 @@
     </h:head>
 
     <h:body>
-        <div id="panelFullSpread" class="fullSpread ui-widget-content " >
+        <div class="container-fluid p-1" >
             <p:growl id="publicGrowl"  />
             <h:panelGroup >
                 <h:form>
@@ -47,7 +47,7 @@
                             </f:facet>  
                         </p:ajaxStatus>
 
-                        <h:panelGroup rendered="#{sessionController.logged and !sessionController.firstLogin and sessionController.department ne null}" styleClass="nonPrintBlock" >
+                        <h:panelGroup rendered="#{sessionController.logged and sessionController.department ne null}" styleClass="nonPrintBlock" >
 
                             <f:facet name="header" >
                                 <h:outputLabel value="#{labels.topic}" />
@@ -717,26 +717,7 @@
 
                         </h:panelGroup>
 
-                        <h:panelGroup rendered="#{sessionController.firstLogin}" style="border: 1px solid;border-radius: 6px;" 
-                                      styleClass="nonPrintBlock" >
-                            <f:facet name="header" >
-                                <h:outputLabel value="#{labels.topic}" />
-                            </f:facet>
-
-                            <p:menubar styleClass="nonPrintBlock" style=" border: 0px;" >
-                                <p:submenu label="Administration"  >
-                                    <p:menuitem  ajax="false"  action="/admin_manage_users" value="Manage Users"></p:menuitem>
-                                    <p:menuitem  ajax="false"  action="/admin_mange_institutions_index" value="Manage Institutions"  ></p:menuitem>
-                                    <p:menuitem  ajax="false"  action="/admin_manage_staff_index" value="Manage Staff"></p:menuitem>
-                                    <p:menuitem  ajax="false"  action="/admin_items" value="Manage Items/Services" ></p:menuitem>
-                                    <p:menuitem  ajax="false"  action="/admin_fees" value="Manage Prices/Charges/Packages"></p:menuitem>
-                                    <p:menuitem ajax="false" action="/dataAdmin/admin_data_administration" value="Data Administration" ></p:menuitem>
-                                </p:submenu>
-
-
-                            </p:menubar>
-
-                        </h:panelGroup>
+                       
 
 
                     </h:panelGroup>
@@ -746,7 +727,7 @@
 
             <h:panelGrid id="pgM" columns="1" style="width: 100%; border: 0px;" >
 
-                <h:panelGroup rendered ="#{(sessionController.logged and sessionController.department ne null ) or sessionController.firstLogin}" >
+                <h:panelGroup rendered ="#{sessionController.logged and sessionController.department ne null}" >
                     <div style="min-height: 600px;" >
 
                         <ui:insert name="content"   >

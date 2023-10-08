@@ -51,7 +51,7 @@ public class MembershipSchemeController implements Serializable {
     Institution lastInstitution;
 
     public MembershipScheme findMembershipScheme(String name, Boolean createNew) {
-        String j = "select m from MembershipScheme m where upper(m.name) = :name";
+        String j = "select m from MembershipScheme m where (m.name) = :name";
         Map m = new HashMap();
         m.put("name", name.toUpperCase().trim());
         MembershipScheme tm = getFacade().findFirstBySQL(j, m);
@@ -104,7 +104,7 @@ public class MembershipSchemeController implements Serializable {
     public List<MembershipScheme> completeMembershipScheme(String qry) {
         List<MembershipScheme> c;
         HashMap hm = new HashMap();
-        String sql = "select c from MembershipScheme c where c.retired=false and upper(c.name) "
+        String sql = "select c from MembershipScheme c where c.retired=false and (c.name) "
                 + " like :q order by c.name";
         hm.put("q", "%" + qry.toUpperCase() + "%");
         c = getFacade().findBySQL(sql, hm);
@@ -116,7 +116,7 @@ public class MembershipSchemeController implements Serializable {
     }
 
     public List<MembershipScheme> getSelectedItems() {
-        selectedItems = getFacade().findBySQL("select c from MembershipScheme c where c.retired=false and upper(c.name) like '%" + getSelectText().toUpperCase() + "%' order by c.name");
+        selectedItems = getFacade().findBySQL("select c from MembershipScheme c where c.retired=false and (c.name) like '%" + getSelectText().toUpperCase() + "%' order by c.name");
         return selectedItems;
     }
 

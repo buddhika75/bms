@@ -98,7 +98,7 @@ public class CategoryController implements Serializable {
 
     public List<Category> completeCategory(String qry) {
         List<Category> c;
-        c = getFacade().findBySQL("select c from Category c where c.retired=false and upper(c.name) like '%" + qry.toUpperCase() + "%' order by c.name");
+        c = getFacade().findBySQL("select c from Category c where c.retired=false and (c.name) like '%" + qry.toUpperCase() + "%' order by c.name");
         if (c == null) {
             c = new ArrayList<>();
         }
@@ -123,7 +123,7 @@ public class CategoryController implements Serializable {
             suggestions = new ArrayList<>();
         } else {
 
-            sql = "select c from Category c where c.retired=false and (type(c)= :sup or type(c)= :sub) and upper(c.name) like '%" + query.toUpperCase() + "%' order by c.name";
+            sql = "select c from Category c where c.retired=false and (type(c)= :sup or type(c)= :sub) and (c.name) like '%" + query.toUpperCase() + "%' order by c.name";
             ////System.out.println(sql);
             tmpMap.put("sup", ServiceCategory.class);
             tmpMap.put("sub", ServiceSubCategory.class);
@@ -139,7 +139,7 @@ public class CategoryController implements Serializable {
 
         sql = "select c from Category c where c.retired=false"
                 + " and (type(c)= :service or type(c)= :sub or type(c)= :invest or "
-                + "type(c)= :time or type(c)= :parm or type(c)= :con  ) and upper(c.name)"
+                + "type(c)= :time or type(c)= :parm or type(c)= :con  ) and (c.name)"
                 + " like :q order by c.name";
 
         temMap.put("service", ServiceCategory.class);
@@ -165,7 +165,7 @@ public class CategoryController implements Serializable {
 
         sql = "select c from Category c where c.retired=false"
                 + " and (type(c)= :service or type(c)= :sub  )"
-                + " and upper(c.name)"
+                + " and (c.name)"
                 + " like :q order by c.name";
 
         temMap.put("service", ServiceCategory.class);
@@ -190,7 +190,7 @@ public class CategoryController implements Serializable {
                 + " and (type(c)= :service "
                 + " or type(c)= :sub "
                 + " or type(c)=:invest )"
-                + " and upper(c.name)"
+                + " and (c.name)"
                 + " like :q order by c.name";
 
         temMap.put("service", ServiceCategory.class);
@@ -232,7 +232,7 @@ public class CategoryController implements Serializable {
 
         sql = "select c from Category c where c.retired=false"
                 + " and (type(c)= :service or type(c)= :sub or type(c)= :ph  )"
-                + " and upper(c.name)"
+                + " and (c.name)"
                 + " like :q order by c.name";
 
         temMap.put("service", ServiceCategory.class);
@@ -255,7 +255,7 @@ public class CategoryController implements Serializable {
         Map temMap = new HashMap();
 
         sql = "select c from Category c where c.retired=false"
-                + " and (type(c)= :invest ) and upper(c.name)"
+                + " and (type(c)= :invest ) and (c.name)"
                 + " like :q order by c.name";
 
         temMap.put("invest", InvestigationCategory.class);
@@ -277,7 +277,7 @@ public class CategoryController implements Serializable {
         sql = "select c from Category c"
                 + "  where c.retired=false"
                 + " and (type(c)= :parm ) "
-                + " and upper(c.name) like :q "
+                + " and (c.name) like :q "
                 + " order by c.name";
 
         temMap.put("parm", PharmaceuticalItemCategory.class);
@@ -297,7 +297,7 @@ public class CategoryController implements Serializable {
         Map temMap = new HashMap();
 
         sql = "select c from Category c where c.retired=false"
-                + " and (type(c)= :parm ) and upper(c.name)"
+                + " and (type(c)= :parm ) and (c.name)"
                 + " like :q order by c.name";
 
         temMap.put("parm", StoreItemCategory.class);
@@ -329,7 +329,7 @@ public class CategoryController implements Serializable {
     }
 
     public List<Category> getSelectedItems() {
-        selectedItems = getFacade().findBySQL("select c from Category c where c.retired=false and upper(c.name) like '%" + getSelectText().toUpperCase() + "%' order by c.name");
+        selectedItems = getFacade().findBySQL("select c from Category c where c.retired=false and (c.name) like '%" + getSelectText().toUpperCase() + "%' order by c.name");
         return selectedItems;
     }
 
@@ -403,7 +403,7 @@ public class CategoryController implements Serializable {
         sql = "select c from Category c"
                 + "  where c.retired=false"
                 + " and (type(c)= :parm or type(c)=:assetcat)"
-                + " and upper(c.name) like :q "
+                + " and (c.name) like :q "
                 + " order by c.name";
 
         temMap.put("parm", ConsumableCategory.class);

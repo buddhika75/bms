@@ -124,7 +124,7 @@ public class PettyCashBillController implements Serializable {
     }
 
     private boolean checkInvoice() {
-        String sql = "Select b From BilledBill b where b.retired=false and b.cancelledBill is null and b.billType= :btp and upper(b.invoiceNumber)='" + getCurrent().getInvoiceNumber().trim().toUpperCase() + "'";
+        String sql = "Select b From BilledBill b where b.retired=false and b.cancelledBill is null and b.billType= :btp and (b.invoiceNumber)='" + getCurrent().getInvoiceNumber().trim().toUpperCase() + "'";
         HashMap h = new HashMap();
         h.put("btp", BillType.PettyCash);
         List<Bill> tmp = getBillFacade().findBySQL(sql, h, TemporalType.TIME);

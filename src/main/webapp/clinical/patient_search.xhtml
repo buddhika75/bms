@@ -64,7 +64,7 @@
                     <div class="col-8" >
                         <h:form>
                             <p:dataTable value="#{patientController.searchPatients}" var="p"
-                                         
+
                                          >
                                 <p:column headerText="Name" >
                                     <p:outputLabel value="#{p.person.name}" ></p:outputLabel>
@@ -80,6 +80,10 @@
                                 </p:column>
                                 <p:column headerText="Phone" width="80">
                                     <p:outputLabel value="#{p.person.phone}">
+                                    </p:outputLabel>
+                                </p:column>
+                                <p:column headerText="Mobile" width="80">
+                                    <p:outputLabel value="#{p.person.mobile}">
                                     </p:outputLabel>
                                 </p:column>
                                 <p:column headerText="Actions" width="80">
