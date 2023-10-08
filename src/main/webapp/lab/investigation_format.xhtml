@@ -72,7 +72,7 @@
                                                 <p:inputText value="#{investigationItemController.testUnit}" ></p:inputText>
 
                                                 <p:outputLabel value="Reference" ></p:outputLabel>
-                                                <p:textEditor value="#{investigationItemController.testReferenceRange}" height="100" ></p:textEditor>
+                                                <p:textEditor secure='false' value="#{investigationItemController.testReferenceRange}" height="100" ></p:textEditor>
 
                                                 <p:outputLabel value="Comments" ></p:outputLabel>
                                                 <p:inputTextarea value="#{investigationItemController.testComments}" ></p:inputTextarea>
@@ -334,11 +334,12 @@
                                                         <p:commandButton process="lblIiText" update="txtContents" value="Save" 
                                                                          oncomplete="PF('dlgContents').hide()" 
                                                                          ></p:commandButton>
-                                                        <p:textEditor  width="350" height="200" id="lblIiText" 
-                                                                   value="#{investigationItemController.current.htmltext}" >
+                                                        <p:textEditor secure='false' class="w-100"
+                                                                      height="200" id="lblIiText" 
+                                                                      value="#{investigationItemController.current.htmltext}" >
 
                                                         </p:textEditor >
-                                                        
+
 
                                                     </p:dialog>
                                                 </p:column>

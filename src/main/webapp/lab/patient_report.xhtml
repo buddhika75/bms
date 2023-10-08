@@ -193,19 +193,25 @@
                                             <ui:repeat id="tblDls" 
                                                        value="#{patientReportController.currentPatientReport.patientReportItemValues}"  
                                                        var="pvd"  >
-                                                <h:panelGroup rendered="#{pvd.investigationItem.ixItemType eq 'DynamicLabel'}" >
-                                                    <tr>
-                                                        <td >
-                                                            <h:outputLabel value="#{pvd.investigationItem.name}" ></h:outputLabel>
-                                                        </td>
-                                                        <td>
-                                                            <p:selectOneMenu  id="cmbStrDl" value="#{pvd.strValue}" editable="true" style="min-width: 200px;" disabled="#{patientReportController.currentPatientReport.approved}">
-                                                                <f:selectItems value="#{investigationItemDynamicLabelController.getDynamicLabelsByIxItId(pvd.investigationItem) }" var="iivd" itemLabel="#{iivd.flagMessage}" itemValue="#{iivd}" ></f:selectItems>
-                                                                <p:ajax process="@this" event="change" listener="#{patientReportController.savePatientReportItemValues()}"></p:ajax>
-                                                            </p:selectOneMenu>
-                                                        </td>
-                                                    </tr>
+
+                                                <h:panelGroup rendered="true" >
+                                                    <h:panelGroup rendered="#{pvd.investigationItem.ixItemType eq 'DynamicLabel'}" >
+                                                        <tr>
+                                                            <td >
+                                                                <h:outputLabel value="#{pvd.investigationItem.name}" ></h:outputLabel>
+                                                            </td>
+                                                            <td>
+                                                                <p:selectOneMenu  id="cmbStrDl" value="#{pvd.strValue}" editable="true" style="min-width: 200px;" disabled="#{patientReportController.currentPatientReport.approved}">
+                                                                    <f:selectItem itemLabel="Select" ></f:selectItem>
+                                                                    <f:selectItems value="#{investigationItemDynamicLabelController.getDynamicLabelsByIxItId(pvd.investigationItem) }" var="iivd" itemLabel="#{iivd.flagMessage}" itemValue="#{iivd}" ></f:selectItems>
+                                                                    <p:ajax process="@this" event="change" listener="#{patientReportController.savePatientReportItemValues()}"></p:ajax>
+                                                                </p:selectOneMenu>
+                                                            </td>
+                                                        </tr>
+                                                    </h:panelGroup>
                                                 </h:panelGroup>
+
+
                                             </ui:repeat>
                                         </table>
                                     </p:panel>
@@ -310,7 +316,12 @@
 
                                         </h:panelGrid>
                                         <h1>#{patientReportController.currentPatientReport.patientReportItemValues}</h1>
-                                        <p:textEditor id="reportEditor" value="#{patientReportController.currentPatientReport.templateItem.lobValue}" widgetVar="editor" height="650" >
+                                        <p:textEditor 
+                                            secure='false'
+                                            id="reportEditor"
+                                            value="#{patientReportController.currentPatientReport.templateItem.lobValue}" 
+                                            widgetVar="editor" 
+                                            height="650" >
 
                                         </p:textEditor>
 
@@ -415,7 +426,10 @@
                                     </ui:repeat>
                                     <ui:repeat  value="#{patientReportController.currentPatientReport.patientReportItemValues}" var="prv" >
                                         <div style="#{prv.investigationItem.cssStyle}; position:absolute;">
-                                            <h:outputLabel value="#{prv.strValue}" rendered="#{prv.investigationItem.ixItemType eq 'Flag'}" escape="false" />
+                                            <h:outputLabel 
+                                                value="#{prv.strValue}"
+                                                rendered="#{prv.investigationItem.ixItemType eq 'Flag'}" 
+                                                escape="false" />
                                         </div>
                                     </ui:repeat>
                                     <ui:repeat  value="#{patientReportController.currentPatientReport.patientReportItemValues}" var="prv" >
