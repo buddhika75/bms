@@ -46,14 +46,35 @@ public enum ReportItemType {
     Institution,
     DateTime,
     Barcode,
-    
-    
     DataEntered,
-    ;
-    
-    public String getLabel(){
-        switch (this){
-            case AutherizedSignature: return "AutherizedSignature";
+    PatientAgeOnBillDate,
+    Phn,
+    SampledAt,
+    Ward,
+    AutherizedName,
+    AutherizedCode,
+    AutherizedPosition,
+    AutherizedQualification,
+    DataEntryUserName,
+    DataEntryUserDetails,
+    ApprovedSignature,
+    ApprovedUserName,
+    ApprovedUserDetails,
+    AutherizedUserName,
+    AutherizedUserDetails,
+    BarcodeBillId,
+    BarcodeBillItemId,
+    BarcodePatientId,
+    BarcodePatientInvestigationId,
+    BarcodePatientReportId,
+    BHT,
+    Comments,
+    Css,;
+
+    public String getLabel() {
+        switch (this) {
+            case AutherizedSignature:
+                return "AutherizedSignature";
         }
         return null;
     }

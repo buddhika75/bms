@@ -1300,25 +1300,25 @@ public class PatientReportController implements Serializable {
         }
         if (pf != null && pf.getSentEmailWithInvestigationReportApproval()) {
             if (CommonController.isValidEmail(currentPtIx.getBillItem().getBill().getPatient().getPerson().getEmail())) {
-                AppEmail e = new AppEmail();
-                e.setCreatedAt(new Date());
-                e.setCreater(sessionController.getLoggedUser());
-
-                e.setReceipientEmail(currentPtIx.getBillItem().getBill().getPatient().getPerson().getEmail());
-                e.setMessageSubject("Your Report is Ready");
-                e.setMessageBody(emailMessageBody(currentPatientReport));
-                e.setAttachment1(createPDFAndSaveAsaFile());
-
-                e.setSenderPassword(getCurrentPatientReport().getApproveInstitution().getEmailSendingPassword());
-                e.setSenderUsername(getCurrentPatientReport().getApproveInstitution().getEmailSendingUsername());
-                e.setSenderEmail(getCurrentPatientReport().getApproveInstitution().getEmail());
-
-                e.setDepartment(getSessionController().getLoggedUser().getDepartment());
-                e.setInstitution(getSessionController().getLoggedUser().getInstitution());
-
-                e.setSentSuccessfully(false);
-
-                getEmailFacade().create(e);
+//                AppEmail e = new AppEmail();
+//                e.setCreatedAt(new Date());
+//                e.setCreater(sessionController.getLoggedUser());
+//
+//                e.setReceipientEmail(currentPtIx.getBillItem().getBill().getPatient().getPerson().getEmail());
+//                e.setMessageSubject("Your Report is Ready");
+//                e.setMessageBody(emailMessageBody(currentPatientReport));
+//                e.setAttachment1(createPDFAndSaveAsaFile());
+//
+//                e.setSenderPassword(getCurrentPatientReport().getApproveInstitution().getEmailSendingPassword());
+//                e.setSenderUsername(getCurrentPatientReport().getApproveInstitution().getEmailSendingUsername());
+//                e.setSenderEmail(getCurrentPatientReport().getApproveInstitution().getEmail());
+//
+//                e.setDepartment(getSessionController().getLoggedUser().getDepartment());
+//                e.setInstitution(getSessionController().getLoggedUser().getInstitution());
+//
+//                e.setSentSuccessfully(false);
+//
+//                getEmailFacade().create(e);
             }
         }
         if (pf != null && pf.getSentSmsWithInvestigationRequestApproval()) {

@@ -370,7 +370,18 @@
 
                         </h:panelGroup  >
 
+                        <style>
+                            @media print {
+                                .labReport {
+                                    position: static !important;
+                                }
+                                #divReportM {
+                                    position: static !important;
+                                }
+                                /* Repeat for other elements as needed */
+                            }
 
+                        </style>
                         <h:panelGroup  id="divPrint" >
 
                             <h:panelGroup rendered="#{patientReportController.currentPatientReport.item.reportType ne 'Microbiology'}"  >
