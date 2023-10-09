@@ -230,10 +230,17 @@
                                                         </td>
 
                                                         <td>
-                                                            <h:selectOneMenu  id="cmbStrDl1" value="#{pvd.strValue}"  style="min-width: 200px;" disabled="#{patientReportController.currentPatientReport.approved}">
+<!--                                                            <h:selectOneMenu  id="cmbStrDl1" value="#{pvd.strValue}"  style="min-width: 200px;" disabled="#{patientReportController.currentPatientReport.approved}">
                                                                 <f:selectItems value="#{investigationItemDynamicLabelController.getDynamicLabelsByIxItId(pvd.investigationItem)}" var="iivd" itemLabel="#{iivd.flagMessage}" itemValue="#{iivd}" ></f:selectItems>
                                                                 <p:ajax process="@this" event="change" listener="#{patientReportController.savePatientReportItemValues()}"></p:ajax>
-                                                            </h:selectOneMenu>
+                                                            </h:selectOneMenu>-->
+                                                            
+                                                             <!-- Modified by Dr M H B Ariyaratne with assistance from ChatGPT from OpenAI -->
+                                                            <p:selectOneMenu id="cmbStrDl" value="#{pvd.strValue}" editable="true" style="min-width: 200px;" disabled="#{patientReportController.currentPatientReport.approved}">
+                                                                <f:selectItems value="#{investigationItemDynamicLabelController.getDynamicLabelsByIxItId(pvd.investigationItem)}" var="iivd" itemLabel="#{iivd.flagMessage}" itemValue="#{iivd}" />
+                                                                <p:ajax process="@this" event="change" listener="#{patientReportController.savePatientReportItemValues()}"></p:ajax>
+                                                            </p:selectOneMenu>
+                                                           
 
 <!--                                                            <p:selectOneMenu  id="cmbStrDl" value="#{pvd.strValue}" editable="true" style="min-width: 200px;" disabled="#{patientReportController.currentPatientReport.approved}">
                                                                 <f:selectItems value="#{pvd.investigationItem.investigationItemValueFlags}" 

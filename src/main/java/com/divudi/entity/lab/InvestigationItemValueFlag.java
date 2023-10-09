@@ -7,6 +7,7 @@ package com.divudi.entity.lab;
 import com.divudi.data.Sex;
 import com.divudi.entity.Item;
 import java.io.Serializable;
+import java.util.Objects;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -200,6 +201,24 @@ public class InvestigationItemValueFlag extends InvestigationItemValue implement
         sb.append("flagMessage=").append(flagMessage);
         sb.append('}');
         return sb.toString();
+    }
+
+    // Modified by Dr M H B Ariyaratne with assistance from ChatGPT from OpenAI
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        InvestigationItemValueFlag that = (InvestigationItemValueFlag) o;
+        return Objects.equals(id, that.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 
 }

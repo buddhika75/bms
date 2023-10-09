@@ -45,9 +45,9 @@ public class PatientReportItemValue implements Serializable {
     Double doubleValue;
 
     public String getStrValue() {
-        if (strValue != null) {
-            strValue = strValue.trim();
-        }
+//        if (strValue != null) {
+//            strValue = strValue.trim();
+//        }
         return strValue;
     }
 
