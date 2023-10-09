@@ -202,7 +202,10 @@
                                                                 <h:outputLabel value="#{pvf.investigationItem.name}" ></h:outputLabel>
                                                             </td>
                                                             <td>
-                                                                <p:selectOneMenu id="cmbStrFlag" value="#{pvf.strValue}" editable="true" style="min-width: 200px;" disabled="#{patientReportController.currentPatientReport.approved}">
+                                                                <p:selectOneMenu id="cmbStrFlag" value="#{pvf.strValue}" editable="true" 
+
+                                                                                 style="min-width: 200px;" 
+                                                                                 disabled="#{patientReportController.currentPatientReport.approved}">
                                                                     <f:selectItems value="#{testFlagController.getIxItemFlagsString(pvf.investigationItem)}" var="iivfh" itemLabel="#{iivfh}" itemValue="#{iivfh}" ></f:selectItems>
                                                                 </p:selectOneMenu>
                                                             </td>
@@ -225,11 +228,18 @@
                                                         <td >
                                                             <h:outputLabel value="#{pvd.investigationItem.name}" ></h:outputLabel>
                                                         </td>
+
                                                         <td>
-                                                            <p:selectOneMenu  id="cmbStrDl" value="#{pvd.strValue}" editable="true" style="min-width: 200px;" disabled="#{patientReportController.currentPatientReport.approved}">
-                                                                <f:selectItems value="#{investigationItemDynamicLabelController.getDynamicLabelsByIxItId(pvd.investigationItem) }" var="iivd" itemLabel="#{iivd.flagMessage}" itemValue="#{iivd}" ></f:selectItems>
+                                                            <h:selectOneMenu  id="cmbStrDl1" value="#{pvd.strValue}"  style="min-width: 200px;" disabled="#{patientReportController.currentPatientReport.approved}">
+                                                                <f:selectItems value="#{investigationItemDynamicLabelController.getDynamicLabelsByIxItId(pvd.investigationItem)}" var="iivd" itemLabel="#{iivd.flagMessage}" itemValue="#{iivd}" ></f:selectItems>
                                                                 <p:ajax process="@this" event="change" listener="#{patientReportController.savePatientReportItemValues()}"></p:ajax>
-                                                            </p:selectOneMenu>
+                                                            </h:selectOneMenu>
+
+<!--                                                            <p:selectOneMenu  id="cmbStrDl" value="#{pvd.strValue}" editable="true" style="min-width: 200px;" disabled="#{patientReportController.currentPatientReport.approved}">
+                                                                <f:selectItems value="#{pvd.investigationItem.investigationItemValueFlags}" 
+                                                                               var="vf" itemLabel="#{vf.flagMessage}" itemValue="#{vf.flagMessage}" ></f:selectItems>
+                                                                <p:ajax process="@this" event="change" listener="#{patientReportController.savePatientReportItemValues()}"></p:ajax>
+                                                            </p:selectOneMenu> comment -->
                                                         </td>
                                                     </tr>
                                                 </h:panelGroup>

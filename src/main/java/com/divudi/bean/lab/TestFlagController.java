@@ -413,16 +413,22 @@ public class TestFlagController implements Serializable {
     }
 
     public List<String> getIxItemFlagsString(InvestigationItem ix) {
+        System.out.println("1 getIxItemFlagsString");
+        System.out.println("2 ix = " + ix);
         List<TestFlag> fs = getIxItemFlags(ix);
+        System.out.println("3 fs = " + fs);
         Set<String> tfss = new HashSet();
         for (TestFlag f : fs) {
+            System.out.println("4 f = " + f);
             tfss.add(f.getNormalMessage());
             tfss.add(f.getHighMessage());
             tfss.add(f.getLowMessage());
 
         }
+        System.out.println("5 tfss = " + tfss);
         List<String> sortedList = new ArrayList(tfss);
         Collections.sort(sortedList);
+        System.out.println("6 sortedList = " + sortedList);
         return sortedList;
     }
 

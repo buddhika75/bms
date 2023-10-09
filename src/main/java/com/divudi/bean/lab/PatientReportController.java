@@ -563,8 +563,8 @@ public class PatientReportController implements Serializable {
         m.put("phone", getSessionController().getPhoneNo());
         m.put("billno", getSessionController().getBillNo().toUpperCase());
         sql = "select pr from PatientInvestigation pr where pr.retired=false and "
-                + "(pr.billItem.bill.patient.person.phone)=:phone and "
-                + " ((pr.billItem.bill.insId)=:billno or (pr.billItem.bill.deptId)=:billno)  "
+                + "upper(pr.billItem.bill.patient.person.phone)=:phone and "
+                + " (upper(pr.billItem.bill.insId)=:billno or upper(pr.billItem.bill.deptId)=:billno)  "
                 + "order by pr.id desc ";
         customerPis = getPiFacade().findBySQL(sql, m, 50);
         return "/reports_list";
@@ -1300,25 +1300,25 @@ public class PatientReportController implements Serializable {
         }
         if (pf != null && pf.getSentEmailWithInvestigationReportApproval()) {
             if (CommonController.isValidEmail(currentPtIx.getBillItem().getBill().getPatient().getPerson().getEmail())) {
-//                AppEmail e = new AppEmail();
-//                e.setCreatedAt(new Date());
-//                e.setCreater(sessionController.getLoggedUser());
-//
-//                e.setReceipientEmail(currentPtIx.getBillItem().getBill().getPatient().getPerson().getEmail());
-//                e.setMessageSubject("Your Report is Ready");
-//                e.setMessageBody(emailMessageBody(currentPatientReport));
-//                e.setAttachment1(createPDFAndSaveAsaFile());
-//
-//                e.setSenderPassword(getCurrentPatientReport().getApproveInstitution().getEmailSendingPassword());
-//                e.setSenderUsername(getCurrentPatientReport().getApproveInstitution().getEmailSendingUsername());
-//                e.setSenderEmail(getCurrentPatientReport().getApproveInstitution().getEmail());
-//
-//                e.setDepartment(getSessionController().getLoggedUser().getDepartment());
-//                e.setInstitution(getSessionController().getLoggedUser().getInstitution());
-//
-//                e.setSentSuccessfully(false);
-//
-//                getEmailFacade().create(e);
+                AppEmail e = new AppEmail();
+                e.setCreatedAt(new Date());
+                e.setCreater(sessionController.getLoggedUser());
+
+                e.setReceipientEmail(currentPtIx.getBillItem().getBill().getPatient().getPerson().getEmail());
+                e.setMessageSubject("Your Report is Ready");
+                e.setMessageBody(emailMessageBody(currentPatientReport));
+                e.setAttachment1(createPDFAndSaveAsaFile());
+
+                e.setSenderPassword(getCurrentPatientReport().getApproveInstitution().getEmailSendingPassword());
+                e.setSenderUsername(getCurrentPatientReport().getApproveInstitution().getEmailSendingUsername());
+                e.setSenderEmail(getCurrentPatientReport().getApproveInstitution().getEmail());
+
+                e.setDepartment(getSessionController().getLoggedUser().getDepartment());
+                e.setInstitution(getSessionController().getLoggedUser().getInstitution());
+
+                e.setSentSuccessfully(false);
+
+                getEmailFacade().create(e);
             }
         }
         if (pf != null && pf.getSentSmsWithInvestigationRequestApproval()) {

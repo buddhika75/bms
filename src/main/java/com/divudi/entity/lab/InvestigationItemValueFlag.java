@@ -10,6 +10,7 @@ import java.io.Serializable;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.Lob;
@@ -20,15 +21,14 @@ import javax.persistence.ManyToOne;
  * @author Buddhika
  */
 @Entity
-@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 public class InvestigationItemValueFlag extends InvestigationItemValue implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Enumerated(EnumType.STRING)
     Sex sex;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     InvestigationItem investigationItemOfLabelType;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     private InvestigationItem investigationItemOfValueType;
     @ManyToOne
     InvestigationItem investigationItemOfFlagType;
@@ -189,4 +189,17 @@ public class InvestigationItemValueFlag extends InvestigationItemValue implement
     public void setInvestigationItemOfFlagType(InvestigationItem investigationItemOfFlagType) {
         this.investigationItemOfFlagType = investigationItemOfFlagType;
     }
+
+    @Override
+    public String toString() {
+        if (this.flagMessage != null) {
+            return flagMessage;
+        }
+        StringBuilder sb = new StringBuilder();
+        sb.append("InvestigationItemValueFlag{");
+        sb.append("flagMessage=").append(flagMessage);
+        sb.append('}');
+        return sb.toString();
+    }
+
 }
