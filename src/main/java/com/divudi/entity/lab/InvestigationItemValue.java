@@ -13,6 +13,8 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
 import javax.persistence.ManyToOne;
 import javax.persistence.Temporal;
 
@@ -21,6 +23,7 @@ import javax.persistence.Temporal;
  * @author Buddhika
  */
 @Entity
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 public class InvestigationItemValue implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -28,7 +31,7 @@ public class InvestigationItemValue implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     //Main Properties
     Long id;
-    @ManyToOne(cascade= CascadeType.ALL,fetch= FetchType.LAZY)
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     InvestigationItem investigationItem;
     String name;
     String code;
@@ -45,7 +48,6 @@ public class InvestigationItemValue implements Serializable {
     Date retiredAt;
     String retireComments;
     Integer orderNo;
-    
 
     public Long getId() {
         return id;
@@ -64,7 +66,7 @@ public class InvestigationItemValue implements Serializable {
 
     @Override
     public boolean equals(Object object) {
-        
+
         if (!(object instanceof InvestigationItemValue)) {
             return false;
         }
@@ -77,7 +79,18 @@ public class InvestigationItemValue implements Serializable {
 
     @Override
     public String toString() {
-        return "com.divudi.entity.InvestigationItemValue[ id=" + id + " ]";
+        String toString;
+        
+        InvestigationItemValueFlag fm = null;
+        if (this instanceof InvestigationItemValueFlag) {
+            fm = (InvestigationItemValueFlag) this;
+        }
+        if (fm != null) {
+            toString = fm.getFlagMessage();
+        } else {
+            toString = "com.divudi.entity.InvestigationItemValue[ id=" + id + " ]";
+        }
+        return toString;
     }
 
     public String getCode() {
@@ -88,8 +101,6 @@ public class InvestigationItemValue implements Serializable {
         this.code = code;
     }
 
-    
-    
     public WebUser getCreater() {
         return creater;
     }
