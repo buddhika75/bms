@@ -216,7 +216,18 @@
                                                     <p:spacer height="1" width="5"></p:spacer>
                                                     <p:commandLink rendered="false" process="@this" update="photos" value="Refresh" ></p:commandLink>
                                                     <p:spacer height="1" width="5"></p:spacer>
-                                                    <p:commandLink ajax="false" value="View" target="_blank" action="photo" ></p:commandLink>
+                                                    <!-- Created by Dr M H B Ariyaratne with assistance from ChatGPT from OpenAI -->
+                                                    <!-- Created by Dr M H B Ariyaratne with assistance from ChatGPT from OpenAI -->
+                                                    <p:commandLink value="View" onclick="PF('imageDialog').show();" />
+                                                    <p:dialog header="Image View" widgetVar="imageDialog" modal="true" showEffect="fade" hideEffect="fade">
+                                                        <p:graphicImage style="border: 1px solid red; width: 70%; margin: auto;" 
+                                                                        cache="false"
+                                                                        rendered="#{patientController.current.baImage ne null}"    
+                                                                        value="#{patientController.getPhotoByByte(patientController.current.baImage)}" />
+                                                        <p:commandButton value="Close" onclick="PF('imageDialog').hide();" type="button" />
+                                                    </p:dialog>
+
+
                                                 </h:panelGrid>
 
                                             </h:panelGroup>
@@ -534,7 +545,8 @@
                     <div class="col-md-12" >
                         <h:form enctype="multipart/form-data" rendered="true" >
                             <h:outputScript library="photocam" name="webcam.js" ></h:outputScript>
-                            <p:commandButton type="button" value="Capture" onclick="PF('pc').capture()"/>
+                            <p:commandButton type="button" value="Capture" onclick="PF('pc').capture()"
+                                             update="@all"/>
                             <p:photoCam 
                                 listener="#{photoCamBean.oncapturePatientPhoto}" 
                                 widgetVar="pc" 

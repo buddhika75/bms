@@ -15,7 +15,7 @@
                     <h:panelGrid columns="1"  id="panSpeciality" class="w-100" >
                         <p:inputText autocomplete="off" id="txtSearch" class="w-100" value="#{doctorSpecialityController.selectText}" style="width: 176px;" placeholder="Specialities" >
                             <f:ajax execute="txtSearch" render="acSpeciality" event="keyup" />
-                            <p:ajax  event="keyup" process="@this" update=":#{p:resolveFirstComponentWithId('scStaff',view).clientId}  :#{p:resolveFirstComponentWithId('tblSessionsOfSelectedConsultant',view).clientId}" listener="#{bookingPastController.listnerStaffListForSpecilitySelectedText}"/> 
+                            <p:ajax  event="keyup" process="@this" update=":#{p:resolveFirstComponentWithId('scStaff',view).clientId}  :#{p:resolveFirstComponentWithId('tblSessionsOfSelectedConsultant',view).clientId}" /> 
                         </p:inputText>
                         <h:outputScript>
                             $(document.getElementById('form:txtSearch')).keypress(function (event) {
@@ -448,8 +448,6 @@
                         </p:panel>
 
                         <p:tab title="Cancel" id="cancel"  disabled="#{!sessionController.hasPrivilege('ChannelBookingCancel')}">                                                         
-                            #{channelBillController.billSession.bill.billType}
-
                             <h:panelGroup rendered="#{channelBillController.billSession.billItem.bill.paymentMethod eq 'Agent'}" >
                                 <p:outputLabel value="Re-payment Method"/>
                                 <p:selectOneMenu  id="cmbCancellPs" value="#{channelBillController.cancelPaymentMethod}">  
@@ -464,7 +462,7 @@
                             <h:panelGroup>
                                 <ch:bill_fees bill="#{channelBillController.billSession.billItem.bill}" />
                             </h:panelGroup>
-                            <h:inputTextarea value="#{channelBillController.comment}"/>
+                            <h:inputTextarea id="txtCancelComments" value="#{channelBillController.comment}"/>
                             <p:commandButton ajax="false" value="Cancel Agent Bill" 
                                              rendered="#{channelBillController.billSession.bill.billType eq 'ChannelAgent'}"
                                              action="#{channelBillController.cancelAgentPaidBill()}"
@@ -483,7 +481,11 @@
                                              disabled="#{channelBillController.billSession.bill.refunded==true
                                                          or channelBillController.billSession.bill.cancelled==true}" 
                                              />
-                            <p:commandButton ajax="false" value="Cancel Paid" 
+                            <p:commandButton 
+                                id="btnCancelPaid"
+                                process="btnCancelPaid txtCancelComments"
+                                update=":#{p:resolveFirstComponentWithId('detail',view).clientId} :#{p:resolveFirstComponentWithId('tblBookingsOfSelectedSession',view).clientId}"
+                                value="Cancel Paid" 
                                              rendered="#{channelBillController.billSession.bill.billType.parent eq 'ChannelCreditFlow' and channelBillController.billSession.bill.billType ne 'ChannelAgent'}"
                                              action="#{channelBillController.cancelCreditPaidBill}"
                                              disabled="#{channelBillController.billSession.bill.refunded==true

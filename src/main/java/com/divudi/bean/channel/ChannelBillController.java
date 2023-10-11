@@ -531,7 +531,9 @@ public class ChannelBillController implements Serializable {
     List<BillFee> listBillFees;
 
     public void createBillfees(SelectEvent event) {
+        System.out.println("event = " + event);
         BillSession bs = ((BillSession) event.getObject());
+        System.out.println("bs = " + bs);
         String sql;
         HashMap hm = new HashMap();
         sql = "Select bf From BillFee bf where bf.retired=false"
@@ -688,40 +690,43 @@ public class ChannelBillController implements Serializable {
     }
 
     public void cancelCreditPaidBill() {
+        System.out.println("cancelCreditPaidBill" );
+        System.out.println("getBillSession() = " + getBillSession());
         if (getBillSession() == null) {
             UtilityController.addErrorMessage("No BillSession");
             return;
         }
-
+        System.out.println("getBillSession().getBill() = " + getBillSession().getBill());
         if (getBillSession().getBill() == null) {
             UtilityController.addErrorMessage("No Bill To Cancel");
             return;
         }
-
+        System.out.println("getBillSession().getPaidBillSession() = " + getBillSession().getPaidBillSession());
         if (getBillSession().getPaidBillSession() == null) {
             UtilityController.addErrorMessage("No Paid Paid Bill Session");
             return;
         }
-
+        System.out.println("getBillSession().getPaidBillSession().getBill() = " + getBillSession().getPaidBillSession().getBill());
         if (getBillSession().getPaidBillSession().getBill() == null) {
             UtilityController.addErrorMessage("No Paid Paid Bill Session");
             return;
         }
-
+        System.out.println("getBillSession().getPaidBillSession().getBill().isRefunded() = " + getBillSession().getPaidBillSession().getBill().isRefunded());
         if (getBillSession().getPaidBillSession().getBill().isRefunded()) {
             UtilityController.addErrorMessage("Already Refunded");
             return;
         }
-
+        System.out.println("getBillSession().getPaidBillSession().getBill().isCancelled() = " + getBillSession().getPaidBillSession().getBill().isCancelled());
         if (getBillSession().getPaidBillSession().getBill().isCancelled()) {
             UtilityController.addErrorMessage("Already Cancelled");
             return;
         }
+        System.out.println("getComment() = " + getComment());
         if (getComment() == null || getComment().trim().equals("")) {
             UtilityController.addErrorMessage("Please enter a comment");
             return;
         }
-
+        System.out.println("going to cancel");
         cancel(getBillSession().getPaidBillSession().getBill(), getBillSession().getPaidBillSession().getBillItem(), getBillSession().getPaidBillSession());
         cancel(getBillSession().getBill(), getBillSession().getBillItem(), getBillSession());
         comment = null;
