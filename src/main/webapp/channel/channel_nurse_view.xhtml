@@ -80,11 +80,14 @@
 
 
 
-            <p:dataTable id="nurseViewP" value="#{channelReportController.nurseViewSessions}" 
-                         var="bs" rowKey="#{bs.id}">
+            <p:dataTable 
+                id="nurseViewP" 
+                class="table table-small"
+                value="#{channelReportController.nurseViewSessions}" 
+                var="bs" rowKey="#{bs.id}">
                 <f:facet name="header">
+                    <p:outputLabel value="Nurse View"/>
                     <h:panelGrid columns="2">
-                        <p:outputLabel value="Nurse View"/>
                         <p:outputLabel value="Consultant"/>
                         <p:outputLabel value="#{channelReportController.serviceSession.staff.person.nameWithTitle}"/>
                         <p:outputLabel value="Date"/>
@@ -108,10 +111,7 @@
                     <p:outputLabel value="- Refunded" rendered="#{bs.bill.refunded eq true}" style="color: red;"/>
                     <p:outputLabel value="- Absent"  rendered="#{bs.absent}" style="color: red;"/>
                     <p:outputLabel value="- Present"  rendered="#{!bs.absent}" style="color: green;"/>
-
                 </p:column>
-
-
             </p:dataTable>
 
         </h:form>
