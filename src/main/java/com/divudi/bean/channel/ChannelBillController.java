@@ -588,6 +588,7 @@ public class ChannelBillController implements Serializable {
     }
 
     private boolean errorCheckCancelling() {
+        System.out.println("errorCheckCancelling");
         if (getBillSession() == null) {
             return true;
         }
@@ -610,10 +611,12 @@ public class ChannelBillController implements Serializable {
             UtilityController.addErrorMessage("Please enter a comment");
             return true;
         }
+        System.out.println("returning false");
         return false;
     }
 
     public void cancelCashFlowBill() {
+        System.out.println("cancelCashFlowBill");
         if (errorCheckCancelling()) {
             return;
         }
@@ -734,6 +737,7 @@ public class ChannelBillController implements Serializable {
     }
 
     public void cancel(Bill bill, BillItem billItem, BillSession billSession) {
+        System.out.println("cancel");
         if (errorCheckCancelling()) {
             return;
         }
@@ -741,7 +745,10 @@ public class ChannelBillController implements Serializable {
         if ((bill.getBillType() == BillType.ChannelCash || bill.getBillType() == BillType.ChannelAgent) && bill.getPaidBill() == null) {
             bill.setPaidBill(bill);
             billFacade.edit(bill);
+        }else if(bill.getPaidBill() == null){
+            bill.setPaidBill(bill);
         }
+        System.out.println("paid bill changed");
 
         //dr. buddhika said
         if (bill.getPaidBill() == null) {
@@ -749,6 +756,7 @@ public class ChannelBillController implements Serializable {
         }
 
         if (bill.getPaidBill().equals(bill)) {
+            System.out.println("equal");
             CancelledBill cb = createCancelBill(bill);
             BillItem cItem = cancelBillItems(billItem, cb);
             BillSession cbs = cancelBillSession(billSession, cb, cItem);
@@ -767,6 +775,7 @@ public class ChannelBillController implements Serializable {
             billSessionFacade.edit(billSession);
 
         } else {
+            System.out.println("not equal");
             CancelledBill cb = createCancelBill(bill);
             BillItem cItem = cancelBillItems(billItem, cb);
             BillSession cbs = cancelBillSession(billSession, cb, cItem);
