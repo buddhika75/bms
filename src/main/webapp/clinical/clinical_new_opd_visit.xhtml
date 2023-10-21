@@ -206,19 +206,27 @@
 
                                             <h:outputLabel value="Picture" rendered="#{sessionController.hasPrivilege('ClinicalPatientPhoto')}" ></h:outputLabel>
                                             <h:panelGroup rendered="#{sessionController.hasPrivilege('ClinicalPatientPhoto')}">
-                                                <p:graphicImage  style="border: 1px solid red; width: 150px;" 
-                                                                 id="photos" cache="false"
-                                                                 rendered="#{patientController.current.baImage ne null and false}"    
-                                                                 value="#{patientController.getPhotoByByte(patientController.current.baImage)}"  >
-                                                </p:graphicImage>
-                                                <h:panelGrid columns="5" >
-                                                    <p:commandLink rendered="false" target="_blank" ajax="false" action="capture" value="To Capture" ></p:commandLink>
-                                                    <p:spacer height="1" width="5"></p:spacer>
-                                                    <p:commandLink rendered="false" process="@this" update="photos" value="Refresh" ></p:commandLink>
-                                                    <p:spacer height="1" width="5"></p:spacer>
-                                                    <!-- Created by Dr M H B Ariyaratne with assistance from ChatGPT from OpenAI -->
-                                                    <!-- Created by Dr M H B Ariyaratne with assistance from ChatGPT from OpenAI -->
-                                                    <p:commandLink value="View" onclick="PF('imageDialog').show();" />
+
+                                                <!--
+                                                                                                <p:graphicImage  style="border: 1px solid red; width: 150px;" 
+                                                                                                                 id="photos" cache="false"
+                                                                                                                 rendered="#{patientController.current.baImage ne null and false}"    
+                                                                                                                 value="#{patientController.getPhotoByByte(patientController.current.baImage)}"  >
+                                                                                                </p:graphicImage>-->
+
+                                                <p:panel toggleable="true"
+                                                         collapsed="true"
+                                                         header="Photo"  id="panelPhoto" >
+                                                    <p:graphicImage style="border: 1px solid red; width: 70%; margin: auto;" 
+                                                                    cache="false"
+                                                                    rendered="#{patientController.current.baImage ne null}"    
+                                                                    value="#{patientController.getPhotoByByte(patientController.current.baImage)}" />
+                                                    <p:outputLabel value="No Photo Available"            rendered="#{patientController.current.baImage eq null}"    ></p:outputLabel>
+
+                                                    <p:commandLink 
+                                                        value="View" 
+                                                        rendered="#{patientController.current.baImage ne null}"    
+                                                        onclick="PF('imageDialog').show();" />
                                                     <p:dialog header="Image View" widgetVar="imageDialog" modal="true" showEffect="fade" hideEffect="fade">
                                                         <p:graphicImage style="border: 1px solid red; width: 70%; margin: auto;" 
                                                                         cache="false"
@@ -227,8 +235,26 @@
                                                         <p:commandButton value="Close" onclick="PF('imageDialog').hide();" type="button" />
                                                     </p:dialog>
 
+                                                </p:panel>
 
-                                                </h:panelGrid>
+                                                <!--
+                                                
+                                                                                                <h:panelGrid columns="5" >
+                                                                                                    <p:commandLink rendered="false" target="_blank" ajax="false" action="capture" value="To Capture" ></p:commandLink>
+                                                                                                    <p:spacer height="1" width="5"></p:spacer>
+                                                                                                    <p:commandLink rendered="false" process="@this" update="photos" value="Refresh" ></p:commandLink>
+                                                                                                    <p:spacer height="1" width="5"></p:spacer>
+                                                                                                    <p:commandLink value="View" onclick="PF('imageDialog').show();" />
+                                                                                                    <p:dialog header="Image View" widgetVar="imageDialog" modal="true" showEffect="fade" hideEffect="fade">
+                                                                                                        <p:graphicImage style="border: 1px solid red; width: 70%; margin: auto;" 
+                                                                                                                        cache="false"
+                                                                                                                        rendered="#{patientController.current.baImage ne null}"    
+                                                                                                                        value="#{patientController.getPhotoByByte(patientController.current.baImage)}" />
+                                                                                                        <p:commandButton value="Close" onclick="PF('imageDialog').hide();" type="button" />
+                                                                                                    </p:dialog>
+                                                
+                                                
+                                                                                                </h:panelGrid>-->
 
                                             </h:panelGroup>
 
