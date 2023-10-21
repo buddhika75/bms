@@ -77,42 +77,68 @@
 
 
 
+            <!-- Newly created by Dr M H B Ariyaratne with assistance from ChatGPT from OpenAI -->
+            <h:panelGroup id="nurseViewP" >
+
+
+                <table  class="table table-small">
+                    <thead>
+                        <tr>
+                            <th colspan="3">
+                                Nurse View
+                            </th>
+                        </tr>
+                        <tr>
+                            <th colspan="3">
+                                Consultant: #{channelReportController.serviceSession.staff.person.nameWithTitle}
+                            </th>
+                        </tr>
+                        <tr>
+                            <th  colspan="3">
+                                Date: #{channelReportController.serviceSession.sessionDate}
+                            </th>
+                        </tr>
+                        <tr>
+                            <th  colspan="3">
+                                Session Name: #{channelReportController.serviceSession.name}
+                            </th>
+                        </tr>
+                        <tr>
+                            <th width="40">No</th>
+                            <th>Patient Name</th>
+                            <th>Remark</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <ui:repeat value="#{channelReportController.nurseViewSessions}" var="bs">
+                            <tr>
+                                <td>
+                                    #{bs.serialNo}
+                                </td>
+                                <td>
+                                    #{bs.bill.patient.person.nameWithTitle}
+                                </td>
+                                <td>
+                                    <h:outputText rendered="#{bs.bill.paidAmount eq 0}" value="To Paid" style="color: red;"/>
+                                    <h:outputText rendered="#{bs.bill.paidAmount ne 0}" value="Paid" style="color: green;"/>
+                                    <h:outputText value="- Cancelled" rendered="#{bs.bill.cancelled eq true}" style="color: red;"/>
+                                    <h:outputText value="- Refunded" rendered="#{bs.bill.refunded eq true}" style="color: red;"/>
+                                    <h:outputText value="- Absent"  rendered="#{bs.absent}" style="color: red;"/>
+                                    <h:outputText value="- Present"  rendered="#{!bs.absent}" style="color: green;"/>
+                                </td>
+                            </tr>
+                        </ui:repeat>
+                    </tbody>
+                </table>
+
+            </h:panelGroup>
 
 
 
-            <p:dataTable 
-                id="nurseViewP" 
-                class="table table-small"
-                value="#{channelReportController.nurseViewSessions}" 
-                var="bs" rowKey="#{bs.id}">
-                <f:facet name="header">
-                    <p:outputLabel value="Nurse View"/>
-                    <h:panelGrid columns="2">
-                        <p:outputLabel value="Consultant"/>
-                        <p:outputLabel value="#{channelReportController.serviceSession.staff.person.nameWithTitle}"/>
-                        <p:outputLabel value="Date"/>
-                        <h:outputLabel value="#{channelReportController.serviceSession.sessionDate}" >
-                            <f:convertDateTime pattern="dd-MM-yyyy"/>
-                        </h:outputLabel>
-                        <p:outputLabel value="Session Name"/>
-                        <h:outputLabel value="#{channelReportController.serviceSession.name}" />
-                    </h:panelGrid>
-                </f:facet>
-                <p:column headerText="No" width="40">
-                    #{bs.serialNo}
-                </p:column>
 
-                <p:column headerText="Patient Name">#{bs.bill.patient.person.nameWithTitle}</p:column>
 
-                <p:column headerText="Remark">
-                    <p:outputLabel rendered="#{bs.bill.paidAmount eq 0}" value="To Paid" style="color: red;"/>
-                    <p:outputLabel rendered="#{bs.bill.paidAmount ne 0}" value="Paid" style="color: green;"/>
-                    <p:outputLabel value="- Cancelled" rendered="#{bs.bill.cancelled eq true}" style="color: red;"/>
-                    <p:outputLabel value="- Refunded" rendered="#{bs.bill.refunded eq true}" style="color: red;"/>
-                    <p:outputLabel value="- Absent"  rendered="#{bs.absent}" style="color: red;"/>
-                    <p:outputLabel value="- Present"  rendered="#{!bs.absent}" style="color: green;"/>
-                </p:column>
-            </p:dataTable>
+
+
 
         </h:form>
 
