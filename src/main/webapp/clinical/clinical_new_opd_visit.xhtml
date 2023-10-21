@@ -206,11 +206,14 @@
 
                                             <h:outputLabel value="Picture" rendered="#{sessionController.hasPrivilege('ClinicalPatientPhoto')}" ></h:outputLabel>
                                             <h:panelGroup rendered="#{sessionController.hasPrivilege('ClinicalPatientPhoto')}">
-                                                <p:graphicImage  style="border: 1px solid red; width: 150px;" 
-                                                                 id="photos" cache="false"
-                                                                 rendered="#{patientController.current.baImage ne null and false}"    
-                                                                 value="#{patientController.getPhotoByByte(patientController.current.baImage)}"  >
-                                                </p:graphicImage>
+                                                <p:panel toggleable="true" collapsed="true"  >
+                                                    <p:graphicImage  style="border: 1px solid red; width: 150px;" 
+                                                                     id="photos" cache="false"
+                                                                     rendered="#{patientController.current.baImage ne null and false}"    
+                                                                     value="#{patientController.getPhotoByByte(patientController.current.baImage)}"  >
+                                                    </p:graphicImage>
+                                                </p:panel>
+
                                                 <h:panelGrid columns="5" >
                                                     <p:commandLink rendered="false" target="_blank" ajax="false" action="capture" value="To Capture" ></p:commandLink>
                                                     <p:spacer height="1" width="5"></p:spacer>
