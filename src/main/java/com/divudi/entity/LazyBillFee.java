@@ -163,4 +163,9 @@ public class LazyBillFee extends LazyDataModel<BillFee> {
     public Spliterator<BillFee> spliterator() {
         return super.spliterator(); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/OverriddenMethodBody
     }
+
+    @Override
+    public int count(Map<String, FilterMeta> map) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
 }
