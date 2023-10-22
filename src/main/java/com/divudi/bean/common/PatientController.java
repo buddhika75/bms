@@ -20,6 +20,7 @@ import com.divudi.facade.util.JsfUtil;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.InputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -586,6 +587,15 @@ public class PatientController implements Serializable {
                     .build();
         }
     }
+    
+    // Newly created by Dr M H B Ariyaratne with assistance from ChatGPT from OpenAI
+public StreamedContent getPhotoByByteNew2(byte[] photoBytes) {
+    if (photoBytes == null || photoBytes.length == 0) {
+        return null;
+    }
+    InputStream inputStream = new ByteArrayInputStream(photoBytes);
+    return DefaultStreamedContent.builder().stream(() -> inputStream).contentType("image/jpeg").build();
+}
 
     // Modified by Dr M H B Ariyaratne with assistance from ChatGPT from OpenAI
     public StreamedContent getPhotoByByteNew(Patient p) {
