@@ -199,6 +199,7 @@ public class ChannelBillController implements Serializable {
     }
 
     public void settleCredit() {
+        System.out.println("Settle Credit - new Date() = " + new Date());
         if (errorCheckForSettle()) {
             return;
         }
