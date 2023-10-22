@@ -679,7 +679,7 @@
                     </h:panelGroup>
 
                     <h:panelGroup rendered="#{sessionController.institutionPreference.opdBillPaperType eq 'PosPaper'}">
-                        <p:panelGrid rendered="#{sessionController.institutionPreference.opdPosBillWithoutLogo eq false}">
+                        <p:panelGrid columns="1" rendered="#{sessionController.institutionPreference.opdPosBillWithoutLogo eq false}">
                             <div class="nonPrintBlock">
                                 <p:commandButton value="Print" ajax="false" action="#"  >
                                     <p:printer target="gpPosBill" ></p:printer>
@@ -710,7 +710,7 @@
 
 
 
-                        <p:panelGrid rendered="#{sessionController.institutionPreference.opdPosBillWithoutLogo eq true}">
+                        <p:panelGrid columns="1" rendered="#{sessionController.institutionPreference.opdPosBillWithoutLogo eq true}">
                             <div class="nonPrintBlock">
                                 <p:commandButton value="Print" ajax="false" action="#"  >
                                     <p:printer target="gpPosBillWithoutLogo" ></p:printer>
