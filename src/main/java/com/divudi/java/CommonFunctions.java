@@ -25,6 +25,9 @@ public class CommonFunctions {
     }
 
     public static LocalDateTime convertDateToLocalDateTime(Date date) {
+        if (date == null) {
+            date = new Date();
+        }
         return date.toInstant()
                 .atZone(ZoneId.systemDefault())
                 .toLocalDateTime();
