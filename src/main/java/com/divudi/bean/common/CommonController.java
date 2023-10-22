@@ -141,7 +141,6 @@ public class CommonController implements Serializable {
         }
         s += "\n ***************";
 
-
     }
 
     //----------Date Time Formats
@@ -153,12 +152,18 @@ public class CommonController implements Serializable {
     }
 
     public static String getDateFormat(Date date, String formatString) {
-        String s = "";
+        if (date == null) {
+            date = new Date();
+        }
+        if (formatString == null || formatString.trim().equals("")) {
+            formatString = "dd MMMM yyyy";
+        }
+        String s ;
         DateFormat d = new SimpleDateFormat(formatString);
         s = d.format(date);
         return s;
     }
-    
+
     public String getDateFormat2(Date date) {
         String s = "";
         DateFormat d = new SimpleDateFormat("YYYY-MMM-dd");
@@ -208,16 +213,16 @@ public class CommonController implements Serializable {
 //        //System.out.println("s = " + s);
         return s;
     }
-    
+
     public Double getDouble(String s) {
-        Double d =null;
-        if(s==null){
+        Double d = null;
+        if (s == null) {
             return d;
         }
-        try{
-            d=Double.parseDouble(s);
-        }catch(NumberFormatException e){
-            d=0.0;
+        try {
+            d = Double.parseDouble(s);
+        } catch (NumberFormatException e) {
+            d = 0.0;
         }
         return d;
     }
